@@ -94,6 +94,7 @@ Tests:
 - `/tests/fixtures/01-prose/` — 12 prose-layer fixtures: `single-paragraph.wit`, `multi-paragraph.wit`, `blank-line-splits.wit`, `soft-line-break.wit`, `long-single-line.wit`, `markdown-ish-leaders.wit`, `punctuation-heavy.wit`, `quoted-prose.wit`, `urls-in-prose.wit`, `numbers-and-arithmetic-shapes.wit`, `tilde-digit-mid-line.wit`, `tilde-slash-mid-line.wit`. Plus `_notes.md` probing I.2 (soft line break) and surfacing 4 new `I.review` items (see "Surfaced design questions" below).
 - `/tests/fixtures/02-emphasis/` — 9 emphasis-layer fixtures: `basic-italic.wit`, `basic-bold.wit`, `combined-bold-italic.wit`, `apostrophe-after-italic.wit`, `arithmetic-shapes.wit`, `underscore-in-identifier.wit`, `empty-marks.wit`, `marks-at-paragraph-boundary.wit`, `mixed-prose-and-marks.wit`. Plus `_notes.md` surfacing 7 new `I.review` items (see "Surfaced design questions" below). Last category permitting in-fixture narration; `03-comments` onward narration is forbidden.
 - `/tests/fixtures/03-comments/` — 8 comments-layer fixtures + `_notes.md`. **First category where in-fixture narration is FORBIDDEN** — all explanation lives in `_notes.md`. Probes PLAN.md I.1 directly. Surfaces 12 new `I.review` items (see "Surfaced design questions" below).
+- `/tests/fixtures/04-nodes-use/` — 10 node-use fixtures + `_notes.md`: `block-name-body.wit`, `inline-name-body.wit`, `bare-reference.wit`, `bare-reference-adjacent-prose.wit`, `dotted-access.wit`, `hyphenated-name.wit`, `numeric-suffix.wit`, `underscored-name.wit`, `nested-same-name.wit`, `empty-body.wit`. (`mismatched-close` deferred to `tests/errors/` — placement noted as I.review item.) Directly probes I.6, I.3; surfaces 11 new `I.review` items including a CONCRETE PROPOSAL for I.6 bare-reference boundary rule (b).
 
 CI/tooling:
 - `/.github/workflows/ci.yml` — `ubuntu-latest`, `pnpm/action-setup@v4`, Node 20 with pnpm cache; runs install/typecheck/test/build.
@@ -185,7 +186,21 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 - CRLF/BOM byte edges inside comments: comment containing CRLF mid-payload, or comment opener after a BOM — interaction with newline normalization pre/post lex (carry-over from M1.00). (new `I.review` item)
 - (Plus direct probe of) PLAN.md I.1 — are comments AST nodes or fully elided? Now the central open question for resolver/expander design.
 
-**Accumulated load (M1.00–M1.03):** 28 surfaced `I.review` items across four `_notes.md` files. M1.review will be substantial — schedule a dedicated review pass before M2 begins; expect spec v0.2 / PLAN.md amendments.
+**From `04-nodes-use/_notes.md` (M1.04):**
+- **PLAN.md I.6 — bare-reference boundary — CONCRETE PROPOSAL surfaced.** Rule (b): handle character class is `[A-Za-z0-9_-]`; a `.` opens a dot-access path (continues parsing); ALL other bytes (whitespace, punctuation, apostrophe, `@`, EOF) terminate the handle. This is the candidate resolution to feed into M1.review / spec v0.2.
+- Trailing hyphen rule: does `@paper-stats-` end the handle at the trailing hyphen or include it? Greedy vs lookahead. (new `I.review` item)
+- Sentence-final period disambiguation: `@weil.` — is the `.` a dot-access opener (then handle is `weil` and `.` starts access path expecting a field) or sentence punctuation (terminator)? Resolution interacts with I.3. (new `I.review` item)
+- Numeric indices in dot-access path: `@chapter.1` — legal field name or terminator? (new `I.review` item)
+- Leading-underscore handle: `@_private` — is `_` legal as first char of handle, or reserved? (new `I.review` item)
+- Case sensitivity of handles: `@Foo` vs `@foo` — same handle, distinct handles, or case-folded? (new `I.review` item)
+- Closer source location: in `@x ... x@`, does `x@` carry its own loc or attach to the open? Affects diagnostics. (new `I.review` item)
+- All-on-one-line nested classification: `@x @x x@ x@` on a single line — inline-nested or block-nested-rendered-inline? (new `I.review` item)
+- Inter-marker space in empty body: `@x x@` vs `@xx@` — required space between open and close? Tokenization rule. (new `I.review` item)
+- Block-then-prose paragraph fusion: when a block node ends mid-paragraph, does following prose attach to the same paragraph or open a new one? (new `I.review` item)
+- Mismatched-close placement (`errors/` vs `04-nodes-use/`): the meta-question itself, recorded as I.review. Deferred to errors/ for now.
+- Unicode handle policy: non-ASCII letters in `@name` — extends emphasis Unicode question (M1.02) to identifiers. (new `I.review` item)
+
+**Accumulated load (M1.00–M1.04):** ~40 surfaced `I.review` items across five `_notes.md` files (28 before M1.04 + 11 new + 1 CONCRETE PROPOSAL for I.6). M1.review will be substantial — schedule a dedicated review pass before M2 begins; expect spec v0.2 / PLAN.md amendments. I.6 proposal is ready to ratify.
 
 ---
 
@@ -196,6 +211,7 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 - **Task 3 — M1.01 prose fixtures** (merge `7ddde39`): 12 `.wit` fixtures under `tests/fixtures/01-prose/` covering single/multi-paragraph prose, blank-line splits, soft line breaks, long single lines, markdown-ish leaders treated as plain prose, punctuation-heavy text, quoted prose, embedded URLs, number/arithmetic shapes, and mid-line `~` cases. Probes PLAN.md I.2 (soft line break) and surfaces 4 new `I.review` items: markdown-ish leader rendering (verbatim/stripped), smart-quote substitution policy, number-shape tokenization inside Text runs, and email-shaped mid-word `@` (extending I.6 with a non-word-boundary requirement). Tightened convention: narration `~ ...` flushes against first prose line (no blank between) — applied uniformly. Cross-category fragility flagged: `numbers-and-arithmetic-shapes.wit` must re-validate when 02-emphasis tokenization lands.
 - **Task 4 — M1.02 emphasis fixtures** (merge `3e0f7ea`): 9 `.wit` fixtures under `tests/fixtures/02-emphasis/` covering `_italic_` and `*bold*` baselines, `_*combined*_` nesting, the `_keeper_'s` apostrophe-after-italic edge, `5*6*7` arithmetic-shape suppression, intra-word `snake_case` underscores, empty `__`/`**` marks, marks at paragraph boundaries, and mixed prose+marks runs. `_notes.md` surfaces 7 new `I.review` items: empty-mark semantics, word-character Unicode policy, three-plus adjacent marks (`***x***`), italic-then-apostrophe smart-quote interaction, digit-then-letter `*` asymmetric boundary, unclosed mark across blank line, and emphasis mark split across CRLF. Narration-flush convention from M1.01 reinforced — recurrence in this review means every future briefing for a narration-permitting category must call it out explicitly. (After this category, narration in fixtures dies.)
 - **Task 5 — M1.03 comments fixtures** (merge `0d83116`): 8 `.wit` fixtures under `tests/fixtures/03-comments/` covering line-leading `~`, inline `~~ ... ~~/`, multi-line blocks, internal `~~` divider, `~/` path safety inside block bodies, mid-line tilde discriminators, empty comments, and the comment-between-prose-lines paragraph-boundary probe. **First category where in-fixture narration is forbidden** — all explanation lives in `_notes.md`. Directly probes PLAN.md I.1 (comments as AST nodes vs elided). Surfaces 12 new `I.review` items (see above): trivia attachment, whitespace-after-tilde, block-spans-blank-line, payload indent preservation, `~~` divider semantics, `~~~/` leftmost-longest, mid-line `~` lookbehind, empty-comment shape, closer positional restrictions, joiner/separator (composes I.1+I.2), and CRLF/BOM byte edges. Convention reinforced for all forward categories: explanation in `_notes.md` only. Accumulated total: 28 `I.review` items across four notes files; M1.review will be substantial.
+- **Task 6 — M1.04 nodes-use fixtures** (merge `ad79997`): 10 `.wit` fixtures under `tests/fixtures/04-nodes-use/` covering block-form `@name ... name@`, inline form, bare `@name` reference, bare reference adjacent to prose (direct I.6 probe), `@name.field` dot-access (I.3), hyphenated/numeric-suffix/underscored identifiers, nested same-name shadowing, and empty body `@x x@`. `mismatched-close` deferred to `tests/errors/`. **First contact with the central `@name`-reference syntactic feature.** **CONCRETE PROPOSAL for I.6 surfaced in `_notes.md`** — rule (b): handle class `[A-Za-z0-9_-]`; `.` opens dot-access path; all other bytes terminate. 11 new `I.review` items surfaced (trailing hyphen, sentence-final period vs I.3, numeric dot-access indices, leading-underscore, case sensitivity, closer source location, all-on-one-line nesting, inter-marker space, block-then-prose paragraph fusion, mismatched-close placement, Unicode handles). Accumulated total: ~40 `I.review` items across five notes files; I.6 proposal ready to ratify at M1.review.
 
 ---
 
@@ -214,28 +230,30 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 
 ## Notes for next briefing cycle
 
-- **M1.04 — nodes-use fixtures for `tests/fixtures/04-nodes-use/`** is the next dispatch. PLAN section E.1, user stories W4.1–W4.5, plus DS-4. **Narration in `.wit` remains FORBIDDEN from 03 forward** — all explanation lives in `_notes.md`. This category is the first contact with `@name`-references, the central syntactic feature of Wit.
-  - Read `/tests/fixtures/README.md` (especially the "no in-fixture narration from 03 forward" clause), `/tests/fixtures/03-comments/_notes.md` (latest format reference and the no-narration convention in practice), and `/examples/` files that exercise `@name` references (notably `15-references/` and any single-feature reference example) for grounding.
-  - Scenarios to cover (8–12 fixtures, one purpose each, kebab-case):
-    - `block-name-body.wit` — basic `@name ... name@` block form.
-    - `inline-name-body.wit` — `@name ... name@` mid-paragraph (inline form).
-    - `bare-reference.wit` — `@name` with no body, no closer, no parens — pure reference. Probes I.6 (where does the handle end?).
-    - `dotted-access.wit` — `@name.field` dot access (probes PLAN.md I.3 — where dot-access is legal).
-    - `hyphenated-name.wit` — `@paper-stats` (hyphen in identifier).
-    - `numeric-suffix.wit` — `@h1`, `@h2` (digit-tail identifiers).
-    - `underscored-name.wit` — `@chapter_one` (underscore in identifier).
-    - `nested-same-name.wit` — `@x @x x@ x@` — closer pairing discipline under name shadowing.
-    - `bare-reference-adjacent-prose.wit` — `@weil argued` — direct I.6 probe: handle terminates at whitespace? at punctuation? at apostrophe?
-    - `empty-body.wit` — `@x x@` (no content between).
-    - **Optional / judgment call:** `mismatched-close.wit` — `@x ... y@`. This may belong in `tests/errors/` rather than `fixtures/04-nodes-use/`. Implementer's call: include with an `_notes.md` note flagging the placement question, or defer to errors/.
-  - Create `tests/fixtures/04-nodes-use/_notes.md`. **No narration in `.wit` files.** Expected open questions to surface (each H2 cites PLAN.md `I.x` or flags `I.review`):
-    - **PLAN.md I.6 — bare reference boundary** — directly and centrally probed by `bare-reference-adjacent-prose.wit`, `numeric-suffix.wit`, `dotted-access.wit`. Expect concrete proposal in notes.
-    - **PLAN.md I.7 — `!!` greedy-parse risk** — not exercised here (no short-close), but flag as the next category's headache; downstream concern worth surfacing now while reference syntax is fresh.
-    - PLAN.md I.3 — `@name.field` legal positions — probed by `dotted-access.wit`.
-    - Identifier character class (hyphen, digit, underscore — first-char rules, mid-char rules) — likely new `I.review`.
-    - Closer-pairing discipline under name shadowing (nested-same-name) — likely new `I.review`.
-    - Mismatched-close placement (fixtures/ vs errors/) if included.
-  - Avoid `#`-definitions, `*`/`_` emphasis as the test subject, `!!` close, parens on references, pipes — those belong in later categories. Plain prose hosting the references is fine.
+- **M1.05 — nodes-parens fixtures for `tests/fixtures/05-nodes-parens/`** is the next dispatch. PLAN section E.1 W4.4 + DS-5. **Narration in `.wit` remains FORBIDDEN.** First contact with the `(...)` parameter list syntax — named params, flags, mixed, self-closing classification.
+  - Read `/tests/fixtures/README.md`, `/tests/fixtures/04-nodes-use/_notes.md` (latest format reference, including the I.6 CONCRETE PROPOSAL pattern — emulate the form for any concrete proposals that emerge here), and `/examples/` files that exercise parens (notably any node-call / param example) for grounding.
+  - Scenarios to cover (kebab-case, one purpose each):
+    - `single-named-param.wit` — `@badge(tone good)` self-closing with one named param.
+    - `multiple-params.wit` — `@badge(a, b, c)` multiple params.
+    - `named-and-flag.wit` — `@badge(tone good, verified!)` named + flag (probes PLAN.md I.12 — multi-word flag scoping is NOT here; single-word flag `verified!` is).
+    - `mixed-params.wit` — `@figure(src lamp.png, full width!, caption The lens)` mixed forms incl. multi-word flag (directly probes I.12 — does `full width!` parse as one flag or word + stray).
+    - `hyphen-multi-word-key.wit` — `@panel(background colour - dark slate)` hyphen as the multi-word-key separator convention. New I.review territory.
+    - `empty-parens.wit` — `@x()` empty parens — legal, no-op, or error?
+    - `trailing-comma.wit` — `@x(a,)` trailing comma — legal or not? New I.review.
+    - `inner-whitespace.wit` — `@x( a , b )` extra whitespace inside parens — normalized or preserved? New I.review.
+    - `self-closing.wit` — confirms self-closing classification: no body, no `name@` closer; parens themselves terminate the node. New I.review on classification rule.
+    - `parens-then-body.wit` — `@name(p) body name@` parens + body without pipes. Note: this is OPEN (related to I.11 mixing-parens-and-pipes, but parens+body without pipes is a distinct subquestion). Flag explicitly in `_notes.md` as the right place to ask it.
+  - Create `tests/fixtures/05-nodes-parens/_notes.md`. **No narration in `.wit` files.** Expected open questions to surface (each H2 cites PLAN.md `I.x` or flags `I.review`):
+    - **PLAN.md I.12 — multi-word flags via parens** — directly probed by `mixed-params.wit`. Expect concrete proposal.
+    - **PLAN.md I.4 — parameter value quoting** — every fixture exercises unquoted values; flag whether any value would NEED quoting (special chars: comma, paren, `!`).
+    - **PLAN.md I.11 — mixing parens and pipes** — not exercised (no pipes yet), but flag downstream; parens+body without pipes (`parens-then-body.wit`) is a related but distinct subquestion to surface.
+    - **PLAN.md I.17 — combining `!!` close with parens** — not exercised here (no `!!`), but flag downstream now that parens are fresh.
+    - Self-closing classification rule (no body + no closer + parens present => self-closing node) — new `I.review`.
+    - Empty parens semantics — new `I.review`.
+    - Trailing comma policy — new `I.review`.
+    - Inner-whitespace normalization — new `I.review`.
+    - Hyphen as multi-word-key separator convention vs literal hyphen in value — new `I.review`.
+  - Avoid `#`-definitions, pipes, `!!` close, refs without parens (that's M1.04). Plain prose hosting the parens-bearing nodes is fine.
   - Do NOT add snapshot `.json` files — snapshot runner has not landed.
-  - **Branch:** `m1-04-nodes-use-fixtures`. **Single commit message:** `M1.04: nodes-use fixtures (@name body name@, bare, dotted, edges)`.
-- Keep this file under 280 lines. Prune resolved design questions into a separate "Decisions" section once they land. (Currently approaching limit — next memory update should consider pruning oldest scaffold notes.)
+  - **Branch:** `m1-05-nodes-parens-fixtures`. **Single commit message:** `M1.05: nodes-parens fixtures (@name(p), self-closing, edges)`.
+- Keep this file under 280 lines. Prune resolved design questions into a separate "Decisions" section once they land. (Currently OVER the 280-line target — next memory update should compact the per-category "Surfaced design questions" lists into one-line digests, or move them to a sibling `design-questions.md`.)
