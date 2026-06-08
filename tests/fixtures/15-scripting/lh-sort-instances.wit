@@ -1,0 +1,7 @@
+@finding(weight: 3, claim: "low")
+@finding(weight: 9, claim: "high")
+@finding(weight: 6, claim: "mid")
+
+<%
+lh.sort('finding', (a, b) => b.weight - a.weight);
+%>

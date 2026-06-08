@@ -1,0 +1,8 @@
+#paper:
+  word count: 0
+
+<%
+lh.set('paper.word count', 1200);
+%>
+
+Current count: <% lh.data.paper['word count'] %>

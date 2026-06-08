@@ -1,0 +1,7 @@
+<%
+function greet(name) {
+  return `hello, ${name}`;
+}
+%>
+
+The system says: @scriptCall(greet, "world")

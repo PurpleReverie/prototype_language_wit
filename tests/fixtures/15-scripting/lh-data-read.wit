@@ -1,0 +1,11 @@
+#themes:
+  - clarity
+  - rigor
+  - depth
+
+<%
+const themes = lh.data.themes;
+lh.inject('theme-count', `#total: ${themes.length}`);
+%>
+
+@theme-count

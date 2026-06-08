@@ -1,0 +1,10 @@
+@finding(claim: "A holds")
+@finding(claim: "B holds")
+@finding(claim: "C holds")
+
+<%
+const all = lh.query('finding');
+lh.inject('finding-count', `#count: ${all.length}`);
+%>
+
+@finding-count
