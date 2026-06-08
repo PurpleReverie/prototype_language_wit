@@ -95,6 +95,7 @@ Tests:
 - `/tests/fixtures/02-emphasis/` — 9 emphasis-layer fixtures: `basic-italic.wit`, `basic-bold.wit`, `combined-bold-italic.wit`, `apostrophe-after-italic.wit`, `arithmetic-shapes.wit`, `underscore-in-identifier.wit`, `empty-marks.wit`, `marks-at-paragraph-boundary.wit`, `mixed-prose-and-marks.wit`. Plus `_notes.md` surfacing 7 new `I.review` items (see "Surfaced design questions" below). Last category permitting in-fixture narration; `03-comments` onward narration is forbidden.
 - `/tests/fixtures/03-comments/` — 8 comments-layer fixtures + `_notes.md`. **First category where in-fixture narration is FORBIDDEN** — all explanation lives in `_notes.md`. Probes PLAN.md I.1 directly. Surfaces 12 new `I.review` items (see "Surfaced design questions" below).
 - `/tests/fixtures/04-nodes-use/` — 10 node-use fixtures + `_notes.md`: `block-name-body.wit`, `inline-name-body.wit`, `bare-reference.wit`, `bare-reference-adjacent-prose.wit`, `dotted-access.wit`, `hyphenated-name.wit`, `numeric-suffix.wit`, `underscored-name.wit`, `nested-same-name.wit`, `empty-body.wit`. (`mismatched-close` deferred to `tests/errors/` — placement noted as I.review item.) Directly probes I.6, I.3; surfaces 11 new `I.review` items including a CONCRETE PROPOSAL for I.6 bare-reference boundary rule (b).
+- `/tests/fixtures/05-nodes-parens/` — 10 parens-form fixtures + `_notes.md`: `single-named-param.wit`, `multiple-params.wit`, `named-and-flag.wit`, `mixed-params.wit`, `hyphen-multi-word-key.wit`, `empty-parens.wit`, `trailing-comma.wit`, `inner-whitespace.wit`, `self-closing.wit`, `parens-then-body.wit`. First contact with `(...)` parameter list syntax; in-fixture narration FORBIDDEN. Directly probes I.12, I.4; flags downstream I.11, I.17. Surfaces 12 new `I.review` items plus CONCRETE PROPOSALS for: I.12 multi-word flag = whole-slot; trailing comma tolerated; inner-whitespace stripped per slot; hyphen-as-separator with surrounding spaces; self-closing classification parity with pipe-form.
 
 CI/tooling:
 - `/.github/workflows/ci.yml` — `ubuntu-latest`, `pnpm/action-setup@v4`, Node 20 with pnpm cache; runs install/typecheck/test/build.
@@ -200,7 +201,21 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 - Mismatched-close placement (`errors/` vs `04-nodes-use/`): the meta-question itself, recorded as I.review. Deferred to errors/ for now.
 - Unicode handle policy: non-ASCII letters in `@name` — extends emphasis Unicode question (M1.02) to identifiers. (new `I.review` item)
 
-**Accumulated load (M1.00–M1.04):** ~40 surfaced `I.review` items across five `_notes.md` files (28 before M1.04 + 11 new + 1 CONCRETE PROPOSAL for I.6). M1.review will be substantial — schedule a dedicated review pass before M2 begins; expect spec v0.2 / PLAN.md amendments. I.6 proposal is ready to ratify.
+**From `05-nodes-parens/_notes.md` (M1.05):**
+- **PLAN.md I.12 — multi-word flag scoping — CONCRETE PROPOSAL surfaced.** A multi-word flag terminated by `!` (e.g. `full width!`) parses as a single whole-slot flag; the `!` belongs to the slot, not the trailing word. Ready to ratify at M1.review.
+- **Trailing comma — CONCRETE PROPOSAL.** Tolerated: `@x(a,)` parses identically to `@x(a)`; trailing empty slot is discarded.
+- **Inner-whitespace — CONCRETE PROPOSAL.** Strip leading/trailing whitespace per slot after comma-split; preserve internal single spaces for multi-word keys/values.
+- **Hyphen-as-separator — CONCRETE PROPOSAL.** ` - ` (hyphen with surrounding spaces) separates multi-word key from multi-word value; bare `-` inside a word is literal (e.g. `well-known` is a single token).
+- **Self-closing classification — CONCRETE PROPOSAL.** Parens-form with no trailing body achieves parity with pipe-form self-close: `@badge(tone good)` is self-closing iff no body content follows on the same construct.
+- PLAN.md I.4 — parameter value quoting — flagged: no fixture needed quoting; concrete chars triggering quote requirement (comma, paren, `!`, leading `-`) remain open. (new `I.review` item)
+- PLAN.md I.11 — mixing parens and pipes — flagged downstream for M1.06.
+- PLAN.md I.17 — combining `!!` close with parens — flagged downstream for M1.07.
+- Empty-parens semantics: `@x()` legal/no-op/error. (new `I.review` item)
+- Parens+body without pipes (`@name(p) body name@`) — distinct subquestion of I.11; flagged as new I.review.
+- Hyphen disambiguator: `|well-known|` (positional) vs `|key - value|` (named) — formalize the surrounding-space rule. (new `I.review` item)
+- 12 new I.review items total including downstream I.11 + I.17 flags.
+
+**Accumulated load (M1.00–M1.05):** ~52 surfaced `I.review` items across six `_notes.md` files (40 before M1.05 + 12 new) plus 6 CONCRETE PROPOSALS ready to ratify (I.6 from M1.04; I.12 + trailing comma + inner-whitespace + hyphen-separator + self-closing parity from M1.05). M1.review will be substantial — schedule a dedicated review pass before M2 begins; expect spec v0.2 / PLAN.md amendments.
 
 ---
 
@@ -212,6 +227,7 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 - **Task 4 — M1.02 emphasis fixtures** (merge `3e0f7ea`): 9 `.wit` fixtures under `tests/fixtures/02-emphasis/` covering `_italic_` and `*bold*` baselines, `_*combined*_` nesting, the `_keeper_'s` apostrophe-after-italic edge, `5*6*7` arithmetic-shape suppression, intra-word `snake_case` underscores, empty `__`/`**` marks, marks at paragraph boundaries, and mixed prose+marks runs. `_notes.md` surfaces 7 new `I.review` items: empty-mark semantics, word-character Unicode policy, three-plus adjacent marks (`***x***`), italic-then-apostrophe smart-quote interaction, digit-then-letter `*` asymmetric boundary, unclosed mark across blank line, and emphasis mark split across CRLF. Narration-flush convention from M1.01 reinforced — recurrence in this review means every future briefing for a narration-permitting category must call it out explicitly. (After this category, narration in fixtures dies.)
 - **Task 5 — M1.03 comments fixtures** (merge `0d83116`): 8 `.wit` fixtures under `tests/fixtures/03-comments/` covering line-leading `~`, inline `~~ ... ~~/`, multi-line blocks, internal `~~` divider, `~/` path safety inside block bodies, mid-line tilde discriminators, empty comments, and the comment-between-prose-lines paragraph-boundary probe. **First category where in-fixture narration is forbidden** — all explanation lives in `_notes.md`. Directly probes PLAN.md I.1 (comments as AST nodes vs elided). Surfaces 12 new `I.review` items (see above): trivia attachment, whitespace-after-tilde, block-spans-blank-line, payload indent preservation, `~~` divider semantics, `~~~/` leftmost-longest, mid-line `~` lookbehind, empty-comment shape, closer positional restrictions, joiner/separator (composes I.1+I.2), and CRLF/BOM byte edges. Convention reinforced for all forward categories: explanation in `_notes.md` only. Accumulated total: 28 `I.review` items across four notes files; M1.review will be substantial.
 - **Task 6 — M1.04 nodes-use fixtures** (merge `ad79997`): 10 `.wit` fixtures under `tests/fixtures/04-nodes-use/` covering block-form `@name ... name@`, inline form, bare `@name` reference, bare reference adjacent to prose (direct I.6 probe), `@name.field` dot-access (I.3), hyphenated/numeric-suffix/underscored identifiers, nested same-name shadowing, and empty body `@x x@`. `mismatched-close` deferred to `tests/errors/`. **First contact with the central `@name`-reference syntactic feature.** **CONCRETE PROPOSAL for I.6 surfaced in `_notes.md`** — rule (b): handle class `[A-Za-z0-9_-]`; `.` opens dot-access path; all other bytes terminate. 11 new `I.review` items surfaced (trailing hyphen, sentence-final period vs I.3, numeric dot-access indices, leading-underscore, case sensitivity, closer source location, all-on-one-line nesting, inter-marker space, block-then-prose paragraph fusion, mismatched-close placement, Unicode handles). Accumulated total: ~40 `I.review` items across five notes files; I.6 proposal ready to ratify at M1.review.
+- **Task 7 — M1.05 nodes-parens fixtures** (merge `231f8b0`): 10 `.wit` fixtures under `tests/fixtures/05-nodes-parens/` covering single named param, multiple params, named+flag, mixed-form (multi-word flag), hyphen-multi-word-key, empty parens, trailing comma, inner whitespace, self-closing classification, and parens+body without pipes. **First contact with the `(...)` parameter-list syntax; in-fixture narration FORBIDDEN.** Directly probes PLAN.md I.12 (multi-word flag) and I.4 (parameter value quoting); flags downstream I.11 (mixing parens+pipes) and I.17 (`!!` close + parens). `_notes.md` surfaces **5 CONCRETE PROPOSALS**: (1) I.12 — multi-word flag terminated by `!` parses as whole-slot flag; (2) trailing comma tolerated; (3) inner-whitespace stripped per slot, internal single spaces preserved; (4) hyphen-as-separator requires surrounding spaces (` - `) — bare `-` is literal; (5) self-closing classification parity with pipe-form. Plus 12 new `I.review` items including downstream I.11 and I.17 placeholders. Accumulated total: ~52 `I.review` items across six notes files; 6 concrete proposals (I.6 + 5 from M1.05) ready to ratify at M1.review.
 
 ---
 
@@ -230,30 +246,33 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 
 ## Notes for next briefing cycle
 
-- **M1.05 — nodes-parens fixtures for `tests/fixtures/05-nodes-parens/`** is the next dispatch. PLAN section E.1 W4.4 + DS-5. **Narration in `.wit` remains FORBIDDEN.** First contact with the `(...)` parameter list syntax — named params, flags, mixed, self-closing classification.
-  - Read `/tests/fixtures/README.md`, `/tests/fixtures/04-nodes-use/_notes.md` (latest format reference, including the I.6 CONCRETE PROPOSAL pattern — emulate the form for any concrete proposals that emerge here), and `/examples/` files that exercise parens (notably any node-call / param example) for grounding.
+- **M1.06 — nodes-pipes (parameters) fixtures for `tests/fixtures/06-nodes-pipes/`** is the next dispatch. PLAN section E.1 W5.1–W5.6 + DS-5. **Narration in `.wit` remains FORBIDDEN.** First contact with pipe-form parameters `|key value|` / `|positional|` / `|flag!|`. Implementer must commit to parity with M1.05 proposals OR explicitly diverge in `_notes.md`.
+  - Read `/tests/fixtures/README.md`, `/tests/fixtures/05-nodes-parens/_notes.md` (latest format reference; emulate the CONCRETE PROPOSAL form for any new proposals), and `/examples/` files that exercise pipes for grounding. Note PLAN file rule: `|key value|` — first word is key, rest is value; flag form REQUIRES trailing `!`; bare single-word slot (no `!`) is POSITIONAL, not flag.
   - Scenarios to cover (kebab-case, one purpose each):
-    - `single-named-param.wit` — `@badge(tone good)` self-closing with one named param.
-    - `multiple-params.wit` — `@badge(a, b, c)` multiple params.
-    - `named-and-flag.wit` — `@badge(tone good, verified!)` named + flag (probes PLAN.md I.12 — multi-word flag scoping is NOT here; single-word flag `verified!` is).
-    - `mixed-params.wit` — `@figure(src lamp.png, full width!, caption The lens)` mixed forms incl. multi-word flag (directly probes I.12 — does `full width!` parse as one flag or word + stray).
-    - `hyphen-multi-word-key.wit` — `@panel(background colour - dark slate)` hyphen as the multi-word-key separator convention. New I.review territory.
-    - `empty-parens.wit` — `@x()` empty parens — legal, no-op, or error?
-    - `trailing-comma.wit` — `@x(a,)` trailing comma — legal or not? New I.review.
-    - `inner-whitespace.wit` — `@x( a , b )` extra whitespace inside parens — normalized or preserved? New I.review.
-    - `self-closing.wit` — confirms self-closing classification: no body, no `name@` closer; parens themselves terminate the node. New I.review on classification rule.
-    - `parens-then-body.wit` — `@name(p) body name@` parens + body without pipes. Note: this is OPEN (related to I.11 mixing-parens-and-pipes, but parens+body without pipes is a distinct subquestion). Flag explicitly in `_notes.md` as the right place to ask it.
-  - Create `tests/fixtures/05-nodes-parens/_notes.md`. **No narration in `.wit` files.** Expected open questions to surface (each H2 cites PLAN.md `I.x` or flags `I.review`):
-    - **PLAN.md I.12 — multi-word flags via parens** — directly probed by `mixed-params.wit`. Expect concrete proposal.
-    - **PLAN.md I.4 — parameter value quoting** — every fixture exercises unquoted values; flag whether any value would NEED quoting (special chars: comma, paren, `!`).
-    - **PLAN.md I.11 — mixing parens and pipes** — not exercised (no pipes yet), but flag downstream; parens+body without pipes (`parens-then-body.wit`) is a related but distinct subquestion to surface.
-    - **PLAN.md I.17 — combining `!!` close with parens** — not exercised here (no `!!`), but flag downstream now that parens are fresh.
-    - Self-closing classification rule (no body + no closer + parens present => self-closing node) — new `I.review`.
-    - Empty parens semantics — new `I.review`.
-    - Trailing comma policy — new `I.review`.
-    - Inner-whitespace normalization — new `I.review`.
-    - Hyphen as multi-word-key separator convention vs literal hyphen in value — new `I.review`.
-  - Avoid `#`-definitions, pipes, `!!` close, refs without parens (that's M1.04). Plain prose hosting the parens-bearing nodes is fine.
+    - `basic-named.wit` — `|mood calm|` basic named, single-word key + single-word value.
+    - `multi-word-value.wit` — `|caption The second-order Fresnel lens|` single-word key + multi-word value (verify the "first word is key, rest is value" rule).
+    - `hyphen-multi-word-key.wit` — `|background colour - dark slate|` multi-word key with hyphen separator (verify M1.05 surrounding-space hyphen-separator proposal applies to pipes too).
+    - `bare-positional.wit` — `|full|` single word, no `!` — should parse as POSITIONAL per PLAN rule (flag rule requires trailing `!`). Verify with implementer.
+    - `flag-with-bang.wit` — `|full width!|` flag with trailing `!`, multi-word slot (parity probe for M1.05 I.12 whole-slot proposal).
+    - `multi-word-isolated.wit` — `|multi word value with space|` same shape as caption case but isolated in its own fixture for clarity (probes "first word = key" rule unambiguously).
+    - `mid-body-scatter.wit` — multiple `|p|` in different positions inside a single node body (probes last-one-wins ordering for same-key duplicates across positions).
+    - `last-one-wins.wit` — same key twice with different values; later wins.
+    - `multiple-pipes-per-line.wit` — `@x |a x| |b y| ... x@` multiple pipe-slots on the same line inside a node body.
+    - `empty-pipe.wit` — `||` empty pipe — error, no-op, or empty positional? New I.review territory.
+    - `pipe-in-body-text.wit` — pipe-shaped text inside body content that is NOT a parameter slot (no matching node opener) — does it parse as plain text or error? New I.review.
+    - `literal-hyphen-probe.wit` — `|well-known|` (positional, bare hyphen as part of word) vs `|key - value|` (named, hyphen as separator with surrounding spaces) — disambiguator parity with M1.05 hyphen-separator proposal.
+  - Create `tests/fixtures/06-nodes-pipes/_notes.md`. **No narration in `.wit` files.** Expected open questions to surface (each H2 cites PLAN.md `I.x` or flags `I.review`):
+    - **PLAN.md I.11 — mixing parens and pipes** — not directly exercised here (pipes only), but pipes-side semantics defined now constrain the I.11 resolution. Cross-reference M1.05 `_notes.md`.
+    - **PLAN.md I.12 — multi-word flag scoping** — `flag-with-bang.wit` is the pipe-form parity probe for M1.05's whole-slot proposal. Implementer must explicitly affirm or diverge.
+    - **PLAN.md I.4 — parameter value quoting** — multi-word values exercise unquoted forms; flag whether any value would NEED quoting (pipe `|`, `!`, leading `-`).
+    - Bare-positional vs flag disambiguation rule — `|full|` is positional (PLAN rule: flag requires `!`). New `I.review` formalizing the lookahead.
+    - Last-one-wins ordering — does "later wins" apply per-key globally across the node body, or only within the parens slot list? Pipes scatter across body so this needs explicit answer. New `I.review`.
+    - Empty pipe `||` semantics — error / no-op / empty positional. New `I.review`.
+    - Pipe-shaped text inside body content (not a slot) — literal text, error, or position-restricted? New `I.review`.
+    - Hyphen-as-separator parity with M1.05 proposal — affirm or diverge. New `I.review`.
+    - Mid-body scatter classification — does a pipe slot anywhere inside the body attach to the enclosing node, or only at the node opener? New `I.review`.
+    - Multi-word key delimiter inside pipes — same `first word = key, rest = value` rule, or different from the `key - value` named form? Reconcile. New `I.review`.
+  - Avoid `#`-definitions, `!!` close, refs without pipes (those are later milestones). Plain prose + `@x ... x@` bodies hosting the pipe slots are fine. Mixing parens AND pipes on the same node is OUT OF SCOPE for this milestone (that's I.11 / a later category).
   - Do NOT add snapshot `.json` files — snapshot runner has not landed.
-  - **Branch:** `m1-05-nodes-parens-fixtures`. **Single commit message:** `M1.05: nodes-parens fixtures (@name(p), self-closing, edges)`.
-- Keep this file under 280 lines. Prune resolved design questions into a separate "Decisions" section once they land. (Currently OVER the 280-line target — next memory update should compact the per-category "Surfaced design questions" lists into one-line digests, or move them to a sibling `design-questions.md`.)
+  - **Branch:** `m1-06-parameters-pipes-fixtures`. **Single commit message:** `M1.06: parameters-pipes fixtures (|p|, last-one-wins, edges)`.
+- **Memory pruning still pending.** This file is ~250+ lines. Next memory update should compact per-category "Surfaced design questions" into one-line digests, or move them to a sibling `design-questions.md`. Carry forward.
