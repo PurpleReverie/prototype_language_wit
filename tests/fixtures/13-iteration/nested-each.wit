@@ -1,0 +1,3 @@
+#decks: [ { name - upper, hands - [ Marlow, Singleton ] }, { name - lower, hands - [ Wait ] } ]
+
+(each @decks as deck) The @deck.name deck held (each @deck.hands as hand) @hand, (end) and stood ready. (end)

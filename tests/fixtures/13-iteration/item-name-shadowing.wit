@@ -1,0 +1,5 @@
+#item: solitary
+#items: [ first, second, third ]
+
+The standing reference is @item.
+(each @items as item) The loop names @item. (end)

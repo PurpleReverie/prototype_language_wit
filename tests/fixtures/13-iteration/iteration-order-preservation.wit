@@ -1,0 +1,3 @@
+#bells: [ one, two, three, four, five, six, seven, eight ]
+
+(each @bells as item) @item, (end)

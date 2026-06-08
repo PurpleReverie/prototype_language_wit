@@ -1,0 +1,3 @@
+#hands: [ { name - Marlow, post - bridge }, { name - Singleton, post - foredeck } ]
+
+(each @hands as item) @watch |keeper @item.name, station @item.post| The bell struck twice. watch@ (end)

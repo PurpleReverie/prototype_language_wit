@@ -1,0 +1,3 @@
+#watchers: [ { name - Marlow, post - bridge }, { name - Singleton, post - foredeck } ]
+
+(each @watchers as item) @item.name kept the @item.post. (end)
