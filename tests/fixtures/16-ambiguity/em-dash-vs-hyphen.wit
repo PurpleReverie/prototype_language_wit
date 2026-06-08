@@ -1,0 +1,5 @@
+The key — value pair uses an em-dash and remains prose.
+
+Compare to greet - name where a single ASCII hyphen separates tokens.
+
+A range like 1995 — 2010 is prose; a flag like build - release is not.

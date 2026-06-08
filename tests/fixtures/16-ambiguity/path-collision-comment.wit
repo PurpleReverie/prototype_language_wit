@@ -1,0 +1,5 @@
+~~ TODO save to ~/Documents ~~
+
+Another: ~~ remember ~/.config/wit.toml needs review ~~
+
+Inline ~~ check ~/bin/run-script ~~ stays a comment despite the path.
