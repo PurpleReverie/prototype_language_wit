@@ -1,0 +1,6 @@
+reference ./chapters/one.wit
+reference ./chapters/two.wit
+
+@chapterhead |number I| |title The Keeper|
+
+@chapterhead |number II| |title The Lamp|
