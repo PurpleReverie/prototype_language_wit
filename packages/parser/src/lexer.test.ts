@@ -337,3 +337,4 @@ describe('lex — emphasis recognizers', () => {
     expect(pb.loc.line).toBe(1);
   });
 });
+
