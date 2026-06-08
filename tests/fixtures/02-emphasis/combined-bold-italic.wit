@@ -1,4 +1,3 @@
 ~ both orderings of nested marks: bold outside italic, then italic outside bold
 ~ each token is one word so the inner mark closes before the outer
-
 He read the inscription _*aloud*_, then read it again *_silently_*.

@@ -11,7 +11,9 @@ beyond a single narration line, nodes (`@`), defs (`#`), parameters,
 records, and short-close (`!!`) all live in later categories and are
 absent from every fixture below.
 
-## Baseline italic and bold (PLAN.md DS-2 / 2.U.1, 2.U.2)
+## Baseline italic and bold (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-2 / 2.U.1, 2.U.2.
 
 - `basic-italic.wit` and `basic-bold.wit` are the minimum-viable probes
   for `_word_` and `*word*` respectively. One word, one mark, one
@@ -23,7 +25,22 @@ absent from every fixture below.
   The intended rule (PLAN §2.U.1/2.U.2) is "wraps a token"; these
   fixtures pin the simplest token shape — a single alphabetic word.
 
-## Combined marks — both orderings (PLAN.md I.review; cross-refs 2.C.3)
+## Mixed prose and marks in one paragraph (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md 2.C.1.
+
+- `mixed-prose-and-marks.wit` is the interleave smoke test: one
+  paragraph that runs plain prose → italic → plain prose → bold →
+  plain prose. The single-mark fixtures (`basic-italic.wit`,
+  `basic-bold.wit`) each isolate one mark; this one pins that the two
+  marks coexist in a single run without disturbing the surrounding
+  prose tokens or each other.
+- Lean: AST shape is a flat sequence of `Prose | Italic | Prose | Bold |
+  Prose` children under one paragraph. No nesting expected.
+
+## Combined marks — both orderings (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md 2.C.3.
 
 - `combined-bold-italic.wit` includes BOTH `_*word*_` (bold inside
   italic) and `*_word_*` (italic inside bold). PLAN §2.C.3 promises
@@ -37,7 +54,9 @@ absent from every fixture below.
   below); deeper combinations should wait for a tokenizer decision on
   the empty-mark case before fixtures are written.
 
-## Apostrophe boundary (PLAN.md DS-2 / 2.U.3)
+## Apostrophe boundary (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-2 / 2.U.3.
 
 - `apostrophe-after-italic.wit` is the canonical probe for 2.U.3
   ("`_word_'s` recognizes mark + apostrophe-s"). The italic closes on
@@ -49,7 +68,9 @@ absent from every fixture below.
   italic boundary changes the byte that follows the closer and could
   affect the boundary rule. Lean verbatim; spec is silent.
 
-## Arithmetic shapes — digit-flanked asterisks (PLAN.md DS-2 / 2.U.4)
+## Arithmetic shapes — digit-flanked asterisks (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-2 / 2.U.4.
 
 - `arithmetic-shapes.wit` is the emphasis-side assertion of the same
   `5*6*7` shape probed in `01-prose/numbers-and-arithmetic-shapes.wit`.
@@ -67,7 +88,9 @@ absent from every fixture below.
   digit case; a digit-then-letter case (`5*x*7`, `x*5*y`) is not yet
   probed and may need its own fixture once the rule is committed.
 
-## Intra-word underscore (PLAN.md DS-2 / 2.U.5, W2.5)
+## Intra-word underscore (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-2 / 2.U.5, W2.5.
 
 - `underscore-in-identifier.wit` pins `snake_case_word`: an underscore
   flanked by letters on both sides must not open italic. Spec page 3
@@ -79,7 +102,9 @@ absent from every fixture below.
   with `arithmetic-shapes.wit` — together they pin "intra-word mark
   character does not trigger emphasis" for both marks.
 
-## Empty marks (PLAN.md DS-2 / 2.U.5; new I.review item for legality)
+## Empty marks (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-2 / 2.U.5 (legality of `__` / `**` is the open item).
 
 - `empty-marks.wit` contains `__` and `**` as standalone tokens. PLAN
   §2.U.5 promises "`__`, `**` are not emphasis" but does not say what
@@ -113,7 +138,9 @@ absent from every fixture below.
   fixture and should be either explicitly in or explicitly out of the
   word-character class.
 
-## Marks at paragraph boundary (PLAN.md DS-2 / 2.C.2)
+## Marks at paragraph boundary (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-2 / 2.C.2.
 
 - `marks-at-paragraph-boundary.wit` places `_Alone_` as the first
   token of paragraph 1, `*dawn*` as the last token of paragraph 2, and
