@@ -58,20 +58,44 @@ function step(state: LexState): void {
   consumeTextRun(state);
 }
 
-function tryParagraphBreak(state: LexState): boolean {
-  // A paragraph break is two or more consecutive LFs.
+interface BreakScan {
+  // Last consumed offset (one past the final `\n`) when this position
+  // begins a paragraph break, otherwise -1.
+  endOffset: number;
+}
+
+function scanParagraphBreak(state: LexState): BreakScan {
+  // A paragraph break is `\n` followed by zero or more `(ws* \n)` runs,
+  // i.e. at least two newlines separated only by inline whitespace.
   const { src, cur } = state;
-  if (src.charAt(cur.offset) !== '\n') return false;
-  if (src.charAt(cur.offset + 1) !== '\n') return false;
-  emitParagraphBreak(state);
+  if (src.charAt(cur.offset) !== '\n') return { endOffset: -1 };
+  const lastNewline = scanBreakTail(src, cur.offset + 1);
+  if (lastNewline === -1) return { endOffset: -1 };
+  return { endOffset: lastNewline + 1 };
+}
+
+function scanBreakTail(src: string, from: number): number {
+  let i = from;
+  let lastNewline = -1;
+  while (i < src.length) {
+    const c = src.charAt(i);
+    if (c === '\n') { lastNewline = i; i += 1; continue; }
+    if (c === ' ' || c === '\t') { i += 1; continue; }
+    break;
+  }
+  return lastNewline;
+}
+
+function tryParagraphBreak(state: LexState): boolean {
+  const scan = scanParagraphBreak(state);
+  if (scan.endOffset === -1) return false;
+  emitParagraphBreak(state, scan.endOffset);
   return true;
 }
 
-function emitParagraphBreak(state: LexState): void {
+function emitParagraphBreak(state: LexState, endOffset: number): void {
   const start = snapshot(state.cur);
-  while (state.src.charAt(state.cur.offset) === '\n') {
-    advance(state);
-  }
+  while (state.cur.offset < endOffset) advance(state);
   const tok: ParagraphBreak = {
     kind: 'paragraphBreak',
     loc: locFrom(state.file, start, state.cur),
@@ -85,7 +109,7 @@ function consumeTextRun(state: LexState): void {
   const start = snapshot(state.cur);
   let value = '';
   while (state.cur.offset < state.src.length) {
-    if (isParagraphBreakAt(state)) break;
+    if (scanParagraphBreak(state).endOffset !== -1) break;
     value += state.src.charAt(state.cur.offset);
     advance(state);
   }
@@ -96,13 +120,6 @@ function consumeTextRun(state: LexState): void {
     loc: locFrom(state.file, start, state.cur),
   };
   state.tokens.push(tok);
-}
-
-function isParagraphBreakAt(state: LexState): boolean {
-  return (
-    state.src.charAt(state.cur.offset) === '\n' &&
-    state.src.charAt(state.cur.offset + 1) === '\n'
-  );
 }
 
 function advance(state: LexState): void {
