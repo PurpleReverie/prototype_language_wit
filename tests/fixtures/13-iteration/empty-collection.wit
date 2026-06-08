@@ -1,0 +1,3 @@
+#absent: [ ]
+
+(each @absent as item) The deck answered @item. (end)

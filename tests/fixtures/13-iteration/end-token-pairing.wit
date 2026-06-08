@@ -1,0 +1,4 @@
+#watch: [ Marlow, Singleton ]
+#relief: [ Wait, Donkin ]
+
+(each @watch as item) @item, (end) (each @relief as item) @item, (end) and the deck was full.
