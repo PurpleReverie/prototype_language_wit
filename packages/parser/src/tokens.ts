@@ -166,11 +166,21 @@ export interface ScriptClose extends HasLoc {
 }
 
 export interface HashOpen extends HasLoc {
+  // `#name` — start of a node-definition.
   kind: 'hashOpen';
+  name: string;
 }
 
 export interface HashClose extends HasLoc {
+  // `name#` — close of a node-definition block.
   kind: 'hashClose';
+  name: string;
+}
+
+export interface InterpolationName extends HasLoc {
+  // Bare handle between `::` ... `::` markers.
+  kind: 'interpolationName';
+  name: string;
 }
 
 export interface AdditivePrefix extends HasLoc {
@@ -240,6 +250,7 @@ export type Token =
   | ScriptClose
   | HashOpen
   | HashClose
+  | InterpolationName
   | AdditivePrefix
   | RecordOpen
   | RecordClose
