@@ -72,4 +72,35 @@ A third sub-agent — the **overview agent** — maintains a living understandin
 
 ---
 
+## 5. Tester sub-agent gates the merge
+
+After the reviewer approves, a **tester agent** runs the test suite. The merge only happens if tests pass.
+
+**Responsibilities:**
+- Run the relevant tests for the change.
+- On pass: report green; main session proceeds to merge.
+- On fail: report failing tests with enough detail for the implementer to diagnose. Main session bounces the task back to the implementer with the test feedback.
+
+**Why.** Test output is mostly noise when green — pages of "PASS" lines that would drown the main session's context. When red, the output matters but only in digest form. A dedicated tester agent absorbs the verbosity in its own context and hands back: *pass* or a structured failure report.
+
+**Per-task flow** (final form, extends rules 3 and 4):
+
+1. **Brief** — overview agent prepares the implementer briefing.
+2. **Implement** — implementer makes changes on a branch.
+3. **Review** — reviewer checks diff and downstream impact.
+4. **Resolve review feedback** — defects bounce to implementer; downstream-impact flags may adjust the plan.
+5. **Test** — tester agent runs the suite.
+6. **Resolve test feedback** — failures bounce to implementer (restart at step 2 on the same branch); on pass, proceed.
+7. **Merge** — branch lands on `main`.
+8. **Notify** — overview agent receives the merged diff + one-line summary.
+9. **Next task** — restart at step 1.
+
+**How to apply.**
+- Tester scope: the test suites likely affected by the diff. Run a narrow set when narrow is enough; widen when structure changes.
+- Failure reports: failing test name, the assertion that failed, ~5 lines of relevant context. Not the full output.
+- The tester never fixes tests. It only reports. Fixes go to the implementer.
+- A task is not done until tests are green *and* the branch is on `main`.
+
+---
+
 This document is living. New rules land here as we discover them mid-implementation.
