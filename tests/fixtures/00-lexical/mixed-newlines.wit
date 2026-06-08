@@ -1,0 +1,3 @@
+~ LF then CRLF then CR within one file. parser must normalize.
+LF-terminated line.
+CRLF-terminated line.CR-terminated line.
