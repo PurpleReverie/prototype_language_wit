@@ -4,3 +4,4 @@ export * from './tokens.js';
 export * from './errors.js';
 export * from './char.js';
 export * from './lexer.js';
+export * from './parser.js';
