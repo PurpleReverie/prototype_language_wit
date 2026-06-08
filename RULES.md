@@ -123,29 +123,32 @@ No per-task reviewer agent, no per-task tester agent. Their work is folded into 
 
 ### The context pack — `.agent-state/context-pack.md`
 
-A single living file, ~200–300 lines, that contains everything an implementer needs:
+A small living file, **target ~100–150 lines**, containing only what an implementer needs for the *current* task:
 
-- **Conventions** — narration rules (forbidden from 03+), kebab-case filenames, one-purpose-per-fixture, H2 citation form, forbidden tokens per category.
-- **Locked decisions** — proposals committed across prior tasks (one line each).
-- **Open questions with leans** — concrete-proposal leans (rule a/b/c) for open I.x items; downstream tasks must respect these leans but may surface counterexamples.
-- **Downstream horizon** — next 3–5 tasks (scope, syntax each will introduce, tokens to avoid in the current task).
+- **Conventions** — narration rules, kebab-case, one-purpose-per-fixture, H2 citation form.
 - **Self-review checklist** — bullets the implementer runs before committing.
+- **Current task brief** — scope, fixture list, expected `_notes.md` H2s, out-of-scope tokens. Edited per-task.
 - **Return format** — the ≤ 20-line output contract.
 
-The pack is the implementer's ONLY mandatory read. PLAN.md / README / prior `_notes.md` are referenced only when the implementer needs a specific spec citation for its own `_notes.md`, not as routine reading.
+**Explicitly NOT in the pack:** locked decisions from prior tasks, open-question leans from prior tasks, downstream-task horizon. Those live in **git history** (commit messages, prior `_notes.md` merged to main) and are read by the **reviewer**, not the implementer.
 
-The pack is maintained by the main session after each merge: small Edits to "Locked decisions," "Open questions," and "Downstream horizon." Full rebuilds only when the pack drifts (every 6–8 tasks).
+The implementer **codes blind to prior decisions** for its category's local scope. Whether the work conflicts with downstream tasks or prior leans is the **reviewer's** job at the periodic batch pass.
 
-### Periodic batch reviewer
+The pack is maintained by the main session: small Edit to the current-task-brief section before each dispatch.
 
-Every 3–4 merged tasks, a single **batch reviewer agent** runs to:
+### Periodic batch reviewer (downstream-conflict check)
 
-- Cross-check all `_notes.md` files in the batch for consistency.
-- Flag convention drift the implementers' self-reviews missed.
-- Surface cross-category cross-cuts.
+The implementer codes blind. The **reviewer** is where downstream-conflict checking happens. Every 3–4 merged tasks, a single reviewer agent runs to:
+
+- Read the diffs landed since the last review (`git diff <last-review-sha>..main`).
+- Read the **next 3–5 tasks** in the queue (scope, syntax they'll introduce).
+- Flag conflicts: does any decision the implementer made (concrete proposal, fixture shape) conflict with what's coming?
+- Cross-check `_notes.md` files in the batch for consistency and convention drift.
 - Suggest new I.review items to lift into PLAN.md `I` section.
 
 The reviewer is **non-blocking** — its output schedules follow-up fix tasks but does not gate the in-flight merge stream. Per-task bash gates remain the merge gate.
+
+This split (implementer codes blind, reviewer checks downstream) is intentional: pre-loading the implementer with every prior decision was redundant — most decisions don't touch the current category, and accumulating them inflated the implementer's read cost. Conflicts are rare; checking once at review beats checking at every implementer dispatch.
 
 ### Why this shape
 
