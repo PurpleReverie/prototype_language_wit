@@ -1,8 +1,8 @@
-\- a record is a set of named values wrapped in { }.
-   keys use the same - delimiter as parameters. -\
+~ a record is a set of named values wrapped in { }.
+~ keys use the same - delimiter as parameters.
 
-\- multi-line: opening brace on the definition line, body indented,
-   never a brace stranded alone -\
+~ multi-line: opening brace on the definition line, body indented,
+~ never a brace stranded alone
 
 #keeper: {
   name - Aldous Vane
@@ -10,11 +10,11 @@
   lamp lit - true
 }
 
-\- short records fit on one line, comma-separated -\
+~ short records fit on one line, comma-separated
 
 #world: { location - Bag End, time - night, storm - true }
 
-\- records nest -\
+~ records nest
 
 #keeper_detailed: {
   name - Aldous Vane
@@ -22,7 +22,7 @@
   history { years - 31, incidents - 2 }
 }
 
-\- record values can be any literal: strings, numbers, booleans -\
+~ record values can be any literal: strings, numbers, booleans
 
 #report: {
   title - Q3 Operations Review

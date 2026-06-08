@@ -1,5 +1,5 @@
-\- chapters/one.wit — a self-contained chapter that reaches into the
-   shared vocabulary defined in ../shared/schema.wit. -\
+~ chapters/one.wit — a self-contained chapter that reaches into the
+~ shared vocabulary defined in ../shared/schema.wit.
 
 #chapter_one
 @chapter |number - I| |title - The Lamp|

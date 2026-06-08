@@ -1,12 +1,12 @@
-\- additive partials: prefix a definition with + and multiple declarations
-   of the same name merge instead of overwriting.
-
-   the master file has no chapter list. it just references the chapter files
-   and renders @toc and @bibliography — both fully populated by chapters
-   that registered themselves.
-
-   add a chapter: create the file, add one `reference` line.
-   the toc and bibliography grow on their own. -\
+~ additive partials: prefix a definition with + and multiple declarations
+~ of the same name merge instead of overwriting.
+~
+~ the master file has no chapter list. it just references the chapter files
+~ and renders @toc and @bibliography — both fully populated by chapters
+~ that registered themselves.
+~
+~ add a chapter: create the file, add one `reference` line.
+~ the toc and bibliography grow on their own.
 
 reference ./chapters/one.wit
 reference ./chapters/two.wit

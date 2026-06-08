@@ -1,5 +1,5 @@
-\- this chapter registers itself into the shared @toc and @bibliography.
-   the master file never lists the chapter; the chapter announces itself. -\
+~ this chapter registers itself into the shared @toc and @bibliography.
+~ the master file never lists the chapter; the chapter announces itself.
 
 +#toc: @tocrow |number - I| |title - The Lamp| tocrow@
 +#bibliography: @weil: ! Simone Weil, Gravity and Grace, 1952, Routledge !

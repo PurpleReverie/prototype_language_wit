@@ -1,12 +1,61 @@
-\- anything between \- and -\ is a comment. invisible to every renderer. -\
+~ comments are invisible to every renderer.
 
-\- remember to verify this date before publishing -\
+~ two forms:
+~   ~ at the start of a line       — the rest of the line is a comment
+~   ~~ ... ~~/                      — inline, may span lines.
+~                                     the tail wraps it up.
+
+~ rules:
+~   ~~ always opens an inline comment, even at line start.
+~   ~ followed by whitespace at line start opens a line comment.
+~   ~~/ closes an inline comment. plain ~~ inside an open comment is
+~       just content, so the writer can use it as a divider however
+~       they like.
+
+
+~ line comments
+
+~ remember to verify this date before publishing
 The lighthouse was commissioned in 1847.
 
-\- comments can span lines:
-   the keeper was Aldous Vane,
-   appointed 1923, served thirty-one years. -\
-
+~ TODO: confirm the year of the new bell
 He served thirty-one years.
 
-The bell \- TODO: confirm the year of the new bell -\ rang on the hour.
+
+~ inline comments
+
+The bell ~~ TODO: confirm year ~~/ rang on the hour.
+
+The keeper, Aldous Vane ~~ check spelling against the parish record ~~/, was thirty-one years at post.
+
+
+~ multi-line inline
+
+~~ a longer aside:
+   we should decide whether epigraphs count toward the chapter's
+   word count. for now they don't. ~~/
+
+For eleven days the lamp had burned untended.
+
+
+~ internal ~~ as a free divider
+
+~~ TODO ~~ also fix the typo on page 3 ~~ and verify the footnote ~~/
+
+~~ note ~~ rough draft ~~ needs editor pass ~~/
+
+~~ section one ~~ section two ~~ section three ~~/
+
+
+~ what does NOT trigger a comment
+
+~ a tilde attached to a token is just a tilde.
+The crossing took ~5 minutes.
+He smiled ~half-heartedly~ at the lamp.
+The estimate, x ~ y, held within tolerance.
+
+~ shell paths inside comments are safe — ~~/ is the close, not ~/.
+~~ TODO: save the file to ~/Documents/notes and ~/.bashrc ~~/
+
+~ the close fires anywhere — end of line, mid-line, doesn't matter.
+~~ aside that ends mid-line ~~/ and then prose resumes.

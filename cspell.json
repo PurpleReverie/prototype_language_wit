@@ -1,0 +1,15 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "Aldous", "Vane", "Fresnel", "Dunmore", "Carrick", "Ines",
+    "Mara", "Finch", "Weil", "Berger", "Arendt", "Routledge",
+    "Sauron", "Frodo", "Gandalf", "Baggins",
+    "tocrow", "chapterheader", "epigraphbody", "reportheader",
+    "metriccard", "metriclabel", "metricvalue",
+    "siterow", "sitename", "sitestatus",
+    "statrow", "postmeta", "scenebreak", "slugline",
+    "weil", "berger", "arendt", "frodo", "gandalf",
+    "alnum", "untended", "wordcount"
+  ]
+}

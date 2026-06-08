@@ -1,11 +1,11 @@
-\- two inline marks, only two -\
+~ two inline marks, only two
 
 This is _italic_ and this is *bold*.
 
 The keeper called the lens a _miracle of glass_, though it was *only* polished stone in a brass cage.
 
-\- punctuation inside prose cannot trigger a mark by accident,
-   because the marks wrap a token rather than living at the start of a line -\
+~ punctuation inside prose cannot trigger a mark by accident,
+~ because the marks wrap a token rather than living at the start of a line
 
 I multiplied 5*6*7 and the 6 stays plain.
 

@@ -1,7 +1,7 @@
-\- # defines a node. inside a definition:
-     ||a, b, c||   captures parameters
-     ::name::      interpolates a captured parameter
-     ...           marks where the invocation body will render -\
+~ # defines a node. inside a definition:
+~   ||a, b, c||   captures parameters
+~   ::name::      interpolates a captured parameter
+~   ...           marks where the invocation body will render
 
 #chapter ||number, title, subtitle||
 @chapterheader
@@ -13,7 +13,7 @@ chapterheader@
 ...
 chapter#
 
-\- used like this -\
+~ used like this
 
 @chapter
 |number - I|
@@ -23,7 +23,7 @@ chapter#
 For eleven days the lamp had burned untended.
 chapter@
 
-\- captured parameters can also thread into child nodes invisibly -\
+~ captured parameters can also thread into child nodes invisibly
 
 #metric ||label, value, target, met||
 @metriccard

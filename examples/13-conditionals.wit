@@ -1,5 +1,5 @@
-\- statements are wrapped in parentheses — they read as asides, never as instructions.
-   conditionals reference already-defined static data only. -\
+~ statements are wrapped in parentheses — they read as asides, never as instructions.
+~ conditionals reference already-defined static data only.
 
 #book: { status - draft }
 
@@ -7,7 +7,7 @@
 @watermark Draft — do not distribute. watermark@
 (end)
 
-\- with else -\
+~ with else
 
 #author: { corresponding - true, email - a.vane@coast.edu, name - Aldous Vane }
 
@@ -17,7 +17,7 @@ Corresponding author: @author.email
 @author.name
 (end)
 
-\- conditionals nest freely -\
+~ conditionals nest freely
 
 #report: { status - final, audience - external }
 

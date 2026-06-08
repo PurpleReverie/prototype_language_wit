@@ -1,17 +1,17 @@
-\- @name opens a node, name@ closes it. everything between is the body. -\
+~ @name opens a node, name@ closes it. everything between is the body.
 
 @aside
 Fresnel lenses rarely fail. Keepers do.
 aside@
 
-\- inline usage works the same way -\
+~ inline usage works the same way
 
 She crossed the @highlight last threshold highlight@ alone.
 
-\- whether @aside renders as a block and @highlight renders inline
-   is a renderer decision, never a writer decision. -\
+~ whether @aside renders as a block and @highlight renders inline
+~ is a renderer decision, never a writer decision.
 
-\- nodes nest -\
+~ nodes nest
 
 @chapter
 @scene
@@ -23,6 +23,6 @@ He turned the lamp by hand.
 scene@
 chapter@
 
-\- using a reference with no body — just the bare handle -\
+~ using a reference with no body — just the bare handle
 
 The keeper, @weil, the stranger.

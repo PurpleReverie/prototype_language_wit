@@ -1,21 +1,21 @@
-\- scope comes entirely from @name / name@ pairs.
-   indentation is cosmetic — for the reader, never the parser. -\
+~ scope comes entirely from @name / name@ pairs.
+~ indentation is cosmetic — for the reader, never the parser.
 
-\- flat -\
+~ flat
 
 @chapter
 @aside Keepers do. aside@
 He read the letter twice.
 chapter@
 
-\- indented — parses identically to the above -\
+~ indented — parses identically to the above
 
 @chapter
     @aside Keepers do. aside@
     He read the letter twice.
 chapter@
 
-\- mixed — also fine -\
+~ mixed — also fine
 
 @chapter
   @scene

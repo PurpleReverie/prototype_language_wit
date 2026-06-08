@@ -1,11 +1,11 @@
-\- [ ] holds a collection — of plain values, or of records.
-   opening bracket sits on the definition line; items are indented beneath. -\
+~ [ ] holds a collection — of plain values, or of records.
+~ opening bracket sits on the definition line; items are indented beneath.
 
-\- a collection of values -\
+~ a collection of values
 
 #themes: [ attention, perception, moral failure ]
 
-\- a collection of records — the common case for tables, casts, datasets -\
+~ a collection of records — the common case for tables, casts, datasets
 
 #findings: [
   { claim - Attention precedes perception, supported - true,  strength - strong    }
@@ -14,8 +14,8 @@
   { claim - Perception is neutral,          supported - false, strength - contested }
 ]
 
-\- records inside a collection are the same { } records used everywhere else.
-   they map directly to JSON-shaped data — nothing to translate. -\
+~ records inside a collection are the same { } records used everywhere else.
+~ they map directly to JSON-shaped data — nothing to translate.
 
 #sites: [
   { name - Dunmore Head,  status - operational, inspected - 2024-08-14 }

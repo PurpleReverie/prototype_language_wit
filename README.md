@@ -17,7 +17,7 @@ Each file is single-purpose. Edit one to test how a feature's syntax feels witho
 |---|---|---|
 | 01 | `01-prose.wit` | Prose-as-default, paragraphs |
 | 02 | `02-emphasis.wit` | `_italic_`, `*bold*` |
-| 03 | `03-comments.wit` | `\- … -\` |
+| 03 | `03-comments.wit` | `~` line + `~~ … ~~/` inline |
 | 04 | `04-using-nodes.wit` | `@name … name@` block and inline |
 | 05 | `05-parameters.wit` | `\|value\|`, `\|key - value\|`, `\|flag\|`, last-one-wins |
 | 06 | `06-indentation.wit` | Indentation is cosmetic |

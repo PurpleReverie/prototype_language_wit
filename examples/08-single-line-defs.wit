@@ -1,14 +1,14 @@
-\- #name: is the single-line form. the colon means "no body". -\
+~ #name: is the single-line form. the colon means "no body".
 
 #year: 1923
 #place: Dunmore Head
 #keeper: Aldous Vane
 
-\- single-line definitions can still capture and interpolate -\
+~ single-line definitions can still capture and interpolate
 
 #cite: ||author, title, year|| ! ::author:: (::year::). _::title::_. !
 
-\- complex values are wrapped in ! ... ! — may span lines, may contain other nodes -\
+~ complex values are wrapped in ! ... ! — may span lines, may contain other nodes
 
 #epigraph: !
 The sea does not forgive forgetting.
@@ -17,6 +17,6 @@ The sea does not forgive forgetting.
 
 #weil: ! Simone Weil, _Gravity and Grace_, 1952 !
 
-\- a #name: definition is used like any other node: @name -\
+~ a #name: definition is used like any other node: @name
 
 He was @keeper. The year was @year.

@@ -1,6 +1,6 @@
-\- the escape hatch for everything the declarative model can't express:
-   plain JavaScript in a <script> tag. runs once after the initial DOM
-   is rendered, via the `lh` bridge object. -\
+~ the escape hatch for everything the declarative model can't express:
+~ plain JavaScript in a <script> tag. runs once after the initial DOM
+~ is rendered, via the `lh` bridge object.
 
 #findings: [
   { claim - Attention precedes perception, supported - true,  strength - strong    }

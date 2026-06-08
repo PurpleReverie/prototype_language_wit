@@ -1,5 +1,5 @@
-\- (each @collection as item) ... (end)
-   the loop walks static data — no iteration state, no mutation, no surprises. -\
+~ (each @collection as item) ... (end)
+~ the loop walks static data — no iteration state, no mutation, no surprises.
 
 #findings: [
   { claim - Attention precedes perception, strength - strong   }
@@ -14,9 +14,9 @@
 finding@
 (end)
 
-\- iteration is what makes a Wit document self-organising —
-   define the chapters as data, and both the table of contents
-   and the chapter bodies render from the same source. -\
+~ iteration is what makes a Wit document self-organising —
+~ define the chapters as data, and both the table of contents
+~ and the chapter bodies render from the same source.
 
 #chapters: [
   { number - I,   title - The Lamp,     file - one.wit   }

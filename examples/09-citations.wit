@@ -1,27 +1,27 @@
-\- references read as ideas, not page numbers.
-   define a schema once, name your sources, build an argument map. -\
+~ references read as ideas, not page numbers.
+~ define a schema once, name your sources, build an argument map.
 
-\- 1. define the citation schema -\
+~ 1. define the citation schema
 
 #cite: ||author, title, year, publisher, page|| ! ::author:: (::year::, p. ::page::). _::title::_. ::publisher::. !
 
-\- 2. define your sources as named instances of it -\
+~ 2. define your sources as named instances of it
 
 #weil:   ! Simone Weil, Gravity and Grace, 1952, Routledge, !
 #berger: ! John Berger, Ways of Seeing, 1972, Penguin, !
 
-\- 3. argument map — name the idea, not the page -\
+~ 3. argument map — name the idea, not the page
 
 #weil_attention:  @weil! p. 42 !
 #weil_generosity: @weil! p. 117 !
 #berger_looking:  @berger! p. 9 !
 
-\- 4. write prose. citations are two words long and name ideas. -\
+~ 4. write prose. citations are two words long and name ideas.
 
 Attention, as @weil_attention argued, is the rarest form of generosity.
 Berger complicates this @berger_looking by insisting that we never look
 at one thing alone.
 
-\- when a reference needs no parameters at all, the bare name is enough -\
+~ when a reference needs no parameters at all, the bare name is enough
 
 The lamp burned, as @weil knew it would.

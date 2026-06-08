@@ -1,5 +1,5 @@
-\- master.wit — a composition script that assembles the book from parts.
-   `reference` pulls in the definitions, data, and nodes from another file. -\
+~ master.wit — a composition script that assembles the book from parts.
+~ `reference` pulls in the definitions, data, and nodes from another file.
 
 reference ./shared/schema.wit
 reference ./shared/sources.wit
