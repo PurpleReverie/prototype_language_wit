@@ -1,0 +1,5 @@
+#sites: [
+  { name - Dunmore Head, status - operational }
+  { name - Carrick Point, status - maintenance }
+  { name - Ines Rock, status - operational }
+]
