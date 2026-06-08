@@ -1,0 +1,3 @@
+#findings: [ { claim - lamp lit }, { claim - logbook signed } ]
+
+The first finding was @findings.0.claim.
