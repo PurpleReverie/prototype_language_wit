@@ -155,6 +155,46 @@ Cross-refs: PLAN.md DS-4, 4.U.3, 4.U.5, 4.U.6, I.6.
   is exact-match on handles; fuzzy matching is for access path
   segments only (DS-10). Not probed.
 
+## Unicode in handles (no PLAN.md entry — new I.review item)
+
+Cross-refs: PLAN.md DS-4, 4.U.3, I.6, "Identifier character
+class" above.
+
+- The concrete proposal (b) under "Bare reference boundary"
+  fixes the handle character class as `[A-Za-z0-9_-]`. That
+  class is ASCII-only by construction: it excludes every
+  non-ASCII letter. Handles like `@café` (Latin-1 e-acute) or
+  `@日本` (CJK) would either fail to lex as handles at all or
+  truncate at the first non-ASCII byte under proposal (b).
+- PLAN.md does not state a Unicode policy on identifiers.
+  DS-4 and the 4.U.* sub-items describe the use-side shape of
+  handles (`@name`, `name@`, `@name.field`) without committing
+  on whether `name` is ASCII-only, NFC-normalised Unicode, or
+  some restricted Unicode subset (e.g. UAX #31 identifier
+  characters).
+- Three rough options for the reviewer:
+  (i)   **ASCII-only handles** — keep `[A-Za-z0-9_-]`. Simple
+        to lex, simple to compare, but excludes non-English
+        author names from the handle itself (`@müller`,
+        `@日本`). Authors must transliterate.
+  (ii)  **Unicode identifiers, NFC-normalised** — handle is
+        any sequence of Unicode letter/digit/underscore/hyphen
+        codepoints, normalised on parse. More inclusive; adds
+        a normalisation step to the lexer and a comparison
+        contract for the resolver.
+  (iii) **UAX #31 identifier syntax** — Unicode's published
+        identifier rule (XID_Start + XID_Continue). Used by
+        Rust, Python 3, Swift. Well-specified; needs a Unicode
+        table in the lexer.
+- Surface at M1.review so the rule can be picked before any
+  Unicode-shape fixture lands. Defer the Unicode probe
+  fixtures (`@café.wit`, `@日本.wit`, NFC vs NFD round-trip)
+  until the rule is committed — authoring them now would
+  prejudge between (i), (ii), and (iii).
+- Cross-cuts with I.6: whichever class is picked, the
+  boundary rule (proposal (b), "any non-class byte ends the
+  handle") still applies; only the class definition changes.
+
 ## Closer pairing under shadowing (PLAN.md I.3 + DS-4)
 
 Cross-refs: PLAN.md 4.C.3, 4.U.2.
@@ -176,9 +216,9 @@ Cross-refs: PLAN.md 4.C.3, 4.U.2.
   for clarity; an all-on-one-line variant is not in this
   category.
 
-## Empty body (PLAN.md DS-4, 4.C.7)
+## Empty body (no PLAN.md entry — new I.review item)
 
-Cross-refs: PLAN.md 4.C.7.
+Cross-refs: PLAN.md DS-4, 4.C.7.
 
 - `empty-body.wit` is `@x x@` on a single line, nothing
   between. 4.C.7 says: "body is empty array, not null." This
@@ -194,9 +234,9 @@ Cross-refs: PLAN.md 4.C.7.
   explicitly "empty array, not null"). Comments have no parallel
   commitment.
 
-## Inline vs block classification (PLAN.md DS-4, 4.S.2)
+## Inline vs block classification (no PLAN.md entry — new I.review item)
 
-Cross-refs: PLAN.md 4.S.2.
+Cross-refs: PLAN.md DS-4, 4.S.2.
 
 - `block-name-body.wit` and `inline-name-body.wit` are the
   canonical pair. The block fixture is `@aside` on its own
