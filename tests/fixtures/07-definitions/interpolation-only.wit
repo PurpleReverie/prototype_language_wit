@@ -1,0 +1,5 @@
+#greeting ||name||
+Hello, ::name::.
+greeting#
+
+@greeting |name reader| greeting@

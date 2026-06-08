@@ -1,0 +1,9 @@
+#aside
+@panel
+...
+panel@
+aside#
+
+@aside
+For eleven days the lamp had burned untended.
+aside@

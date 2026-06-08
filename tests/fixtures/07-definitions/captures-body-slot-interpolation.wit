@@ -1,0 +1,11 @@
+#framed ||title||
+@panel
+@header ::title:: header@
+...
+panel@
+framed#
+
+@framed
+|title The Keeper|
+For eleven days the lamp had burned untended.
+framed@

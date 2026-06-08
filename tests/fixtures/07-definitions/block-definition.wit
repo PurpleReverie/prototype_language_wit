@@ -1,0 +1,6 @@
+#sidebar
+A panel that sits beside the main column. It carries supplementary
+prose, citations, or marginalia.
+sidebar#
+
+@sidebar
