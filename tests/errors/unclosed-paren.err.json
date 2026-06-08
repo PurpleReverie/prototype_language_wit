@@ -1,0 +1,5 @@
+{
+  "code": "E_UNCLOSED_PAREN",
+  "message_contains": "unclosed paren",
+  "loc": { "line": 1, "col": 3 }
+}

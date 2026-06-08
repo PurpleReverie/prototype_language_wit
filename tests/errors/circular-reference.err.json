@@ -1,0 +1,5 @@
+{
+  "code": "E_CIRCULAR_REFERENCE",
+  "message_contains": "circular reference",
+  "loc": { "line": 1, "col": 1 }
+}

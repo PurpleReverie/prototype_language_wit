@@ -1,0 +1,5 @@
+{
+  "code": "E_MISMATCHED_CLOSE",
+  "message_contains": "mismatched close",
+  "loc": { "line": 3, "col": 1 }
+}

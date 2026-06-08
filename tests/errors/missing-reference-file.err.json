@@ -1,0 +1,5 @@
+{
+  "code": "E_MISSING_REFERENCE_FILE",
+  "message_contains": "missing reference file",
+  "loc": { "line": 1, "col": 1 }
+}

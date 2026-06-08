@@ -1,0 +1,5 @@
+{
+  "code": "E_BARE_FIELD",
+  "message_contains": "bare field",
+  "loc": { "line": 2, "col": 19 }
+}

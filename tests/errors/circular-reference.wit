@@ -1,0 +1,5 @@
+reference ./circular-reference/a.wit
+
+@root
+  - uses @a
+root@

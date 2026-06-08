@@ -1,0 +1,5 @@
+{
+  "code": "E_UNCLOSED_COMMENT",
+  "message_contains": "unclosed comment",
+  "loc": { "line": 1, "col": 1 }
+}

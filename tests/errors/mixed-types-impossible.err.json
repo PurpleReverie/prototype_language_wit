@@ -1,0 +1,5 @@
+{
+  "code": "E_TYPE_MISMATCH",
+  "message_contains": "type mismatch",
+  "loc": { "line": 6, "col": 19 }
+}

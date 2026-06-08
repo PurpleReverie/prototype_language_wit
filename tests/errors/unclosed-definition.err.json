@@ -1,0 +1,5 @@
+{
+  "code": "E_UNCLOSED_DEFINITION",
+  "message_contains": "unclosed definition",
+  "loc": { "line": 1, "col": 1 }
+}

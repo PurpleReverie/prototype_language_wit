@@ -1,0 +1,5 @@
+{
+  "code": "E_UNCLOSED_NODE",
+  "message_contains": "unclosed node",
+  "loc": { "line": 1, "col": 1 }
+}
