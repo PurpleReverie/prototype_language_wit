@@ -1,7 +1,6 @@
 # 13-iteration fixtures — authoring notes
 
 Bulleted log of ambiguities surfaced while writing these fixtures.
-No decisions here — see M1.review.
 
 Scope: the `(each @collection as item) ... (end)` loop construct.
 Iterates over collections of values or records. Inside the body,
