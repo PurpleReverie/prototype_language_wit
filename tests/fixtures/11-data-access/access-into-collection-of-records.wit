@@ -1,0 +1,3 @@
+#findings: [ { strength - faint }, { strength - steady } ]
+
+The second beam was @findings.1.strength.

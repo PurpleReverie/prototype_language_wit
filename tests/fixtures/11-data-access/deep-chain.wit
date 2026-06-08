@@ -1,0 +1,3 @@
+#x: { y { z { w - deep } } }
+
+Reached @x.y.z.w at the bottom.
