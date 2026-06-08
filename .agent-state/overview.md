@@ -91,6 +91,7 @@ Tests:
 - `/tests/runner/package.json` — `@wit/test-runner`, exists only to satisfy pnpm workspaces; no source yet.
 - `/tests/fixtures/README.md` — fixture-authoring conventions (see "Fixture authoring conventions" below).
 - `/tests/fixtures/00-lexical/` — 13 lexical-layer fixtures: `empty.wit`, `minimal-non-empty.wit`, `single-paragraph.wit`, `multi-paragraph.wit`, `leading-whitespace.wit`, `tabs-vs-spaces.wit`, `whitespace-only-line.wit`, `trailing-newline.wit`, `no-trailing-newline.wit`, `multiple-trailing-newlines.wit`, `windows-newlines.wit`, `mac-newlines.wit`, `mixed-newlines.wit`. Plus `_notes.md` (the canonical template — 5 open questions logged, each H2 cites a PLAN.md `I.x` or flags a new `I.review` item). No `.test.ts` / snapshot files yet — those will arrive with the snapshot runner.
+- `/tests/fixtures/01-prose/` — 12 prose-layer fixtures: `single-paragraph.wit`, `multi-paragraph.wit`, `blank-line-splits.wit`, `soft-line-break.wit`, `long-single-line.wit`, `markdown-ish-leaders.wit`, `punctuation-heavy.wit`, `quoted-prose.wit`, `urls-in-prose.wit`, `numbers-and-arithmetic-shapes.wit`, `tilde-digit-mid-line.wit`, `tilde-slash-mid-line.wit`. Plus `_notes.md` probing I.2 (soft line break) and surfacing 4 new `I.review` items (see "Surfaced design questions" below).
 
 CI/tooling:
 - `/.github/workflows/ci.yml` — `ubuntu-latest`, `pnpm/action-setup@v4`, Node 20 with pnpm cache; runs install/typecheck/test/build.
@@ -148,12 +149,24 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 - Trailing-LF semantics: `\n\n\n` ending — zero, one, or three trailing empty paragraphs? Spec silent.
 - (Non-blocking, known M1.review item) Stale spec PDF: `wit-spec.pdf` pp. 3–4 shows old `\- ... -\` comment syntax; examples and fixtures use `~ ...`. Examples treated as source of truth.
 
+**From `01-prose/_notes.md` (M1.01):**
+- Markdown-ish leaders (`> `, `* `, `- `, `1. `): preserved verbatim in the Text run, or stripped/normalized? Confirming Wit treats them as plain prose is established; the open question is the textual rendering — leading marker kept as bytes or elided/normalized? (new `I.review` item)
+- Smart-quote substitution policy: do straight ASCII `'` and `"` get rewritten to typographic quotes (U+2018/2019/201C/201D) at lex/render time, or preserved verbatim? Stage matters (lexer, renderer, or never). (new `I.review` item)
+- Number-shape tokenization inside Text runs (e.g. `3.14`, `1,000`, `5*6*7`): distinguished token type, or opaque substring of a Text run? Affects whether `3.14` ever surfaces in the AST as anything other than characters. (new `I.review` item)
+- Email-shaped mid-word `@` (e.g. `user@example.com`): extends I.6 — a NodeUse `@name` should require a non-word boundary before `@` to open, otherwise emails fragment. Formalize the lookbehind rule. (new `I.review` item, extends PLAN.md I.6)
+- Probed: I.2 soft line break — `soft-line-break.wit` and `long-single-line.wit` exercise the single-LF-inside-paragraph case; resolution still pending.
+- **Cross-category fragility:** `01-prose/numbers-and-arithmetic-shapes.wit` is a snapshot landmine — its `5*6*7` content must re-validate once 02-emphasis lands `*bold*` tokenization, since the asterisk semantics conflict. Flag this fixture for explicit re-review at M1.02 merge.
+
+**Convention tightening (M1.01):**
+- Narration comments `~ ...` flush against the first prose line (no blank line between narration and the prose it annotates). Applied uniformly across `01-prose/`; future categories permitting narration (`02-emphasis`) must follow.
+
 ---
 
 ## Tasks completed
 
 - **Task 1 — M0 scaffold** (merge `8eec37e`): TS monorepo scaffold landed; `pnpm install/typecheck/test/build` all green. pnpm workspace with `packages/parser` (empty AST placeholder) and `tests/runner` workspace stub; root tsconfig solution file with project reference to parser; root vitest config; GitHub Actions CI on Node 20. Ready to receive fixture and parser code.
 - **Task 2 — M1.00 lexical fixtures** (merge `38d6e7b`): 13 `.wit` fixtures under `tests/fixtures/00-lexical/` covering empty/minimal inputs, paragraph boundaries, whitespace/tabs, and CR/LF/CRLF newline conventions. Byte-sensitive newline fixtures authored via `printf` and verified with `od -c`. `_notes.md` logs 5 open design questions (see above), each H2 citing PLAN.md `I.x` or flagging an `I.review` item. Established `tests/fixtures/README.md` codifying fixture-authoring conventions (see above). No snapshot runner yet — fixtures sit ready for when it lands.
+- **Task 3 — M1.01 prose fixtures** (merge `7ddde39`): 12 `.wit` fixtures under `tests/fixtures/01-prose/` covering single/multi-paragraph prose, blank-line splits, soft line breaks, long single lines, markdown-ish leaders treated as plain prose, punctuation-heavy text, quoted prose, embedded URLs, number/arithmetic shapes, and mid-line `~` cases. Probes PLAN.md I.2 (soft line break) and surfaces 4 new `I.review` items: markdown-ish leader rendering (verbatim/stripped), smart-quote substitution policy, number-shape tokenization inside Text runs, and email-shaped mid-word `@` (extending I.6 with a non-word-boundary requirement). Tightened convention: narration `~ ...` flushes against first prose line (no blank between) — applied uniformly. Cross-category fragility flagged: `numbers-and-arithmetic-shapes.wit` must re-validate when 02-emphasis tokenization lands.
 
 ---
 
@@ -172,17 +185,25 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 
 ## Notes for next briefing cycle
 
-- **M1.01 — prose fixtures for `tests/fixtures/01-prose/`** is the next dispatch. PLAN section E.1 "Prose", user stories W1.1–W1.5. Implementer should be briefed to:
-  - Read `/tests/fixtures/README.md` first (the conventions) and `/tests/fixtures/00-lexical/_notes.md` as the format template for `_notes.md`.
-  - Read `/examples/01-prose.wit` and `wit-spec.pdf` prose section for grounding.
-  - **Narration comments (`~ ...`) inside fixtures are still permitted** at this category (00–02 window per the README).
+- **M1.02 — emphasis fixtures for `tests/fixtures/02-emphasis/`** is the next dispatch. PLAN section E.1, user stories W2.1–W2.5. Implementer should be briefed to:
+  - Read `/tests/fixtures/README.md` first (conventions) and `/tests/fixtures/01-prose/_notes.md` as the most current `_notes.md` format reference.
+  - Read `/examples/02-emphasis.wit` and `wit-spec.pdf` emphasis section for grounding.
+  - **Narration `~ ...` is still permitted** at this category (final window per README; 03+ disallows it). Apply the M1.01 convention: narration flushes against first prose line, no blank between.
   - Scenarios to cover (one fixture per purpose, kebab-case names):
-    - pure single-paragraph prose (positive baseline)
-    - multi-paragraph prose (separator semantics in a richer-than-00 setting)
-    - lines starting with reserved/markdown-ish characters: `>`, `*`, `-`, `1.` — confirm Wit treats them as plain prose, not block syntax
-    - punctuation, URLs (e.g. `https://...`), numeric content embedded in prose — confirm no accidental tokenization
-    - any other W1.1–W1.5 angle not covered above
-  - Create `tests/fixtures/01-prose/_notes.md` with H2s citing PLAN.md `I.x` (especially I.2 soft-line-break, I.6 bare-reference termination — even though `@` won't appear yet, prose-edge cases inform the boundary). New questions flagged `(no PLAN.md entry — new I.review item)`.
-  - Avoid `@`-references, `#`-defs, `!!` close, emphasis, or any non-prose syntax — those belong to later categories.
-  - Do NOT add snapshot `.json` files yet — the snapshot runner has not landed. Fixtures + `_notes.md` only.
+    - `basic-italic.wit` — `_word_` underscore italic baseline.
+    - `basic-bold.wit` — `*word*` asterisk bold baseline.
+    - `combined-bold-italic.wit` — `_*word*_` / `*_word_*` nesting; both orderings.
+    - `apostrophe-after-italic.wit` — `_keeper_'s` edge: closing `_` followed by `'s` — confirm italic closes cleanly and `'s` is plain text.
+    - `arithmetic-shapes.wit` — `5*6*7` cross-cut from `01-prose/numbers-and-arithmetic-shapes.wit`: digits flanking asterisks must NOT open emphasis (number-boundary rule).
+    - `underscore-in-identifier.wit` — `snake_case_word` mid-prose: intra-word `_` does NOT trigger italic.
+    - `empty-marks.wit` — `__` and `**` standalone / adjacent: legal as literal punctuation or error? (open question to log)
+    - `marks-at-paragraph-boundary.wit` — `_word_` as first/last token of paragraph; `*` immediately before/after blank line.
+  - Create `tests/fixtures/02-emphasis/_notes.md` with H2s citing PLAN.md `I.x` where applicable; expected to surface several new `I.review` items:
+    - Word-boundary rules for `_` and `*` opening/closing (likely new `I.review`).
+    - Empty-mark legality (`__`, `**`) — text or error?
+    - Interaction with M1.01's flagged `numbers-and-arithmetic-shapes.wit`: cite cross-category re-validation explicitly.
+    - Smart-quote interaction with `'s` after closing `_` (links to M1.01 smart-quote question).
+  - Avoid `@`-references, `#`-defs, `!!` close, or any non-emphasis syntax — those belong to later categories.
+  - Do NOT add snapshot `.json` files — snapshot runner has not landed.
+  - **Re-validate** `tests/fixtures/01-prose/numbers-and-arithmetic-shapes.wit` against the new `*`/`_` rules; if the snapshot semantics shift, note it in `02-emphasis/_notes.md` and call it out in the PR.
 - Keep this file under 250 lines. Prune resolved design questions into a separate "Decisions" section once they land.
