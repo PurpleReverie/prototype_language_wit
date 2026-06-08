@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "types": ["node"],
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+  },
+  "include": ["./**/*.ts"],
+  "references": [{ "path": "../../packages/parser" }]
+}

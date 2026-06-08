@@ -16,6 +16,7 @@
   },
   "files": [],
   "references": [
-    { "path": "./packages/parser" }
+    { "path": "./packages/parser" },
+    { "path": "./tests/runner" }
   ]
 }
