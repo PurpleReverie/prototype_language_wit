@@ -69,4 +69,17 @@ describe('parse (skeleton)', () => {
     const doc = parse('hello');
     expect(doc.loc.file).toBe('<inline>');
   });
+
+  it('parses emphasis tokens into Italic/Bold inline children', () => {
+    const doc = parse('hello _world_.');
+    const para = doc.children[0] as Paragraph;
+    const kinds = para.children.map((c) => c.kind);
+    expect(kinds).toEqual(['text', 'italic', 'text']);
+  });
+
+  it('promotes a standalone line comment to a top-level Comment block', () => {
+    const doc = parse('~ note');
+    expect(doc.children).toHaveLength(1);
+    expect(doc.children[0].kind).toBe('comment');
+  });
 });

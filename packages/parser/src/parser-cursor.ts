@@ -40,6 +40,16 @@ export class TokenCursor {
     return this.idx;
   }
 
+  // Restore a previously-captured position. Used by speculative
+  // recognizers (e.g. emphasis pairing) that need to roll back on
+  // mismatch.
+  reset(idx: number): void {
+    if (idx < 0 || idx >= this.tokens.length) {
+      throw new Error(`TokenCursor.reset: index ${idx} out of range.`);
+    }
+    this.idx = idx;
+  }
+
   // Advance one step (never past EOF) and return the *previous* token.
   advance(): Token {
     const tok = this.current();
