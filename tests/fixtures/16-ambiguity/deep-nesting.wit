@@ -1,0 +1,3 @@
+@a @b @c @d @e @f @g word g@ f@ e@ d@ c@ b@ a@
+
+@outer @mid1 @mid2 @mid3 @inner core inner@ mid3@ mid2@ mid1@ outer@
