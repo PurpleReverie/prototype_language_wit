@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "three LFs at end of file. parser must not see phantom paragraphs."
+          },
+          {
+            "kind": "text",
+            "value": "\nHe served thirty-one years."
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,35 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "the underscore mark wraps a single token to produce italic"
+          },
+          {
+            "kind": "text",
+            "value": "\nThe keeper called it a "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "miracle"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": " and went back to polishing the lens.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

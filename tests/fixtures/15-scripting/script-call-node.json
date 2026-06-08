@@ -1,0 +1,48 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "<%\nfunction greet(name) {\n  return `hello, ${name}`;\n}\n%>"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The system says: "
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "scriptCall",
+            "params": [
+              {
+                "name": null,
+                "value": "greet"
+              },
+              {
+                "name": null,
+                "value": "\"world\""
+              }
+            ],
+            "paramsSource": "parens"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

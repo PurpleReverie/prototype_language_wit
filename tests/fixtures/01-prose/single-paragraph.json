@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "baseline positive case: a single paragraph of plain prose, no markup."
+          },
+          {
+            "kind": "text",
+            "value": "\nThe keeper had not spoken aloud in eleven days, and his silence had begun to feel less like an absence than a furnishing.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

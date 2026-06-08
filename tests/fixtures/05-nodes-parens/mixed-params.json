@@ -1,0 +1,39 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "figure",
+            "params": [
+              {
+                "name": "src",
+                "value": "lamp.png"
+              },
+              {
+                "name": "full width",
+                "value": ""
+              },
+              {
+                "name": "caption",
+                "value": "The lens"
+              }
+            ],
+            "paramsSource": "parens"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "LF then CRLF then CR within one file. parser must normalize."
+          },
+          {
+            "kind": "text",
+            "value": "\nLF-terminated line.\nCRLF-terminated line.\nCR-terminated line.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

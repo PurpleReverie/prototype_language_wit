@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "em-dashes, apostrophes, colons, semicolons — none are syntax in prose."
+          },
+          {
+            "kind": "text",
+            "value": "\nHe had three rules — written, unwritten, and forgotten; the keeper's own list, in that order: pragmatic, sentimental, lost.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

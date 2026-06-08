@@ -6,6 +6,7 @@ export default defineConfig({
       'tests/fixtures/**/*.test.ts',
       'tests/integration/**/*.test.ts',
       'tests/errors/**/*.test.ts',
+      'tests/runner/**/*.test.ts',
       'packages/**/*.test.ts',
     ],
   },

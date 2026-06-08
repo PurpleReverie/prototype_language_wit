@@ -1,0 +1,235 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " "
+                      },
+                      {
+                        "body": [
+                          {
+                            "kind": "text",
+                            "value": " "
+                          },
+                          {
+                            "body": [
+                              {
+                                "kind": "text",
+                                "value": " "
+                              },
+                              {
+                                "body": [
+                                  {
+                                    "kind": "text",
+                                    "value": " "
+                                  },
+                                  {
+                                    "body": [
+                                      {
+                                        "kind": "text",
+                                        "value": " word "
+                                      }
+                                    ],
+                                    "closeStyle": "named",
+                                    "inline": true,
+                                    "kind": "nodeUse",
+                                    "name": "g",
+                                    "params": [],
+                                    "paramsSource": "none"
+                                  },
+                                  {
+                                    "kind": "text",
+                                    "value": " "
+                                  }
+                                ],
+                                "closeStyle": "named",
+                                "inline": true,
+                                "kind": "nodeUse",
+                                "name": "f",
+                                "params": [],
+                                "paramsSource": "none"
+                              },
+                              {
+                                "kind": "text",
+                                "value": " "
+                              }
+                            ],
+                            "closeStyle": "named",
+                            "inline": true,
+                            "kind": "nodeUse",
+                            "name": "e",
+                            "params": [],
+                            "paramsSource": "none"
+                          },
+                          {
+                            "kind": "text",
+                            "value": " "
+                          }
+                        ],
+                        "closeStyle": "named",
+                        "inline": true,
+                        "kind": "nodeUse",
+                        "name": "d",
+                        "params": [],
+                        "paramsSource": "none"
+                      },
+                      {
+                        "kind": "text",
+                        "value": " "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "c",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "b",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "a",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " "
+                      },
+                      {
+                        "body": [
+                          {
+                            "kind": "text",
+                            "value": " "
+                          },
+                          {
+                            "body": [
+                              {
+                                "kind": "text",
+                                "value": " core "
+                              }
+                            ],
+                            "closeStyle": "named",
+                            "inline": true,
+                            "kind": "nodeUse",
+                            "name": "inner",
+                            "params": [],
+                            "paramsSource": "none"
+                          },
+                          {
+                            "kind": "text",
+                            "value": " "
+                          }
+                        ],
+                        "closeStyle": "named",
+                        "inline": true,
+                        "kind": "nodeUse",
+                        "name": "mid3",
+                        "params": [],
+                        "paramsSource": "none"
+                      },
+                      {
+                        "kind": "text",
+                        "value": " "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "mid2",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "mid1",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "outer",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

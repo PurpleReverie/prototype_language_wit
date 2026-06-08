@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "one paragraph, one sentence, no blank lines."
+          },
+          {
+            "kind": "text",
+            "value": "\nThe keeper had not spoken aloud in eleven days.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

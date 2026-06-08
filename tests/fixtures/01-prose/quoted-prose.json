@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "both straight double and single quotes appear mid-prose. Neither opens a string token."
+          },
+          {
+            "kind": "text",
+            "value": "\n\"Stay until morning,\" she said, and he answered 'as long as the lamp holds out' — which was not, in the end, very long at all.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

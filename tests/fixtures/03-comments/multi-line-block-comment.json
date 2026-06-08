@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": " a longer aside:\n   we should decide whether epigraphs count toward the chapter's\n   word count. for now they don't. "
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "For eleven days the lamp had burned untended.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

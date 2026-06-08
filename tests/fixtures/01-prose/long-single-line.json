@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "one paragraph, one physical line, no wrapping. Tests that line length itself carries no semantics and that the lexer does not impose a column limit on prose runs."
+          },
+          {
+            "kind": "text",
+            "value": "\nThe keeper had not spoken aloud in eleven days and during that long unbroken silence he had catalogued, in the privacy of his own head, every sound the lighthouse made — the wind across the lantern glass, the slow groan of the iron stair, the kettle's small announcement of itself, the soft tick of the brass clock his father had wound and his grandfather had wound and which he himself, by some accident of inheritance, was now winding too — and concluded that a building, given enough quiet, will tell you everything about itself that you were ever going to need to know.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "E_UNCLOSED_COMMENT",
+    "message": "Block comment opened with `~~` is not closed with `~~/` before end of input."
+  },
+  "ok": false
+}

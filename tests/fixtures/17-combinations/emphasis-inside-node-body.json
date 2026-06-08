@@ -1,0 +1,62 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " She "
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "crossed"
+                  }
+                ],
+                "kind": "italic"
+              },
+              {
+                "kind": "text",
+                "value": " the "
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "threshold"
+                  }
+                ],
+                "kind": "bold"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "aside",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}
