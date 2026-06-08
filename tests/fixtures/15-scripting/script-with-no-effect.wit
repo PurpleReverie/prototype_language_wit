@@ -1,0 +1,8 @@
+<%
+const ok = lh.data.paper !== undefined;
+if (!ok) {
+  throw new Error('paper missing');
+}
+%>
+
+Prose unaffected by the script above.

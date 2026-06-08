@@ -1,0 +1,13 @@
+<%
+lh.set('phase', 'first');
+%>
+
+Some prose between blocks.
+
+<%
+const phase = lh.data.phase;
+lh.inject('marker', `#phase-was: ${phase}`);
+lh.set('phase', 'second');
+%>
+
+@marker

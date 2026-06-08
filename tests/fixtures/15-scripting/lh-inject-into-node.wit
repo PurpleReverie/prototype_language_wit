@@ -1,0 +1,6 @@
+<%
+const stats = '#words: 1200\n#pages: 4';
+lh.inject('paper-stats', stats);
+%>
+
+@paper-stats

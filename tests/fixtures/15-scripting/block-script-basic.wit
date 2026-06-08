@@ -1,0 +1,6 @@
+<%
+const count = lh.data.papers.length;
+lh.inject('summary', `#count: ${count}`);
+%>
+
+@summary
