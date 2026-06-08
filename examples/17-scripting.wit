@@ -1,0 +1,52 @@
+\- the escape hatch for everything the declarative model can't express:
+   plain JavaScript in a <script> tag. runs once after the initial DOM
+   is rendered, via the `lh` bridge object. -\
+
+#findings: [
+  { claim - Attention precedes perception, supported - true,  strength - strong    }
+  { claim - Looking is never neutral,       supported - true,  strength - strong    }
+  { claim - Attention is a form of labour,  supported - true,  strength - moderate }
+  { claim - Perception is neutral,          supported - false, strength - contested }
+]
+
+#paper: { title - On Attention, word count - 0 }
+
+@article |title - @paper.title|
+
+@paper-stats paper-stats@
+
+For three years I kept my references in a database. Every paper I read,
+I logged — author, title, year, the lot.
+
+(each @findings as finding)
+@finding |claim - @finding.claim| |strength - @finding.strength| finding@
+(end)
+
+article@
+
+<script>
+// lh.data — all #thing: definitions as plain JS objects
+const findings = lh.data.findings;
+const supported = findings.filter(f => f.supported === 'true').length;
+const pct = Math.round((supported / findings.length) * 100);
+
+// lh.prose() — the prose text nodes, with helpers like .wordCount()
+const words = lh.prose().wordCount();
+
+// lh.set(path, value) — update a value in the data
+lh.set('paper.word count', words);
+
+// lh.sort(name, fn) — reorder all instances of a node type
+const order = { strong: 0, moderate: 1, contested: 2 };
+lh.sort('finding', (a, b) => order[a.params.strength] - order[b.params.strength]);
+
+// lh.inject(id, source) — render Wit source into a node by id
+lh.inject('paper-stats', `
+  @statrow |label - Supported|    |value - ${supported} of ${findings.length} (${pct}%)| statrow@
+  @statrow |label - Reading time| |value - ~${Math.ceil(words / 200)} min|                statrow@
+`);
+
+// other lh calls available:
+//   lh.query(name)       every node of a given type, as { params, content } objects
+//   lh.node(id)          a single node by its id parameter
+</script>

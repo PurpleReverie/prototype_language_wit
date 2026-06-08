@@ -1,0 +1,30 @@
+\- statements are wrapped in parentheses — they read as asides, never as instructions.
+   conditionals reference already-defined static data only. -\
+
+#book: { status - draft }
+
+(if @book.status = draft)
+@watermark Draft — do not distribute. watermark@
+(end)
+
+\- with else -\
+
+#author: { corresponding - true, email - a.vane@coast.edu, name - Aldous Vane }
+
+(if @author.corresponding = true)
+Corresponding author: @author.email
+(else)
+@author.name
+(end)
+
+\- conditionals nest freely -\
+
+#report: { status - final, audience - external }
+
+(if @report.status = final)
+(if @report.audience = external)
+@disclaimer Reviewed and approved for external circulation. disclaimer@
+(else)
+@disclaimer Final — internal only. disclaimer@
+(end)
+(end)

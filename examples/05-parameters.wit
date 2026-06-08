@@ -1,0 +1,32 @@
+\- parameters live inside pipes and can appear anywhere in a node -\
+
+@figure
+|lamp.png|
+|caption - The second-order Fresnel lens|
+|full width|
+figure@
+
+\- three forms:
+   |value|         positional
+   |key - value|   named (everything left of the first - is the key)
+   |flag|          boolean — present = true -\
+
+@scene |location - INT. LIGHTHOUSE — LANTERN ROOM| |time - NIGHT|
+The wick caught.
+scene@
+
+\- whitespace around the first hyphen is allowed —
+   reads naturally as a label on an object -\
+
+@panel | background colour - dark slate |
+The lantern room was unlit.
+panel@
+
+\- last one wins, applied from that point forward in the flow -\
+
+@scene
+|mood - calm|
+The harbour was still.
+|mood - tense|
+Then the bell began to ring.
+scene@

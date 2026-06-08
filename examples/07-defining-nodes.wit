@@ -1,0 +1,40 @@
+\- # defines a node. inside a definition:
+     ||a, b, c||   captures parameters
+     ::name::      interpolates a captured parameter
+     ...           marks where the invocation body will render -\
+
+#chapter ||number, title, subtitle||
+@chapterheader
+::number:: — ::title::
+(if ::subtitle::)
+::subtitle::
+(end)
+chapterheader@
+...
+chapter#
+
+\- used like this -\
+
+@chapter
+|number - I|
+|title - The Keeper|
+|subtitle - On the nature of attention|
+
+For eleven days the lamp had burned untended.
+chapter@
+
+\- captured parameters can also thread into child nodes invisibly -\
+
+#metric ||label, value, target, met||
+@metriccard
+@metriclabel ::label:: metriclabel@
+@metricvalue ::value:: metricvalue@
+(if ::met:: = true)
+@badge |tone - good| on target badge@
+(else)
+@badge |tone - warn| below target — goal ::target:: badge@
+(end)
+metriccard@
+metric#
+
+@metric |label - Uptime| |value - 99.2%| |target - 99.5%| |met - false| metric@

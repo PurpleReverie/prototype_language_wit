@@ -1,0 +1,26 @@
+\- additive partials: prefix a definition with + and multiple declarations
+   of the same name merge instead of overwriting.
+
+   the master file has no chapter list. it just references the chapter files
+   and renders @toc and @bibliography — both fully populated by chapters
+   that registered themselves.
+
+   add a chapter: create the file, add one `reference` line.
+   the toc and bibliography grow on their own. -\
+
+reference ./chapters/one.wit
+reference ./chapters/two.wit
+reference ./chapters/three.wit
+
+@document
+@h1 Contents h1@
+@toc toc@
+
+@h1 The Book h1@
+@chapter_one chapter_one@
+@chapter_two chapter_two@
+@chapter_three chapter_three@
+
+@h1 Bibliography h1@
+@bibliography bibliography@
+document@

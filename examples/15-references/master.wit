@@ -1,0 +1,27 @@
+\- master.wit — a composition script that assembles the book from parts.
+   `reference` pulls in the definitions, data, and nodes from another file. -\
+
+reference ./shared/schema.wit
+reference ./shared/sources.wit
+reference ./chapters/one.wit
+reference ./chapters/two.wit
+
+#book: {
+  title - The Keeper
+  subtitle - Attention, Perception, and the Moral Life
+  author - Aldous Vane
+  status - draft
+}
+
+@book |title - @book.title| |status - @book.status|
+
+@titlepage
+@book.title
+@book.subtitle
+@book.author
+titlepage@
+
+@chapter_one chapter_one@
+@chapter_two chapter_two@
+
+book@

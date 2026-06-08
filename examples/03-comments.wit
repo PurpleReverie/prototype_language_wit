@@ -1,0 +1,12 @@
+\- anything between \- and -\ is a comment. invisible to every renderer. -\
+
+\- remember to verify this date before publishing -\
+The lighthouse was commissioned in 1847.
+
+\- comments can span lines:
+   the keeper was Aldous Vane,
+   appointed 1923, served thirty-one years. -\
+
+He served thirty-one years.
+
+The bell \- TODO: confirm the year of the new bell -\ rang on the hour.

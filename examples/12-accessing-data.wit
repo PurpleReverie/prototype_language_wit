@@ -1,0 +1,27 @@
+\- dot notation reaches into records and collections -\
+
+#keeper: {
+  name - Aldous Vane
+  years at post - 31
+  lamp lit - true
+}
+
+#findings: [
+  { claim - Attention precedes perception, strength - strong }
+  { claim - Looking is never neutral,       strength - moderate }
+]
+
+\- record field -\
+@keeper.name served for @keeper.years_at_post years.
+
+\- collection by index -\
+The first finding was: @findings.0.claim
+
+\- the renderer fuzzy-matches keys —
+   years at post and years_at_post and yearsAtPost
+   all resolve to the same value. the writer never has to remember
+   exact key formatting. -\
+
+@keeper.years_at_post
+@keeper.years at post
+@keeper.yearsAtPost

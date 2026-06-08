@@ -1,0 +1,6 @@
+\- shared/sources.wit — bibliography sources, defined once,
+   cited from any file that references this one. -\
+
+#weil:   ! Simone Weil, Gravity and Grace, 1952, Routledge !
+#berger: ! John Berger, Ways of Seeing, 1972, Penguin !
+#arendt: ! Hannah Arendt, The Human Condition, 1958, Chicago !

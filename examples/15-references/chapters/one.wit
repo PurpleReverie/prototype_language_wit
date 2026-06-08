@@ -1,0 +1,17 @@
+\- chapters/one.wit — a self-contained chapter that reaches into the
+   shared vocabulary defined in ../shared/schema.wit. -\
+
+#chapter_one
+@chapter |number - I| |title - The Lamp|
+
+@epigraph |source - coastal proverb|
+The sea does not forgive forgetting.
+epigraph@
+
+For eleven days the lamp had burned untended, and Aldous told
+himself this was _fine_.
+
+He had not spoken aloud in so long that his own voice surprised him.
+
+chapter@
+chapter_one#
