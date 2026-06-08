@@ -1,7 +1,6 @@
 # 14-composition fixtures — authoring notes
 
 Bulleted log of ambiguities surfaced while writing these fixtures.
-No decisions here — see M1.review.
 
 Scope: the `reference ./path.wit` directive that pulls
 definitions and data from another file into the current file's
@@ -184,7 +183,7 @@ edge is reported first, etc.).
 to reason about for diagnostics ("a → b → a" reads like the
 file you wrote) and matches how most module resolvers walk.
 
-## Cross-cutting: duplicate definitions across files (deferred)
+## Cross-cutting: duplicate definitions across files (no PLAN.md entry — new I.review item)
 
 Not probed in this category — all fixtures define each `#name`
 in exactly one file. Whether `a.wit` and `b.wit` defining the
