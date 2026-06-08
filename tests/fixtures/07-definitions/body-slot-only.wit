@@ -1,0 +1,11 @@
+#wrapper
+@panel
+...
+panel@
+wrapper#
+
+@wrapper
+First paragraph of contributed body.
+
+Second paragraph of contributed body.
+wrapper@

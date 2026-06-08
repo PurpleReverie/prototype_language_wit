@@ -1,0 +1,9 @@
+#metric ||label, value, target||
+@metriccard
+@metriclabel ::label:: metriclabel@
+@metricvalue ::value:: metricvalue@
+@metrictarget ::target:: metrictarget@
+metriccard@
+metric#
+
+@metric |label Uptime| |value 99.2%| |target 99.5%| metric@
