@@ -1,0 +1,85 @@
+~ quarterly report — data-driven sections, metrics against targets, status flips a watermark.
+
+#report: {
+  title - Q3 Operations Review
+  author - Mara Finch
+  department - Coastal Infrastructure
+  quarter - Q3 2024
+  status - final
+}
+
+#metrics: [
+  { label - Uptime,        value - 99.2%,   target - 99.5%,  met - false }
+  { label - Incidents,     value - 3,       target - 5,      met - true  }
+  { label - Response time, value - 12 min,  target - 15 min, met - true  }
+  { label - Budget used,   value - 84%,     target - 100%,   met - true  }
+]
+
+#sites: [
+  { name - Dunmore Head,  status - operational, inspected - 2024-08-14 }
+  { name - Carrick Point, status - maintenance, inspected - 2024-09-02 }
+  { name - Ines Rock,     status - operational, inspected - 2024-07-30 }
+]
+
+~ a metric renders green when it hit target, amber when it didn't
+
+#metric ||label, value, target, met||
+@metriccard
+@metriclabel ::label:: metriclabel@
+@metricvalue ::value:: metricvalue@
+(if ::met:: is true)
+@badge |tone good| on target badge@
+(else)
+@badge |tone warn| below target — goal ::target:: badge@
+(end)
+metriccard@
+metric#
+
+@document |title @report.title|
+
+(if @report.status is draft)
+@watermark Draft — not for circulation watermark@
+(end)
+
+@reportheader
+@report.title
+@report.department · @report.quarter
+Prepared by @report.author
+reportheader@
+
+@h1 Executive summary h1@
+
+Operations held steady through Q3 despite the Carrick Point outage
+in August. Three of four targets were met; uptime fell marginally
+short owing to the scheduled maintenance window. No safety
+incidents were recorded.
+
+@h1 Key metrics h1@
+
+(each @metrics as m)
+@metric |label @m.label| |value @m.value| |target @m.target| |met @m.met| metric@
+(end)
+
+@h1 Site status h1@
+
+(each @sites as site)
+@siterow
+@sitename @site.name sitename@
+@sitestatus |state @site.status| @site.status sitestatus@
+Last inspected @site.inspected
+siterow@
+(end)
+
+@h1 Recommendations h1@
+
+@recommendation |priority high|
+Bring the Carrick Point lamp replacement forward to Q4 to recover
+the uptime shortfall before storm season.
+recommendation@
+
+@recommendation |priority medium|
+Increase inspection frequency at Ines Rock after the long gap
+since July.
+recommendation@
+
+document@

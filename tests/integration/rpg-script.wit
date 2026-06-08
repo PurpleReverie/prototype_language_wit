@@ -1,0 +1,92 @@
+~ non-linear RPG script — branching dialogue at Bag End, Ring newly revealed.
+~ branches are nested @choice nodes; conditions gate on @world / @character state.
+
+~ characters and world state
+
+#frodo:   { name - Frodo,   has ring - true, knowledge - low }
+#gandalf: { name - Gandalf, mood - grave }
+#world:   { location - Bag End, sauron knows - false }
+
+~ one node for a spoken line
+
+#say ||who, mood||
+@line |speaker ::who::| |mood ::mood::|
+...
+line@
+say#
+
+@scene |id bag-end-revelation|
+
+@say |who Gandalf| |mood grave|
+The fire confirms it. This is no trinket, Frodo. It is the
+Enemy's own — and while it rests in the Shire, the Shire is
+in peril.
+say@
+
+@choices
+
+~ branch: offer it away
+
+@choice
+@say |who Frodo| |mood afraid|
+Then you take it. You're wise, you're strong. Keep it hidden.
+say@
+@say |who Gandalf| |mood urgent|
+Do not offer it to me. I dare not so much as hold it. The Ring
+would find the good in me and turn it to ruin.
+say@
+@goto |scene what-must-be-done|
+choice@
+
+~ branch: ask why
+
+@choice
+@say |who Frodo| |mood lost|
+But why me? I'm no one — a hobbit who's never been past Bree.
+say@
+@say |who Gandalf| |mood gentle|
+Small hands turn the wheel of the world while the eyes of the
+great look elsewhere. It fell to you. That is reason enough.
+say@
+
+@choices
+@choice
+@say |who Frodo| |mood resolved|
+Then I'll carry it. Wherever it must go.
+say@
+@goto |scene the-road-begins|
+choice@
+
+~ only unlocks once Frodo has pieced things together
+
+(if @frodo.knowledge is high)
+@choice
+@say |who Frodo| |mood knowing|
+The Enemy is already stirring in the East, isn't he.
+say@
+@say |who Gandalf| |mood impressed|
+You see further than you let on. Yes — and we have less
+time than I had hoped.
+say@
+choice@
+(end)
+choices@
+choice@
+
+~ only appears once the Enemy is on the trail
+
+(if @world.sauron_knows is true)
+@choice
+@say |who Frodo| |mood panicked|
+He knows it's here. He knows the name Baggins.
+say@
+@say |who Gandalf| |mood dark|
+He does. You cannot stay — not for another night.
+say@
+@goto |scene flee-the-shire|
+choice@
+(end)
+
+choices@
+
+scene@

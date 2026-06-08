@@ -1,0 +1,64 @@
+~ academic article — citation schema, argument map, footnote, figure, theorem, bibliography.
+
+#cite: ||author, title, year, page|| ::author:: (::year::, p. ::page::). _::title::_. !!
+
+#weil:   Simone Weil, Gravity and Grace, 1952 !!
+#berger: John Berger, Ways of Seeing, 1972 !!
+#arendt: Hannah Arendt, The Human Condition, 1958 !!
+
+~ argument map — name the idea, not the page
+
+#weil_attention:  @weil p. 42 !!
+#weil_generosity: @weil p. 117 !!
+#berger_looking:  @berger p. 9 !!
+#arendt_labour:   @arendt p. 79 !!
+
+#theorem ||label, title||
+@theoremheader ::label:: — ::title:: theoremheader@
+...
+theorem#
+
+@article
+|title On Attention and the Act of Looking|
+|author Aldous Vane|
+|institution University of the Coast|
+
+@abstract
+This paper argues that the act of looking is never neutral, and
+that attention constitutes a form of ethical labour whose absence
+carries measurable consequence.
+abstract@
+
+@h1 Introduction h1@
+
+Attention, as @weil_attention argued, is the rarest form of
+generosity — not a cognitive habit but a moral orientation toward
+the world. Berger complicates this @berger_looking by insisting
+that we never look at one thing alone.@note
+This is not merely epistemological. Berger is making an argument
+about power — who looks, at what, and on whose terms.
+note@
+
+@h1 Attention as labour h1@
+
+@theorem |label Theorem 1| |title The Asymmetry of Attention|
+If attention is a form of power, then its distribution is always
+already political @arendt_labour
+theorem@
+
+Weil's corrective @weil_generosity is to insist that genuine
+attention requires the suspension of the self.
+
+@figure |id fig-model| |caption The dual structure of attentive labour.|
+figure@
+
+As @fig-model shows, the structure holds across both accounts.
+
+@h1 Conclusion h1@
+
+The lamp burns only as long as someone tends it. Attention is not
+incidental to the moral life — it is the moral life.
+
+@bibliography bibliography@
+
+article@

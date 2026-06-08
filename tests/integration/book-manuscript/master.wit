@@ -1,0 +1,37 @@
+~ master.wit — composition script. references the parts; @toc and @bibliography
+~ fill themselves via additive partials registered inside each chapter.
+
+reference ./shared/schema.wit
+reference ./shared/sources.wit
+reference ./chapters/one.wit
+reference ./chapters/two.wit
+
+#book: {
+  title - The Keeper
+  subtitle - Attention, Perception, and the Moral Life
+  author - Aldous Vane
+  status - draft
+}
+
+@book |title @book.title| |status @book.status|
+
+(if @book.status is draft)
+@watermark Draft — do not distribute watermark@
+(end)
+
+@titlepage
+@book.title
+@book.subtitle
+@book.author
+titlepage@
+
+~ the contents and bibliography fill themselves
+
+@toc toc@
+
+@chapter_one chapter_one@
+@chapter_two chapter_two@
+
+@bibliography bibliography@
+
+book@

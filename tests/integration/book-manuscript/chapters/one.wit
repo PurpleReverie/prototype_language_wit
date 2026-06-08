@@ -1,0 +1,23 @@
+~ chapters/one.wit — registers itself into @toc and @bibliography
+~ via additive partials, then renders its prose.
+
++#toc: @tocrow |number I| |title The Lamp| tocrow@
++#bibliography: @weil Simone Weil, Gravity and Grace, 1952, Routledge !!
+
+#chapter_one
+@chapter |number I| |title The Lamp|
+
+@epigraph |source coastal proverb|
+The sea does not forgive forgetting.
+epigraph@
+
+For eleven days the lamp had burned untended, and Aldous told
+himself this was _fine_.
+
+@scenebreak scenebreak@
+
+He had not spoken aloud in so long that his own voice, when it
+came, surprised him.
+
+chapter@
+chapter_one#
