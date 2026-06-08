@@ -1,0 +1,7 @@
+~ emphasis as the first and last token of a paragraph
+~ also: asterisks adjacent to blank lines (paragraph boundaries)
+_Alone_, the keeper waited.
+
+The lamp burned through the night until *dawn*.
+
+*Morning* arrived, and the silence broke.

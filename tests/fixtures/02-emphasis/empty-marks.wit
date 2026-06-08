@@ -1,0 +1,4 @@
+~ adjacent mark characters with no token between them
+~ open question: do __ and ** parse as literal punctuation, as an error, or as
+~ an empty emphasis node — fixture pins the input, decision deferred to review
+He drew __ on the slate, then ** beside it, and shrugged.

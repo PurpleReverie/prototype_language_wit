@@ -1,0 +1,3 @@
+~ intra-word underscores in snake_case identifiers do not open italic
+~ the run remains a single plain-text token across all three underscores
+The variable snake_case_word appeared three times in the listing.
