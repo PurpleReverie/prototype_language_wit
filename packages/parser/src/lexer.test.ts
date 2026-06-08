@@ -1,7 +1,13 @@
 import { describe, it, expect } from 'vitest';
 
 import { lex } from './lexer.js';
-import type { Token, TextRun, ParagraphBreak } from './tokens.js';
+import type {
+  EmphasisClose,
+  EmphasisOpen,
+  ParagraphBreak,
+  TextRun,
+  Token,
+} from './tokens.js';
 
 function kinds(tokens: Token[]): string[] {
   return tokens.map((t) => t.kind);
@@ -178,5 +184,156 @@ describe('lex — prose runs', () => {
     expect((toks[0] as TextRun).value).toBe(
       'first line\nsecond line\nthird line',
     );
+  });
+});
+
+describe('lex — emphasis recognizers', () => {
+  it('`_word_` -> [emphasisOpen, textRun, emphasisClose, eof]', () => {
+    const toks = lex('_word_');
+    expect(kinds(toks)).toEqual([
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'eof',
+    ]);
+    expect((toks[0] as EmphasisOpen).marker).toBe('_');
+    expect((toks[1] as TextRun).value).toBe('word');
+    expect((toks[2] as EmphasisClose).marker).toBe('_');
+  });
+
+  it('`*word*` -> [emphasisOpen, textRun, emphasisClose, eof]', () => {
+    const toks = lex('*word*');
+    expect(kinds(toks)).toEqual([
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'eof',
+    ]);
+    expect((toks[0] as EmphasisOpen).marker).toBe('*');
+    expect((toks[1] as TextRun).value).toBe('word');
+    expect((toks[2] as EmphasisClose).marker).toBe('*');
+  });
+
+  it('digit-flanked `*` does not open or close emphasis: `5*6*7`', () => {
+    const toks = lex('5*6*7');
+    expect(kinds(toks)).toEqual(['textRun', 'eof']);
+    expect((toks[0] as TextRun).value).toBe('5*6*7');
+  });
+
+  it('letter-flanked `_` stays literal: `snake_case_word`', () => {
+    const toks = lex('snake_case_word');
+    expect(kinds(toks)).toEqual(['textRun', 'eof']);
+    expect((toks[0] as TextRun).value).toBe('snake_case_word');
+  });
+
+  it('empty `__` stays literal (no zero-width emphasis)', () => {
+    const toks = lex('__');
+    expect(kinds(toks)).toEqual(['textRun', 'eof']);
+    expect((toks[0] as TextRun).value).toBe('__');
+  });
+
+  it('empty `**` stays literal (no zero-width emphasis)', () => {
+    const toks = lex('**');
+    expect(kinds(toks)).toEqual(['textRun', 'eof']);
+    expect((toks[0] as TextRun).value).toBe('**');
+  });
+
+  it("`_keeper_'s` closes italic before the apostrophe-s tail", () => {
+    const toks = lex("_keeper_'s");
+    expect(kinds(toks)).toEqual([
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'textRun',
+      'eof',
+    ]);
+    expect((toks[0] as EmphasisOpen).marker).toBe('_');
+    expect((toks[1] as TextRun).value).toBe('keeper');
+    expect((toks[2] as EmphasisClose).marker).toBe('_');
+    expect((toks[3] as TextRun).value).toBe("'s");
+  });
+
+  it('mixed paragraph emits full token stream', () => {
+    const toks = lex('He said _hello_ and *bye*.');
+    expect(kinds(toks)).toEqual([
+      'textRun',
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'textRun',
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'textRun',
+      'eof',
+    ]);
+    expect((toks[0] as TextRun).value).toBe('He said ');
+    expect((toks[1] as EmphasisOpen).marker).toBe('_');
+    expect((toks[2] as TextRun).value).toBe('hello');
+    expect((toks[3] as EmphasisClose).marker).toBe('_');
+    expect((toks[4] as TextRun).value).toBe(' and ');
+    expect((toks[5] as EmphasisOpen).marker).toBe('*');
+    expect((toks[6] as TextRun).value).toBe('bye');
+    expect((toks[7] as EmphasisClose).marker).toBe('*');
+    expect((toks[8] as TextRun).value).toBe('.');
+  });
+
+  it('emphasis at paragraph start and end', () => {
+    const toks = lex('_Alone_, the keeper waited.');
+    expect(kinds(toks)).toEqual([
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'textRun',
+      'eof',
+    ]);
+    expect((toks[1] as TextRun).value).toBe('Alone');
+    expect((toks[3] as TextRun).value).toBe(', the keeper waited.');
+  });
+
+  it('emphasis as the final token of a paragraph', () => {
+    const toks = lex('burned until *dawn*');
+    expect(kinds(toks)).toEqual([
+      'textRun',
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'eof',
+    ]);
+    expect((toks[2] as TextRun).value).toBe('dawn');
+  });
+
+  it('hyphen-adjacent underscore does not open emphasis', () => {
+    const toks = lex('foo-_bar');
+    expect(kinds(toks)).toEqual(['textRun', 'eof']);
+    expect((toks[0] as TextRun).value).toBe('foo-_bar');
+  });
+
+  it('emphasis loc.length is one byte and tracks column', () => {
+    const toks = lex('_x_');
+    const open = toks[0] as EmphasisOpen;
+    const close = toks[2] as EmphasisClose;
+    expect(open.loc.length).toBe(1);
+    expect(open.loc.col).toBe(1);
+    expect(close.loc.length).toBe(1);
+    expect(close.loc.col).toBe(3);
+  });
+
+  it('emphasis tokens reset at paragraph boundary', () => {
+    const toks = lex('one _word_\n\n*two*');
+    expect(kinds(toks)).toEqual([
+      'textRun',
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'paragraphBreak',
+      'emphasisOpen',
+      'textRun',
+      'emphasisClose',
+      'eof',
+    ]);
+    expect((toks[5] as EmphasisOpen).marker).toBe('*');
+    const pb = toks[4] as ParagraphBreak;
+    expect(pb.loc.line).toBe(1);
   });
 });
