@@ -1,0 +1,3 @@
+#lamp: { lit - true, oil - full }
+
+(if @lamp.lit) (if @lamp.oil is full) The lamp will last the night. (end) (end)

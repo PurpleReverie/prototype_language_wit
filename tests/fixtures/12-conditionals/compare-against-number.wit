@@ -1,0 +1,3 @@
+#meter: { value - 99 }
+
+(if @meter.value is 99) The meter reads full. (end)

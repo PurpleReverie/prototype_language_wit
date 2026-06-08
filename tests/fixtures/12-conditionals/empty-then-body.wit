@@ -1,0 +1,3 @@
+#lamp: { flag - true }
+
+(if @lamp.flag) (end)
