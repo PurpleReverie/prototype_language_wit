@@ -1,0 +1,11 @@
++#bibliography: @weil Simone Weil, Gravity and Grace, 1952, Routledge !!
+
+Some prose between contributions.
+
++#bibliography: @berger John Berger, Ways of Seeing, 1972, Penguin !!
+
+More prose, another chapter's worth of context.
+
++#bibliography: @arendt Hannah Arendt, The Human Condition, 1958, Chicago !!
+
+@bibliography

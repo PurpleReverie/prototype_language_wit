@@ -1,0 +1,7 @@
++#bibliography
+@weil Simone Weil, Gravity and Grace, 1952, Routledge
+bibliography#
+
++#bibliography: @berger John Berger, Ways of Seeing, 1972, Penguin !!
+
+@bibliography
