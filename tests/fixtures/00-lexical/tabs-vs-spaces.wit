@@ -1,0 +1,4 @@
+~ leading tab, leading spaces, mixed tab+space on different lines.
+	Tab-indented prose line.
+    Space-indented prose line.
+ 	 Mixed leading whitespace prose line.
