@@ -27,22 +27,28 @@ in later categories and are deliberately absent from every fixture below.
   not participate in I.2. It exists to assert that line length alone is
   not a paragraph signal.
 
-## Markdown-ish leaders are not block syntax (PLAN.md W1.4 / DS-1 row 1.C.5)
+## Markdown-ish leaders are not block syntax (no PLAN.md entry — new I.review item)
 
+- Cross-refs: PLAN.md W1.4 / DS-1 row 1.C.5.
 - `markdown-ish-leaders.wit` opens lines with `>`, `*`, `-`, and `1.` —
   each in its own paragraph. None of these should activate a
   blockquote, bullet, or ordered-list parse. Wit has no such blocks.
 - Open: should each of these lines parse as a single `Text` run that
   begins with the literal leader character, or should the leader be
-  stripped/normalized? Lean **literal** — the writer typed it on
-  purpose — but the fixture is silent on the choice.
+  stripped/normalized? Two candidate behaviors:
+  (a) literal — the leader char stays in `Text`;
+  (b) normalized — leader is stripped.
+  M1.review will pick. No fixture currently commits.
 - Cross-cuts with 02-emphasis: the `*` leader here is the same byte as
   the bold opener. Decision at column 0 needs a rule that `*` followed
   by whitespace is not a bold opener. Surfacing here so 02-emphasis can
   add the inverse fixture.
 
-## Punctuation, quotes, numerics, URLs (PLAN.md W1.3, W1.5)
+## Punctuation, quotes, numerics, URLs (no PLAN.md entry — new I.review item)
 
+- Cross-refs: PLAN.md W1.3, W1.5. The open questions below
+  (smart-quote substitution, number-shape tokenization, mid-word `@`)
+  are not yet itemized in PLAN.md and should be surfaced at I.review.
 - `punctuation-heavy.wit` packs em-dash, apostrophe, colon, and
   semicolon into one sentence. None are reserved in prose; the file
   exists to lock that in before someone is tempted to overload `:` for
@@ -58,6 +64,9 @@ in later categories and are deliberately absent from every fixture below.
   - `5*6*7` — three digits glued by `*`. PLAN §2.U.4 promises bold
     tokenization will reject this; the fixture is the *prose-side*
     assertion that even before emphasis exists, the run is plain text.
+    Cross-category fragility: `numbers-and-arithmetic-shapes.wit`
+    snapshot must be re-validated when 02-emphasis tokenization lands;
+    the prose-side run for `5*6*7` is observable to both categories.
   - `3.14` — a decimal literal embedded in prose. Open: does the lexer
     distinguish a "number-shaped" token within a `Text` run, or is the
     entire run opaque? Spec is silent; lean opaque.
@@ -71,10 +80,13 @@ in later categories and are deliberately absent from every fixture below.
 
 ## Tilde mid-line (PLAN.md I.1 / DS-3 row 3.U.3)
 
-- `tilde-mid-line.wit` contains `~/Documents` and `~6 hours`, both with
-  the tilde NOT in column 0. PLAN §3.U.3 already promises that mid-line
-  tildes do not start comments; this fixture is the prose-side
-  assertion of the same rule, written before 03-comments lands.
+- `tilde-slash-mid-line.wit` (`~/Documents`) and
+  `tilde-digit-mid-line.wit` (`~6 hours`) both place the tilde NOT in
+  column 0. PLAN §3.U.3 lists the two cases separately, so per README
+  rule (b) they're split into two single-purpose fixtures. PLAN §3.U.3
+  already promises that mid-line tildes do not start comments; these
+  fixtures are the prose-side assertion of the same rule, written
+  before 03-comments lands.
 - Open (carrying over from 00-lexical `_notes.md`): even when the
   comment marker IS in column 0, are comment lines AST nodes or
   elided? Not probed here — every fixture in 01-prose uses at most a
@@ -92,12 +104,13 @@ in later categories and are deliberately absent from every fixture below.
   (`whitespace-only-line.wit`). If the resolution of I.2 forces a
   rewrite, expect a follow-up fixture here.
 
-## Narration comments (carry-over from 00-lexical)
+## Narration comments (PLAN.md I.1)
 
 - Per `tests/fixtures/README.md`, narration `~ ...` inside `.wit`
   files is still permitted in 01-prose. Most fixtures here open with
-  one narration line; `blank-line-splits.wit` opens with two. The
-  comment marker itself is not under test in this category.
+  one narration line; `blank-line-splits.wit` and `urls-in-prose.wit`
+  open with two. The comment marker itself is not under test in this
+  category.
 - From 03-comments onward this convention is locked out; reviewers
   should not propagate the style further.
 
