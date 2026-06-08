@@ -1,46 +1,33 @@
 // Lexer driver for Wit source text.
 //
-// This module is intentionally minimal: it provides the framework
-// (cursor, normalization, paragraph-break recognition, TextRun
-// fall-through) on which subsequent M2 tasks add real recognizers.
+// The driver normalizes newlines, walks the cursor, and delegates to
+// recognizer helpers for paragraph-level constructs (paragraph breaks,
+// comments, emphasis, prose). Comment recognizers live in
+// `lexer-recognizers.ts`; shared cursor/state types and helpers live
+// in `lexer-internals.ts`.
 //
-// FUTURE-IMPROVEMENT: CRLF / bare-CR are normalized to LF in a
-// single pre-pass; error locations therefore reflect the normalized
-// text. If round-trip fidelity is needed, add an offset side-map.
+// FUTURE-IMPROVEMENT: CRLF / bare-CR are normalized to LF in a single
+// pre-pass; error locations therefore reflect the normalized text.
 
 import { isAsciiDigit, isAsciiLetter } from './char.js';
-import { WitError } from './errors.js';
-import type { ErrorCodeName } from './errors.js';
-import type { Loc } from './loc.js';
+import { tryBlockComment, tryLineComment } from './lexer-recognizers.js';
+import {
+  advance,
+  flushTextRun,
+  locFrom,
+  LexerError,
+  snapshot,
+} from './lexer-internals.js';
+import type { Cursor, LexState, RunBuf } from './lexer-internals.js';
 import type {
   EmphasisClose,
   EmphasisOpen,
   EOF,
   ParagraphBreak,
-  TextRun,
   Token,
 } from './tokens.js';
 
-export class LexerError extends WitError {
-  constructor(code: ErrorCodeName, message: string, loc: Loc) {
-    super(code, message, loc);
-    this.name = 'LexerError';
-  }
-}
-
-interface Cursor {
-  line: number;
-  col: number;
-  offset: number;
-}
-
-interface LexState {
-  src: string;
-  file: string;
-  cur: Cursor;
-  paragraphStart: number;
-  tokens: Token[];
-}
+export { LexerError };
 
 export function lex(source: string, file: string = '<anonymous>'): Token[] {
   const normalized = normalizeNewlines(source);
@@ -114,36 +101,24 @@ function emitParagraphBreak(state: LexState, endOffset: number): void {
   state.paragraphStart = state.cur.offset;
 }
 
-interface RunBuf {
-  value: string;
-  start: Cursor;
-}
-
 function consumeParagraphContent(state: LexState): void {
-  // Walk a paragraph emitting EmphasisOpen / EmphasisClose for `_` and `*`
-  // where the word-boundary rule fires; everything else accumulates into
-  // TextRun bytes flushed at boundaries or paragraph end.
+  // Walk a paragraph emitting comment / emphasis tokens where their
+  // recognizers fire; everything else accumulates into TextRun bytes
+  // flushed at boundaries or paragraph end.
   let buf: RunBuf = { value: '', start: snapshot(state.cur) };
   while (state.cur.offset < state.src.length) {
     if (scanParagraphBreak(state).endOffset !== -1) break;
-    if (tryEmphasis(state, buf)) {
-      buf = { value: '', start: snapshot(state.cur) };
-      continue;
-    }
+    if (tryBlockComment(state, buf)) { buf = freshBuf(state); continue; }
+    if (tryLineComment(state, buf)) { buf = freshBuf(state); continue; }
+    if (tryEmphasis(state, buf)) { buf = freshBuf(state); continue; }
     buf.value += state.src.charAt(state.cur.offset);
     advance(state);
   }
   flushTextRun(state, buf);
 }
 
-function flushTextRun(state: LexState, buf: RunBuf): void {
-  if (buf.value.length === 0) return;
-  const tok: TextRun = {
-    kind: 'textRun',
-    value: buf.value,
-    loc: locFrom(state.file, buf.start, state.cur),
-  };
-  state.tokens.push(tok);
+function freshBuf(state: LexState): RunBuf {
+  return { value: '', start: snapshot(state.cur) };
 }
 
 function tryEmphasis(state: LexState, buf: RunBuf): boolean {
@@ -240,31 +215,6 @@ function peek(state: LexState, ahead: number): string {
   return state.src.charAt(idx);
 }
 
-function advance(state: LexState): void {
-  const c = state.src.charAt(state.cur.offset);
-  state.cur.offset += 1;
-  if (c === '\n') {
-    state.cur.line += 1;
-    state.cur.col = 1;
-  } else {
-    state.cur.col += 1;
-  }
-}
-
-function snapshot(c: Cursor): Cursor {
-  return { line: c.line, col: c.col, offset: c.offset };
-}
-
-function locFrom(file: string, start: Cursor, end: Cursor): Loc {
-  return {
-    file,
-    line: start.line,
-    col: start.col,
-    offset: start.offset,
-    length: end.offset - start.offset,
-  };
-}
-
 function makeEof(state: LexState): EOF {
   return {
     kind: 'eof',
@@ -277,3 +227,8 @@ function makeEof(state: LexState): EOF {
     },
   };
 }
+
+// Re-export cursor helpers' types only — Cursor isn't part of the public
+// API but TypeScript needs to see it referenced if a downstream tool
+// reads the source map. (No-op at runtime.)
+export type { Cursor };
