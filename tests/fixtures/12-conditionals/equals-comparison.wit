@@ -1,0 +1,3 @@
+#book: { status - draft }
+
+(if @book.status equals draft) The book is unfinished. (end)

@@ -1,0 +1,3 @@
+#lamp: { flag - true }
+
+(if @lamp.flag) The lamp burned through the watch. (end)
