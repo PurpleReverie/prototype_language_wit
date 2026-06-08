@@ -46,17 +46,19 @@ Fixture inventory:
 - `order-preservation.wit` — three `+#bibliography`
   contributions at different positions in one file, separated
   by prose, to pin the order rule.
-- `non-mergeable-body-shape.wit` — a block-shape `+#bibliography`
+- `mixed-body-shape.wit` — a block-shape `+#bibliography`
   plus a single-line-shape `+#bibliography` in the same file
   (different shapes, same name).
 - `additive-with-captures.wit` — `+#bibliography ||author, work||`
   declaring captures on an additive contribution.
 
-## Merge semantics for `+#name` (PLAN.md DS-7 / 7.C.1)
+## Merge semantics for `+#name` (no PLAN.md entry — new I.review item)
 
 Cross-refs: PLAN.md DS-7, 7.U.1, 7.S.1, 7.C.1,
 `examples/16-additive-partials/`, 07-definitions/_notes.md
-(forward-references / hoisting, definition scope).
+(forward-references / hoisting, definition scope). DS-7 / 7.C.1
+anchor the merge wording but the proposed merge-stage rule
+itself is unstated and surfaces here as a new I.review item.
 
 - DS-7 / 7.C.1 wording: "Multiple `+#bibliography` declarations
   ... merge into single AST node after resolution." The merge
@@ -102,11 +104,14 @@ Cross-refs: PLAN.md DS-7, 7.U.1, 7.S.1, 7.C.1,
   Parity with the rest of the language's case-sensitive handle
   rule. Not probed.
 
-## Mix normal `#x` with additive `+#x` (PLAN.md DS-7 — extends 7.C.1)
+## Mix normal `#x` with additive `+#x` (no PLAN.md entry — new I.review item)
 
 Cross-refs: PLAN.md DS-7, 7.C.1, 7.C.3,
 `mix-normal-and-additive.wit`, 07-definitions/_notes.md
 (definition redefinition — flagged as M1.08 territory).
+DS-7 / 7.C.1 cover additive merge in the abstract; the
+composition with a non-additive `#name` base is not pinned
+in PLAN.md and surfaces here as a new I.review item.
 
 - 07-definitions/_notes.md flagged this exact composition under
   "Open under proposal (c)" of the hoisting section: "definition
@@ -149,25 +154,29 @@ Cross-refs: PLAN.md DS-7, 7.C.1, 7.C.3,
   document/reference order with no special treatment for the
   base. Not probed (the cross-file fixture has no base).
 
-## Shape compatibility across contributions (PLAN.md DS-7 / 7.C.3)
+## Shape compatibility across contributions (no PLAN.md entry — new I.review item)
 
 Cross-refs: PLAN.md DS-7, 7.C.3, 6.S.4 (definition shapes),
-`non-mergeable-body-shape.wit`, 07-definitions/_notes.md
-(definition shape classification).
+`mixed-body-shape.wit`, 07-definitions/_notes.md
+(definition shape classification). 7.C.3 anchors the
+"structural bodies refuse merge" wording; the specific
+shape-compatibility rule across `+#name` contributions is not
+spelled out in PLAN.md and surfaces here as a new I.review
+item.
 
 - 7.C.3 wording: "Partial with non-mergeable body errors —
   structural bodies refuse merge." Read literally, "structural
   bodies" reads like records / collections (M1.09 territory).
   In M1.08, the closest analog is two `+#name` contributions
   with incompatible definition shapes (block vs single-line vs
-  value-block). Probed by `non-mergeable-body-shape.wit`: a
+  value-block). Probed by `mixed-body-shape.wit`: a
   `+#bibliography ... bibliography#` block-shape followed by a
   `+#bibliography: ... !!` single-line-shape.
 - Three candidate rules:
   (a) **shape must match across contributions** — all `+#name`
       contributions must share the same definition shape. Mixing
-      block with single-line is an error at resolve time. The
-      merged body type is determined by the contributions'
+      block with single-line is an error at parse/resolver time.
+      The merged body type is determined by the contributions'
       common shape.
   (b) **shapes coerce to block** — the merger treats all
       contributions as block-shape body sequences regardless of
@@ -180,33 +189,44 @@ Cross-refs: PLAN.md DS-7, 7.C.3, 6.S.4 (definition shapes),
       whatever the bytes naturally form. Maximum permissiveness;
       surprising round-trip behavior (single-line + single-line
       yields `value !! value !!`).
-- **Concrete proposal:** rule (b). The use-side
-  `@bibliography ... bibliography@` expansion produces a body
-  sequence regardless of declaration shape; treating every
-  additive contribution as "contributes an inner body run" is
-  the most natural surface for the chapter-registration pattern
-  (`examples/16-additive-partials/chapters/*.wit` mix a single-
-  line `+#bibliography: @weil ... !!` with what could be a
-  block-shape `+#bibliography ... bibliography#` in a different
-  chapter without the author having to harmonise shapes). Rule
-  (a) is stricter but forces all chapters to agree on shape;
-  rule (c) loses the per-contribution boundary. Under (b), the
-  merged `NodeDef.shape` is `block`; per-contribution shapes
-  are preserved on child `loc` records. Not committed; surface
-  at M1.review.
-- Open under proposal (b): does a `value-block` contribution
-  with nested node uses interact differently from a `single-
-  line` contribution at merge? Lean: no — both reduce to "this
-  contribution adds these child nodes to the merged body."
-  Not probed.
-- Open under proposal (b): mixed captures across contributions
-  with different shapes — see "Captures on `+#x`" below.
+- **Concrete proposal:** rule (a). 7.C.3's wording —
+  "structural bodies refuse merge" — reads most directly as
+  "shapes that disagree on structure do not merge"; treating
+  shape mismatch as a parse/resolver error is the closest M1.08
+  analog of that conformance row. Under (a),
+  `mixed-body-shape.wit` is an ERROR fixture: the block-shape
+  `+#bibliography ... bibliography#` and the single-line-shape
+  `+#bibliography: ... !!` cannot merge and the resolver
+  rejects the combination. Ergonomic loss is real — chapter
+  authors must agree on a shape across the reference graph, or
+  the master must pin shape via a non-additive base — but this
+  follows the conformance row rather than working around it.
+  Rule (b) is more permissive but invents coercion semantics
+  PLAN.md does not authorise; rule (c) loses the per-
+  contribution boundary entirely. Under (a) the merged
+  `NodeDef.shape` is the shared shape of all contributions; per-
+  contribution `loc` records remain. Not committed; surface at
+  M1.review.
+- Open under proposal (a): does a `value-block` contribution
+  count as the same shape as a `block` contribution for merge
+  purposes, or are all three shapes (block / single-line /
+  value-block) mutually exclusive? Lean: mutually exclusive —
+  the M1.07 lean classified them as three distinct shapes by
+  opener byte, and merge should follow that classification.
+  Not probed (no value-block + block fixture).
+- Open under proposal (a): mixed captures across contributions
+  with different shapes — moot under (a) since mismatched
+  shapes do not merge; see "Captures on `+#x`" for the same-
+  shape case.
 
-## Order preservation (PLAN.md DS-7 / 7.C.4)
+## Order preservation (no PLAN.md entry — new I.review item)
 
 Cross-refs: PLAN.md DS-7, 7.C.4, DS-8 (reference graph),
 `order-preservation.wit`, `cross-file-merge/`,
-`multiple-additive-same-file.wit`.
+`multiple-additive-same-file.wit`. DS-7 / 7.C.4 anchor the
+"document/reference order" wording; the specific traversal
+rule (depth-first vs breadth-first vs flat-declaration) is not
+pinned in PLAN.md and surfaces here as a new I.review item.
 
 - 7.C.4 wording: "Partial ordering — children appear in
   document/reference order." Probed in three layers:
@@ -354,7 +374,7 @@ Cross-refs: PLAN.md DS-6 (capture lists), DS-7,
   pins the diagnostic location (`loc` at the `||` opener of
   the additive declaration). The fixture name stays
   descriptive of what it contains rather than its expected
-  outcome, consistent with `non-mergeable-body-shape.wit`.
+  outcome, consistent with `mixed-body-shape.wit`.
 - Open: interaction with `::name::` inside an additive body
   when the base declares captures `||a, b||` and the additive
   body references `::a::`. Lean: legal, the additive sees the
