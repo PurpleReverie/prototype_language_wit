@@ -1,0 +1,49 @@
+~ film script — slug, action, cue, paren, transition. Screenplay vocabulary defined once,
+~ then a scene written as it reads on the page.
+
+#scene ||location, time||
+@slugline ::location:: — ::time:: slugline@
+...
+scene#
+
+#cue ||who||
+@character ::who:: character@
+...
+cue#
+
+~ the scene
+
+@scene |location - INT. LIGHTHOUSE — LANTERN ROOM| |time NIGHT|
+
+@action
+Wind claws at the glass. ALDOUS VANE, fifties, weathered, trims
+the wick of a great lamp. A KNOCK at the hatch below. He does
+not turn.
+action@
+
+@cue |who ALDOUS|
+@paren not turning paren@
+We're closed.
+cue@
+
+@action
+The hatch opens anyway. A STRANGER hauls themselves up, soaked
+through, cradling a tin.
+action@
+
+@cue |who STRANGER|
+I brought oil.
+cue@
+
+@action
+For the first time, Aldous turns.
+action@
+
+@cue |who ALDOUS|
+@paren quietly paren@
+...You'd best come in, then.
+cue@
+
+@transition CUT TO: transition@
+
+scene@

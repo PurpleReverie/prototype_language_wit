@@ -1,0 +1,17 @@
+~ shared/schema.wit — vocabulary definitions for the book.
+
+#cite: ||author, title, year, publisher|| ::author:: (::year::). _::title::_. ::publisher::. !!
+
+#chapter ||number, title||
+@chapterheader
+::number:: — ::title::
+chapterheader@
+...
+chapter#
+
+#epigraph ||source||
+@epigraphbody
+...
+— ::source::
+epigraphbody@
+epigraph#

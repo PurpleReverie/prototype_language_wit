@@ -1,0 +1,56 @@
+~ blog post draft — casual essay with a callout, code block, pullquote, and a figure.
+
+#post: {
+  title - Why I stopped using a citation manager
+  author - Aldous Vane
+  date - 2024-09-18
+  status - draft
+}
+
+#tags: [ writing, tools, academia ]
+
+@article |title @post.title|
+
+@postmeta
+@post.author · @post.date
+(each @tags as tag)
+@tag @tag tag@
+(end)
+postmeta@
+
+@h1 @post.title h1@
+
+For three years I kept my references in a database. Every paper I
+read, I logged — author, title, year, the lot. And every time I sat
+down to actually _write_, I broke flow to hunt down a citation key,
+paste it in, and lose my thread entirely.
+
+@callout |tone aside|
+The tool meant to help me write was the thing stopping me from
+writing.
+callout@
+
+Then I tried defining my sources once, in plain text, and citing
+them by what they _mean_ rather than by some opaque key:
+
+@code |language wit|
+#weil_attention: @cite! Simone Weil, Gravity and Grace, 1952, p. 42 !!
+
+Attention, as @weil_attention argued, is the rarest generosity.
+code@
+
+@pullquote
+I wasn't citing a page anymore. I was naming the idea I was
+standing on.
+pullquote@
+
+@figure |src desk.jpg| |caption My actual desk, mid-draft.|
+figure@
+
+@h2 The point h2@
+
+The friction was never the references. It was the context-switch —
+leaving the writing to manage the writing. Delete that, and you
+write faster *and* cite better.
+
+article@
