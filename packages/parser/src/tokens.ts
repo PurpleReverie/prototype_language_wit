@@ -75,6 +75,14 @@ export interface Dot extends HasLoc {
   kind: 'dot';
 }
 
+export interface AccessSegment extends HasLoc {
+  // A segment of a dotted access path after a NodeOpen, e.g. the `y` in
+  // `@x.y`. Segments accept the full handle class plus numeric-only
+  // (`.0` valid per M2.lex-nodes brief).
+  kind: 'accessSegment';
+  name: string;
+}
+
 export interface ParenOpen extends HasLoc {
   kind: 'parenOpen';
 }
@@ -211,6 +219,7 @@ export type Token =
   | NodeOpen
   | NodeClose
   | Dot
+  | AccessSegment
   | ParenOpen
   | ParenClose
   | PipeOpen

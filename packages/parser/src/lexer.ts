@@ -10,6 +10,7 @@
 // pre-pass; error locations therefore reflect the normalized text.
 
 import { isAsciiDigit, isAsciiLetter } from './char.js';
+import { tryNodeClose, tryNodeOpen, tryPipeOpen } from './lexer-nodes.js';
 import { tryBlockComment, tryLineComment } from './lexer-recognizers.js';
 import {
   advance,
@@ -110,6 +111,9 @@ function consumeParagraphContent(state: LexState): void {
     if (scanParagraphBreak(state).endOffset !== -1) break;
     if (tryBlockComment(state, buf)) { buf = freshBuf(state); continue; }
     if (tryLineComment(state, buf)) { buf = freshBuf(state); continue; }
+    if (tryNodeOpen(state, buf)) { buf = freshBuf(state); continue; }
+    if (tryNodeClose(state, buf)) { buf = freshBuf(state); continue; }
+    if (tryPipeOpen(state, buf)) { buf = freshBuf(state); continue; }
     if (tryEmphasis(state, buf)) { buf = freshBuf(state); continue; }
     buf.value += state.src.charAt(state.cur.offset);
     advance(state);
