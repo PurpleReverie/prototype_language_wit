@@ -8,10 +8,18 @@
 // single pre-pass; error locations therefore reflect the normalized
 // text. If round-trip fidelity is needed, add an offset side-map.
 
+import { isAsciiDigit, isAsciiLetter } from './char.js';
 import { WitError } from './errors.js';
 import type { ErrorCodeName } from './errors.js';
 import type { Loc } from './loc.js';
-import type { Token, TextRun, ParagraphBreak, EOF } from './tokens.js';
+import type {
+  EmphasisClose,
+  EmphasisOpen,
+  EOF,
+  ParagraphBreak,
+  TextRun,
+  Token,
+} from './tokens.js';
 
 export class LexerError extends WitError {
   constructor(code: ErrorCodeName, message: string, loc: Loc) {
@@ -30,6 +38,7 @@ interface LexState {
   src: string;
   file: string;
   cur: Cursor;
+  paragraphStart: number;
   tokens: Token[];
 }
 
@@ -39,6 +48,7 @@ export function lex(source: string, file: string = '<anonymous>'): Token[] {
     src: normalized,
     file,
     cur: { line: 1, col: 1, offset: 0 },
+    paragraphStart: 0,
     tokens: [],
   };
   while (state.cur.offset < state.src.length) {
@@ -55,7 +65,7 @@ function normalizeNewlines(s: string): string {
 
 function step(state: LexState): void {
   if (tryParagraphBreak(state)) return;
-  consumeTextRun(state);
+  consumeParagraphContent(state);
 }
 
 interface BreakScan {
@@ -101,25 +111,133 @@ function emitParagraphBreak(state: LexState, endOffset: number): void {
     loc: locFrom(state.file, start, state.cur),
   };
   state.tokens.push(tok);
+  state.paragraphStart = state.cur.offset;
 }
 
-function consumeTextRun(state: LexState): void {
-  // Fall-through recognizer: everything that isn't a paragraph break
-  // becomes TextRun bytes until the next paragraph break or EOF.
-  const start = snapshot(state.cur);
-  let value = '';
+interface RunBuf {
+  value: string;
+  start: Cursor;
+}
+
+function consumeParagraphContent(state: LexState): void {
+  // Walk a paragraph emitting EmphasisOpen / EmphasisClose for `_` and `*`
+  // where the word-boundary rule fires; everything else accumulates into
+  // TextRun bytes flushed at boundaries or paragraph end.
+  let buf: RunBuf = { value: '', start: snapshot(state.cur) };
   while (state.cur.offset < state.src.length) {
     if (scanParagraphBreak(state).endOffset !== -1) break;
-    value += state.src.charAt(state.cur.offset);
+    if (tryEmphasis(state, buf)) {
+      buf = { value: '', start: snapshot(state.cur) };
+      continue;
+    }
+    buf.value += state.src.charAt(state.cur.offset);
     advance(state);
   }
-  if (value.length === 0) return;
+  flushTextRun(state, buf);
+}
+
+function flushTextRun(state: LexState, buf: RunBuf): void {
+  if (buf.value.length === 0) return;
   const tok: TextRun = {
     kind: 'textRun',
-    value,
+    value: buf.value,
+    loc: locFrom(state.file, buf.start, state.cur),
+  };
+  state.tokens.push(tok);
+}
+
+function tryEmphasis(state: LexState, buf: RunBuf): boolean {
+  const c = state.src.charAt(state.cur.offset);
+  if (c !== '_' && c !== '*') return false;
+  const marker = c as '_' | '*';
+  if (tryRecognizeEmphasisOpen(state, buf, marker)) return true;
+  if (tryRecognizeEmphasisClose(state, buf, marker)) return true;
+  return false;
+}
+
+function tryRecognizeEmphasisOpen(
+  state: LexState,
+  buf: RunBuf,
+  marker: '_' | '*',
+): boolean {
+  if (!isPrecedingBoundary(state)) return false;
+  if (!isFollowingAlnum(state)) return false;
+  flushTextRun(state, buf);
+  emitEmphasisOpen(state, marker);
+  return true;
+}
+
+function tryRecognizeEmphasisClose(
+  state: LexState,
+  buf: RunBuf,
+  marker: '_' | '*',
+): boolean {
+  if (!isPrecedingAlnum(state)) return false;
+  if (!isFollowingBoundary(state)) return false;
+  flushTextRun(state, buf);
+  emitEmphasisClose(state, marker);
+  return true;
+}
+
+function emitEmphasisOpen(state: LexState, marker: '_' | '*'): void {
+  const start = snapshot(state.cur);
+  advance(state);
+  const tok: EmphasisOpen = {
+    kind: 'emphasisOpen',
+    marker,
     loc: locFrom(state.file, start, state.cur),
   };
   state.tokens.push(tok);
+}
+
+function emitEmphasisClose(state: LexState, marker: '_' | '*'): void {
+  const start = snapshot(state.cur);
+  advance(state);
+  const tok: EmphasisClose = {
+    kind: 'emphasisClose',
+    marker,
+    loc: locFrom(state.file, start, state.cur),
+  };
+  state.tokens.push(tok);
+}
+
+function isAlnum(c: string): boolean {
+  return isAsciiLetter(c) || isAsciiDigit(c);
+}
+
+function isPrecedingBoundary(state: LexState): boolean {
+  // Start-of-paragraph counts as a boundary. Otherwise the previous char
+  // must be neither alphanumeric nor `_` nor `-` (per the word-boundary
+  // rule's exclusion list).
+  if (state.cur.offset <= state.paragraphStart) return true;
+  const prev = state.src.charAt(state.cur.offset - 1);
+  if (isAlnum(prev)) return false;
+  if (prev === '_' || prev === '-') return false;
+  return true;
+}
+
+function isFollowingBoundary(state: LexState): boolean {
+  // End-of-paragraph counts as a boundary; otherwise the next char must
+  // not be alphanumeric (non-word per the rule for closing).
+  const next = peek(state, 1);
+  if (next === '') return true;
+  if (next === '\n') return true;
+  return !isAlnum(next);
+}
+
+function isPrecedingAlnum(state: LexState): boolean {
+  if (state.cur.offset <= state.paragraphStart) return false;
+  return isAlnum(state.src.charAt(state.cur.offset - 1));
+}
+
+function isFollowingAlnum(state: LexState): boolean {
+  return isAlnum(peek(state, 1));
+}
+
+function peek(state: LexState, ahead: number): string {
+  const idx = state.cur.offset + ahead;
+  if (idx >= state.src.length) return '';
+  return state.src.charAt(idx);
 }
 
 function advance(state: LexState): void {
@@ -159,4 +277,3 @@ function makeEof(state: LexState): EOF {
     },
   };
 }
-
