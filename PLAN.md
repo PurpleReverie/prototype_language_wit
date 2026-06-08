@@ -72,6 +72,23 @@ tests/
   runner/          vitest harness
 ```
 
+### Resolution timing
+
+Lexer/parser/resolver/expander each act on a defined token-class set. The table below pins which stage handles which class.
+
+| Stage | Name | Constructs | Behaviour |
+|---|---|---|---|
+| 1 | Eager (resolve stage) | Pipe values, parens slots, record RHS, conditional operands (outside definition bodies), `(each)` iteration heads, top-level prose access | Resolver computes the value once and binds it. |
+| 2 | Expansion-time (expander stage) | Definition body interpolation, definition body conditionals against `::param::` (R3), captured-value substitution | Re-resolved per invocation. |
+| 3 | Snapshot (iteration stage) | The collection expression inside `(each @x as item)` | Evaluated eagerly at iteration entry, then the resulting sequence is frozen for the duration of the loop. Loop body access against `@item` uses the snapshot. |
+
+Composition:
+
+- A definition whose body contains an `(each)` over a captured collection: the capture binds eagerly at invocation (stage 1); the `(each)` snapshots the captured value at entry (stage 3); body iteration uses the snapshot.
+- A pipe value containing an access path that resolves to a collection: eager evaluation produces the collection reference, which is then frozen if iterated.
+
+Source: `tests/M1-RECONCILIATIONS.md` R4. Cross-refs: I.120, I.123, R3.
+
 ---
 
 ## D. Milestones
@@ -581,6 +598,7 @@ Each must be resolved during M1 (driven by fixture writing).
 2. Single newline within a paragraph — collapse to space, or preserve as a soft break?
 3. Where can `@name.field` access appear — only in statements/params, or also in body prose? Boundary rule?
 4. Parameter values — always unquoted, or quoted for special-char values?
+   **I.4 — RESOLVED (backslash escape).** Inside parameter values (pipes and parens), backslash escapes the four reserved chars: `\|`, `\,`, `\!`, `\\` (literal backslash). Outside those four contexts, backslash is literal. No quoting syntax. Rationale: matches programmer expectations, simple state-machine, avoids smart-quote ambiguity.
 5. Numeric literals in records — distinguished type, or just strings?
 6. Bare reference vs prose: where does `@weil` end? Whitespace? Punctuation?
 7. `!!` greedy-parse risk in body prose. Options:
@@ -626,6 +644,7 @@ Each must be resolved during M1 (driven by fixture writing).
 34. Handle character class formally: `[A-Za-z0-9_-]`, first char letter; trailing-hyphen disallowed. (04-nodes-use)
 35. Handle case-sensitivity: exact-match vs case-fold. Lean exact. (04-nodes-use)
 36. Handle Unicode policy: ASCII-only / NFC-normalised / UAX #31. (04-nodes-use, 07-definitions)
+    **I.36 — RESOLVED for v1.0 (ASCII-only).** Handle character class is `[A-Za-z0-9_-]`. Non-ASCII handles (`@café`, `@日本`) are reserved for v2 via opt-in mode. Rationale: simpler lexer, no Unicode normalization at parse time, matches M1.04's concrete proposal. v2 will add an opt-in `wit.config` flag to relax the class.
 37. Leading-underscore handle (`@_private`): allowed or not. (04-nodes-use)
 38. Digit-before-`@` boundary (`agent007@…`): non-NodeUse-opener, parity with letter-before. (16-ambiguity)
 
