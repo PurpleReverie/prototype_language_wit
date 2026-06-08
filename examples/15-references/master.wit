@@ -13,7 +13,7 @@ reference ./chapters/two.wit
   status - draft
 }
 
-@book |title - @book.title| |status - @book.status|
+@book |title @book.title| |status @book.status|
 
 @titlepage
 @book.title

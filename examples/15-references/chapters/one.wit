@@ -2,9 +2,9 @@
 ~ shared vocabulary defined in ../shared/schema.wit.
 
 #chapter_one
-@chapter |number - I| |title - The Lamp|
+@chapter |number I| |title The Lamp|
 
-@epigraph |source - coastal proverb|
+@epigraph |source coastal proverb|
 The sea does not forgive forgetting.
 epigraph@
 

@@ -9,8 +9,8 @@
 
 (each @findings as finding)
 @finding
-|claim - @finding.claim|
-|strength - @finding.strength|
+|claim @finding.claim|
+|strength @finding.strength|
 finding@
 (end)
 
@@ -26,6 +26,6 @@ finding@
 
 @toc
 (each @chapters as ch)
-@tocrow |number - @ch.number| |title - @ch.title| tocrow@
+@tocrow |number @ch.number| |title @ch.title| tocrow@
 (end)
 toc@

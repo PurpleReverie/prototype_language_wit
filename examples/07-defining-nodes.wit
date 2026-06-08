@@ -16,9 +16,9 @@ chapter#
 ~ used like this
 
 @chapter
-|number - I|
-|title - The Keeper|
-|subtitle - On the nature of attention|
+|number I|
+|title The Keeper|
+|subtitle On the nature of attention|
 
 For eleven days the lamp had burned untended.
 chapter@
@@ -29,12 +29,12 @@ chapter@
 @metriccard
 @metriclabel ::label:: metriclabel@
 @metricvalue ::value:: metricvalue@
-(if ::met:: = true)
-@badge |tone - good| on target badge@
+(if ::met:: is true)
+@badge |tone good| on target badge@
 (else)
-@badge |tone - warn| below target — goal ::target:: badge@
+@badge |tone warn| below target — goal ::target:: badge@
 (end)
 metriccard@
 metric#
 
-@metric |label - Uptime| |value - 99.2%| |target - 99.5%| |met - false| metric@
+@metric |label Uptime| |value 99.2%| |target 99.5%| |met false| metric@

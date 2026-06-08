@@ -3,7 +3,7 @@
 
 #book: { status - draft }
 
-(if @book.status = draft)
+(if @book.status is draft)
 @watermark Draft — do not distribute. watermark@
 (end)
 
@@ -11,7 +11,7 @@
 
 #author: { corresponding - true, email - a.vane@coast.edu, name - Aldous Vane }
 
-(if @author.corresponding = true)
+(if @author.corresponding is true)
 Corresponding author: @author.email
 (else)
 @author.name
@@ -21,8 +21,8 @@ Corresponding author: @author.email
 
 #report: { status - final, audience - external }
 
-(if @report.status = final)
-(if @report.audience = external)
+(if @report.status is final)
+(if @report.audience equals external)
 @disclaimer Reviewed and approved for external circulation. disclaimer@
 (else)
 @disclaimer Final — internal only. disclaimer@

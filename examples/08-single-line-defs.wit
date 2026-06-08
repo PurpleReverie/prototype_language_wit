@@ -6,16 +6,16 @@
 
 ~ single-line definitions can still capture and interpolate
 
-#cite: ||author, title, year|| ! ::author:: (::year::). _::title::_. !
+#cite: ||author, title, year|| ::author:: (::year::). _::title::_. !!
 
-~ complex values are wrapped in ! ... ! — may span lines, may contain other nodes
+~ complex values are wrapped in : ... !! — may span lines, may contain other nodes
 
-#epigraph: !
+#epigraph:
 The sea does not forgive forgetting.
 — coastal proverb
-!
+!!
 
-#weil: ! Simone Weil, _Gravity and Grace_, 1952 !
+#weil: Simone Weil, _Gravity and Grace_, 1952 !!
 
 ~ a #name: definition is used like any other node: @name
 

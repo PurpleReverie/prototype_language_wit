@@ -31,7 +31,7 @@ Each file is single-purpose. Edit one to test how a feature's syntax feels witho
 | 14 | `14-iteration.wit` | `(each @coll as item)` |
 | 15 | `15-references/` | Multi-file: `reference ./path` composition |
 | 16 | `16-additive-partials/` | Multi-file: `+#name` self-registering chapters |
-| 17 | `17-scripting.wit` | `<script>` + the `lh` bridge |
+| 17 | `17-scripting.wit` | `<% … %>` + the `lh` bridge |
 
 The lighthouse / Aldous Vane thread from the spec runs through the examples on purpose — they read as one corpus rather than disconnected snippets.
 

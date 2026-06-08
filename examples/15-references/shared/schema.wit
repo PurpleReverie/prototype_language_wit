@@ -1,7 +1,7 @@
 ~ shared/schema.wit — vocabulary definitions, available to every file
 ~ that references this one.
 
-#cite: ||author, title, year, publisher|| ! ::author:: (::year::). _::title::_. ::publisher::. !
+#cite: ||author, title, year, publisher|| ::author:: (::year::). _::title::_. ::publisher::. !!
 
 #chapter ||number, title||
 @chapterheader
