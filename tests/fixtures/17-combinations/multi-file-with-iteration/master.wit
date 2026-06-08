@@ -1,0 +1,3 @@
+reference ./hands.wit
+
+(each @hands as hand) @hand.name signed at @hand.hour. (end)

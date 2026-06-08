@@ -1,0 +1,7 @@
+#hands: [
+  { name - Marlow, awake - true }
+  { name - Singleton, awake - false }
+  { name - Vane, awake - true }
+]
+
+(each @hands as hand) (if @hand.awake is true) @hand.name kept the watch. (end) (end)

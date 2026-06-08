@@ -1,0 +1,5 @@
+#weil: { author - Simone Weil, work - Gravity and Grace }
+
+#cite: ||author, work|| ::author::, ::work:: !!
+
+@cite |author @weil.author| |work @weil.work|
