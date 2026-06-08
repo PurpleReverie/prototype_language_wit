@@ -1,0 +1,6 @@
+reference ./mismatched-shape-additive/extra.wit
+
+@thing
+  - kind: "widget"
+  - count: 3
+thing@

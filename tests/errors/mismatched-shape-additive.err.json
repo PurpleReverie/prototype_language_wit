@@ -1,0 +1,5 @@
+{
+  "code": "E_PARTIAL_SHAPE_MISMATCH",
+  "message_contains": "partial shape mismatch",
+  "loc": { "line": 3, "col": 5 }
+}

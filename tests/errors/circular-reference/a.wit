@@ -1,0 +1,5 @@
+reference ./b.wit
+
+@a
+  - uses @b
+a@

@@ -1,0 +1,8 @@
+@x
+  - value: 1
+x@
+
+@y
+  - (if @x.value is "true")
+    - then: "yes"
+y@

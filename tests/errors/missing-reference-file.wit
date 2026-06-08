@@ -1,0 +1,5 @@
+reference ./nonexistent.wit
+
+@x
+  - uses other
+x@

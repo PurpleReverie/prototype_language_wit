@@ -1,0 +1,7 @@
+@x
+  - value: 1
+x@
+
+@y
+  - sees @x.nonexistent
+y@

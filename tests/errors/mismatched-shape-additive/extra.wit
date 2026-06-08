@@ -1,0 +1,4 @@
+@thing
+  - kind: 42
+  - colour: "blue"
+thing@

@@ -1,0 +1,5 @@
+{
+  "code": "E_EMPTY_PIPE",
+  "message_contains": "empty pipe",
+  "loc": { "line": 3, "col": 3 }
+}
