@@ -10,6 +10,15 @@
 // pre-pass; error locations therefore reflect the normalized text.
 
 import { isAsciiDigit, isAsciiLetter } from './char.js';
+import {
+  tryAdditivePrefix,
+  tryBangBang,
+  tryBodySlot,
+  tryCaptureOpen,
+  tryHashClose,
+  tryHashOpen,
+  tryInterpolation,
+} from './lexer-defs.js';
 import { tryNodeClose, tryNodeOpen, tryPipeOpen } from './lexer-nodes.js';
 import { tryBlockComment, tryLineComment } from './lexer-recognizers.js';
 import {
@@ -103,22 +112,33 @@ function emitParagraphBreak(state: LexState, endOffset: number): void {
 }
 
 function consumeParagraphContent(state: LexState): void {
-  // Walk a paragraph emitting comment / emphasis tokens where their
-  // recognizers fire; everything else accumulates into TextRun bytes
-  // flushed at boundaries or paragraph end.
+  // Walk a paragraph: recognizers fire on their respective leads;
+  // everything else accumulates into a TextRun.
   let buf: RunBuf = { value: '', start: snapshot(state.cur) };
   while (state.cur.offset < state.src.length) {
     if (scanParagraphBreak(state).endOffset !== -1) break;
-    if (tryBlockComment(state, buf)) { buf = freshBuf(state); continue; }
-    if (tryLineComment(state, buf)) { buf = freshBuf(state); continue; }
-    if (tryNodeOpen(state, buf)) { buf = freshBuf(state); continue; }
-    if (tryNodeClose(state, buf)) { buf = freshBuf(state); continue; }
-    if (tryPipeOpen(state, buf)) { buf = freshBuf(state); continue; }
-    if (tryEmphasis(state, buf)) { buf = freshBuf(state); continue; }
+    if (runRecognizers(state, buf)) { buf = freshBuf(state); continue; }
     buf.value += state.src.charAt(state.cur.offset);
     advance(state);
   }
   flushTextRun(state, buf);
+}
+
+function runRecognizers(state: LexState, buf: RunBuf): boolean {
+  if (tryBlockComment(state, buf)) return true;
+  if (tryLineComment(state, buf)) return true;
+  if (tryNodeOpen(state, buf)) return true;
+  if (tryNodeClose(state, buf)) return true;
+  if (tryAdditivePrefix(state, buf)) return true;
+  if (tryHashOpen(state, buf)) return true;
+  if (tryHashClose(state, buf)) return true;
+  if (tryCaptureOpen(state, buf)) return true;
+  if (tryPipeOpen(state, buf)) return true;
+  if (tryBangBang(state, buf)) return true;
+  if (tryInterpolation(state, buf)) return true;
+  if (tryBodySlot(state, buf)) return true;
+  if (tryEmphasis(state, buf)) return true;
+  return false;
 }
 
 function freshBuf(state: LexState): RunBuf {

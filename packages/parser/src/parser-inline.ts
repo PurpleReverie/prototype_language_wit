@@ -19,11 +19,15 @@
 //
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
+import { parseNodeUse } from './parser-nodes.js';
 import type {
   Bold,
+  BodySlot,
   Comment,
   Inline,
+  Interpolation,
   Italic,
+  NodeUse,
   Text,
 } from './ast.js';
 import type { Loc } from './loc.js';
@@ -32,8 +36,12 @@ import type {
   BlockCommentClose,
   BlockCommentContent,
   BlockCommentOpen,
+  BodySlotMarker,
   EmphasisClose,
   EmphasisOpen,
+  InterpolationClose,
+  InterpolationName,
+  InterpolationOpen,
   LineComment,
   TextRun,
   Token,
@@ -66,7 +74,55 @@ function parseOneInline(cursor: TokenCursor): Inline | null {
   if (tok.kind === 'blockCommentOpen') return takeBlockComment(cursor);
   if (tok.kind === 'blockCommentContent') return contentAsText(cursor);
   if (tok.kind === 'blockCommentClose') return closerAsText(cursor);
+  if (tok.kind === 'nodeOpen') return takeInlineNodeUse(cursor);
+  if (tok.kind === 'nodeClose') return null;
+  if (tok.kind === 'hashClose') return null;
+  if (tok.kind === 'bangBang') return null;
+  if (tok.kind === 'interpolationOpen') return takeInterpolation(cursor);
+  if (tok.kind === 'bodySlotMarker') return takeBodySlot(cursor);
   return fallbackText(cursor);
+}
+
+function takeInlineNodeUse(cursor: TokenCursor): NodeUse {
+  return parseNodeUse(cursor, {
+    inline: true,
+    parseBodyInline: parseInline,
+    parseBodyBlocks: () => [],
+  });
+}
+
+function takeInterpolation(cursor: TokenCursor): Interpolation {
+  const open = cursor.advance() as InterpolationOpen;
+  const nameTok = consumeInterpolationName(cursor);
+  const close = consumeInterpolationClose(cursor, open.loc);
+  return {
+    kind: 'interpolation',
+    name: nameTok?.name ?? '',
+    loc: spanLoc(open.loc, close),
+  };
+}
+
+function consumeInterpolationName(
+  cursor: TokenCursor,
+): InterpolationName | null {
+  const tok = cursor.current();
+  if (tok.kind !== 'interpolationName') return null;
+  cursor.advance();
+  return tok as InterpolationName;
+}
+
+function consumeInterpolationClose(cursor: TokenCursor, fallback: Loc): Loc {
+  const tok = cursor.current();
+  if (tok.kind === 'interpolationClose') {
+    cursor.advance();
+    return (tok as InterpolationClose).loc;
+  }
+  return fallback;
+}
+
+function takeBodySlot(cursor: TokenCursor): BodySlot {
+  const tok = cursor.advance() as BodySlotMarker;
+  return { kind: 'bodySlot', loc: tok.loc };
 }
 
 // ---------------------------------------------------------------------------

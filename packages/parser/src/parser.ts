@@ -2,22 +2,21 @@
 // and drives a recursive-descent walk over the token stream, producing
 // a Document AST node.
 //
-// Block kinds recognized so far:
-// - Paragraph: a span of inline content between paragraph breaks.
-// - Comment: a LineComment or BlockComment standing alone between
-//   paragraph breaks → top-level Comment block (inline=false).
-//
-// Inline parsing (Text / Italic / Bold / Comment) is delegated to
-// parser-inline.ts. NodeUse / NodeDef / scripts / data live in the
-// next task (M2.parse-nodes).
+// Block kinds recognized at the top-level loop:
+// - Paragraph (delegates to parser-inline for child Inline[]).
+// - Comment (standalone line / block comments between paragraph breaks).
+// - NodeUse `@name ...` (block form).
+// - NodeDef `#name ...` (block form, single-line, or value-block).
 //
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
-import { WitError } from './errors.js';
 import { lex } from './lexer.js';
 import { LexerError } from './lexer-internals.js';
+import { parseNodeDef } from './parser-defs.js';
+import { ParseError } from './parser-errors.js';
 import { TokenCursor } from './parser-cursor.js';
 import { parseInline, parseInlineComment } from './parser-inline.js';
+import { parseNodeUse } from './parser-nodes.js';
 import type {
   Block,
   Comment,
@@ -26,9 +25,9 @@ import type {
   Paragraph,
 } from './ast.js';
 import type { Loc } from './loc.js';
-import type { Token } from './tokens.js';
+import type { Token, TokenKind } from './tokens.js';
 
-export class ParseError extends WitError {}
+export { ParseError };
 
 export function parse(source: string, file: string = '<inline>'): Document {
   const tokens = lexOrThrow(source, file);
@@ -37,8 +36,12 @@ export function parse(source: string, file: string = '<inline>'): Document {
   while (!cursor.isAtEnd()) {
     skipParagraphBreaks(cursor);
     if (cursor.isAtEnd()) break;
+    const before = cursor.position();
     const block = parseBlock(cursor);
     if (block !== null) children.push(block);
+    if (cursor.position() === before) {
+      cursor.advance(); // bail safety — never spin on a stuck token.
+    }
   }
   return makeDocument(children, source, file);
 }
@@ -61,8 +64,107 @@ function skipParagraphBreaks(cursor: TokenCursor): void {
 }
 
 function parseBlock(cursor: TokenCursor): Block | null {
+  const tok = cursor.current();
+  if (isDefStart(tok.kind)) return parseDefBlock(cursor);
+  if (tok.kind === 'nodeOpen' && isBlockBodiedOpen(cursor)) {
+    return parseUseBlock(cursor);
+  }
   if (isStandaloneComment(cursor)) return parseStandaloneComment(cursor);
   return parseParagraph(cursor);
+}
+
+function isBlockBodiedOpen(cursor: TokenCursor): boolean {
+  // A NodeOpen at the start of a block is a block-level NodeUse if
+  // either a matching `name@` close exists later in the stream, or the
+  // open sits alone on its line (next is paragraphBreak/EOF or a
+  // textRun whose first byte is `\n`). The "alone-on-line" case still
+  // becomes a block NodeUse here — parseNodeUse then throws
+  // E_UNCLOSED_NODE when no close is found.
+  const tok = cursor.current();
+  if (tok.kind !== 'nodeOpen') return false;
+  if (hasMatchingNodeClose(cursor, tok.name)) return true;
+  const next = cursor.peek(1);
+  if (next.kind === 'paragraphBreak' || next.kind === 'eof') return true;
+  if (next.kind === 'textRun' && next.value.startsWith('\n')) return true;
+  return false;
+}
+
+function hasMatchingNodeClose(cursor: TokenCursor, name: string): boolean {
+  let i = 1;
+  while (true) {
+    const t = cursor.peek(i);
+    if (t.kind === 'eof') return false;
+    if (t.kind === 'nodeClose' && t.name === name) return true;
+    i += 1;
+  }
+}
+
+function isDefStart(kind: TokenKind): boolean {
+  return kind === 'hashOpen' || kind === 'additivePrefix';
+}
+
+function parseDefBlock(cursor: TokenCursor): Block {
+  return parseNodeDef(cursor, {
+    parseBlocks: parseDefBlocks,
+    parseInline: parseInline,
+  });
+}
+
+function parseUseBlock(cursor: TokenCursor): Block {
+  return parseNodeUse(cursor, {
+    inline: false,
+    parseBodyInline: parseInline,
+    parseBodyBlocks: parseUseBodyBlocks,
+  });
+}
+
+function parseUseBodyBlocks(
+  cursor: TokenCursor,
+  stopName: string,
+): (Block | Inline)[] {
+  return collectBlocksUntilNodeClose(cursor, stopName);
+}
+
+function collectBlocksUntilNodeClose(
+  cursor: TokenCursor,
+  stopName: string,
+): (Block | Inline)[] {
+  const out: (Block | Inline)[] = [];
+  while (!cursor.isAtEnd() && !isMatchingClose(cursor, stopName)) {
+    skipParagraphBreaks(cursor);
+    if (cursor.isAtEnd() || isMatchingClose(cursor, stopName)) break;
+    const before = cursor.position();
+    const block = parseBlock(cursor);
+    if (block !== null) out.push(block);
+    if (cursor.position() === before) break; // no progress — let caller diagnose.
+  }
+  return out;
+}
+
+function isMatchingClose(cursor: TokenCursor, name: string): boolean {
+  const tok = cursor.current();
+  return tok.kind === 'nodeClose' && tok.name === name;
+}
+
+function parseDefBlocks(
+  cursor: TokenCursor,
+  stopHash: string,
+): (Block | Inline)[] {
+  const out: (Block | Inline)[] = [];
+  while (!cursor.isAtEnd() && !isMatchingHashClose(cursor, stopHash)) {
+    skipParagraphBreaks(cursor);
+    if (cursor.isAtEnd() || isMatchingHashClose(cursor, stopHash)) break;
+    const before = cursor.position();
+    const block = parseBlock(cursor);
+    if (block !== null) out.push(block);
+    if (cursor.position() === before) break;
+  }
+  return out;
+}
+
+function isMatchingHashClose(cursor: TokenCursor, name: string): boolean {
+  const tok = cursor.current();
+  return tok.kind === 'hashClose' && tok.name === name;
 }
 
 function isStandaloneComment(cursor: TokenCursor): boolean {

@@ -81,9 +81,11 @@ describe('lex — pipes (param state)', () => {
     expect((toks[1] as TextRun).value).toBe('mood calm');
   });
 
-  it('empty pipe: ||', () => {
+  it('empty pipe: `||` is tokenized as captureOpen/Close (longest-match)', () => {
+    // M2.parse-nodes added `||` as the capture-list delimiter. The
+    // parser disambiguates capture-vs-empty-pipe by context.
     const toks = lex('||');
-    expect(kinds(toks)).toEqual(['pipeOpen', 'pipeClose', 'eof']);
+    expect(kinds(toks)).toEqual(['captureOpen', 'captureClose', 'eof']);
   });
 
   it('flag-with-bang inside pipe: |full width!|', () => {
