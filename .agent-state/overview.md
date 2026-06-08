@@ -93,6 +93,7 @@ Tests:
 - `/tests/fixtures/00-lexical/` — 13 lexical-layer fixtures: `empty.wit`, `minimal-non-empty.wit`, `single-paragraph.wit`, `multi-paragraph.wit`, `leading-whitespace.wit`, `tabs-vs-spaces.wit`, `whitespace-only-line.wit`, `trailing-newline.wit`, `no-trailing-newline.wit`, `multiple-trailing-newlines.wit`, `windows-newlines.wit`, `mac-newlines.wit`, `mixed-newlines.wit`. Plus `_notes.md` (the canonical template — 5 open questions logged, each H2 cites a PLAN.md `I.x` or flags a new `I.review` item). No `.test.ts` / snapshot files yet — those will arrive with the snapshot runner.
 - `/tests/fixtures/01-prose/` — 12 prose-layer fixtures: `single-paragraph.wit`, `multi-paragraph.wit`, `blank-line-splits.wit`, `soft-line-break.wit`, `long-single-line.wit`, `markdown-ish-leaders.wit`, `punctuation-heavy.wit`, `quoted-prose.wit`, `urls-in-prose.wit`, `numbers-and-arithmetic-shapes.wit`, `tilde-digit-mid-line.wit`, `tilde-slash-mid-line.wit`. Plus `_notes.md` probing I.2 (soft line break) and surfacing 4 new `I.review` items (see "Surfaced design questions" below).
 - `/tests/fixtures/02-emphasis/` — 9 emphasis-layer fixtures: `basic-italic.wit`, `basic-bold.wit`, `combined-bold-italic.wit`, `apostrophe-after-italic.wit`, `arithmetic-shapes.wit`, `underscore-in-identifier.wit`, `empty-marks.wit`, `marks-at-paragraph-boundary.wit`, `mixed-prose-and-marks.wit`. Plus `_notes.md` surfacing 7 new `I.review` items (see "Surfaced design questions" below). Last category permitting in-fixture narration; `03-comments` onward narration is forbidden.
+- `/tests/fixtures/03-comments/` — 8 comments-layer fixtures + `_notes.md`. **First category where in-fixture narration is FORBIDDEN** — all explanation lives in `_notes.md`. Probes PLAN.md I.1 directly. Surfaces 12 new `I.review` items (see "Surfaced design questions" below).
 
 CI/tooling:
 - `/.github/workflows/ci.yml` — `ubuntu-latest`, `pnpm/action-setup@v4`, Node 20 with pnpm cache; runs install/typecheck/test/build.
@@ -170,6 +171,22 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 **Convention tightening (M1.01, reinforced M1.02):**
 - Narration comments `~ ...` flush against the first prose line (no blank line between narration and the prose it annotates). Applied uniformly across `01-prose/` and `02-emphasis/`. Both reviews flagged drift — call this out explicitly in every future briefing for any category that permits narration. (No further category permits in-fixture narration after `02-emphasis`; the convention dies at `03-comments`.)
 
+**From `03-comments/_notes.md` (M1.03):**
+- Comment-node trivia attachment: when a comment is elided from the AST, does it attach as leading/trailing trivia to an adjacent node, or vanish entirely? Affects round-trip / formatter feasibility. (new `I.review` item)
+- Whitespace-after-tilde requirement: must `~` be followed by a space to open a line comment (`~ ...`), or is `~foo` also a comment? Disambiguation against `~/path` and `~5`. (new `I.review` item, refines PLAN.md I.1)
+- Block comment spanning a blank line: does `~~ ... \n\n ... ~~/` remain one comment, or does the blank line terminate it? (new `I.review` item)
+- Indent preservation inside comment payload: leading whitespace on continuation lines of a block comment — preserved verbatim in the comment's text, or normalized? (new `I.review` item)
+- `~~` divider semantics inside an open `~~ ... ~~/` block: literal text, structural divider, or attempted nesting? (new `I.review` item)
+- `~~~/` closer disambiguation: leftmost-longest match — is `~~~/` parsed as `~~/` preceded by `~`, or as a distinct closer? (new `I.review` item)
+- Mid-line `~` after non-space: `foo~bar` — never a comment, but confirm: is this a tokenization rule (must be space-preceded) or a lookbehind during comment-open detection? (new `I.review` item)
+- Empty comment shape: `~~ ~~/` vs `~~~~/` — empty comment node, no-op, or error? (new `I.review` item)
+- Closer positional restrictions: can `~~/` close at any column / line position, or only at line start / line end? (new `I.review` item)
+- Comment as joiner vs separator (probes PLAN.md I.1 + I.2): prose line, line-comment, prose line — one paragraph or two? Composes I.1 (AST-presence) with I.2 (soft-break vs blank-line semantics). (new `I.review` item, composes I.1+I.2)
+- CRLF/BOM byte edges inside comments: comment containing CRLF mid-payload, or comment opener after a BOM — interaction with newline normalization pre/post lex (carry-over from M1.00). (new `I.review` item)
+- (Plus direct probe of) PLAN.md I.1 — are comments AST nodes or fully elided? Now the central open question for resolver/expander design.
+
+**Accumulated load (M1.00–M1.03):** 28 surfaced `I.review` items across four `_notes.md` files. M1.review will be substantial — schedule a dedicated review pass before M2 begins; expect spec v0.2 / PLAN.md amendments.
+
 ---
 
 ## Tasks completed
@@ -178,6 +195,7 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 - **Task 2 — M1.00 lexical fixtures** (merge `38d6e7b`): 13 `.wit` fixtures under `tests/fixtures/00-lexical/` covering empty/minimal inputs, paragraph boundaries, whitespace/tabs, and CR/LF/CRLF newline conventions. Byte-sensitive newline fixtures authored via `printf` and verified with `od -c`. `_notes.md` logs 5 open design questions (see above), each H2 citing PLAN.md `I.x` or flagging an `I.review` item. Established `tests/fixtures/README.md` codifying fixture-authoring conventions (see above). No snapshot runner yet — fixtures sit ready for when it lands.
 - **Task 3 — M1.01 prose fixtures** (merge `7ddde39`): 12 `.wit` fixtures under `tests/fixtures/01-prose/` covering single/multi-paragraph prose, blank-line splits, soft line breaks, long single lines, markdown-ish leaders treated as plain prose, punctuation-heavy text, quoted prose, embedded URLs, number/arithmetic shapes, and mid-line `~` cases. Probes PLAN.md I.2 (soft line break) and surfaces 4 new `I.review` items: markdown-ish leader rendering (verbatim/stripped), smart-quote substitution policy, number-shape tokenization inside Text runs, and email-shaped mid-word `@` (extending I.6 with a non-word-boundary requirement). Tightened convention: narration `~ ...` flushes against first prose line (no blank between) — applied uniformly. Cross-category fragility flagged: `numbers-and-arithmetic-shapes.wit` must re-validate when 02-emphasis tokenization lands.
 - **Task 4 — M1.02 emphasis fixtures** (merge `3e0f7ea`): 9 `.wit` fixtures under `tests/fixtures/02-emphasis/` covering `_italic_` and `*bold*` baselines, `_*combined*_` nesting, the `_keeper_'s` apostrophe-after-italic edge, `5*6*7` arithmetic-shape suppression, intra-word `snake_case` underscores, empty `__`/`**` marks, marks at paragraph boundaries, and mixed prose+marks runs. `_notes.md` surfaces 7 new `I.review` items: empty-mark semantics, word-character Unicode policy, three-plus adjacent marks (`***x***`), italic-then-apostrophe smart-quote interaction, digit-then-letter `*` asymmetric boundary, unclosed mark across blank line, and emphasis mark split across CRLF. Narration-flush convention from M1.01 reinforced — recurrence in this review means every future briefing for a narration-permitting category must call it out explicitly. (After this category, narration in fixtures dies.)
+- **Task 5 — M1.03 comments fixtures** (merge `0d83116`): 8 `.wit` fixtures under `tests/fixtures/03-comments/` covering line-leading `~`, inline `~~ ... ~~/`, multi-line blocks, internal `~~` divider, `~/` path safety inside block bodies, mid-line tilde discriminators, empty comments, and the comment-between-prose-lines paragraph-boundary probe. **First category where in-fixture narration is forbidden** — all explanation lives in `_notes.md`. Directly probes PLAN.md I.1 (comments as AST nodes vs elided). Surfaces 12 new `I.review` items (see above): trivia attachment, whitespace-after-tilde, block-spans-blank-line, payload indent preservation, `~~` divider semantics, `~~~/` leftmost-longest, mid-line `~` lookbehind, empty-comment shape, closer positional restrictions, joiner/separator (composes I.1+I.2), and CRLF/BOM byte edges. Convention reinforced for all forward categories: explanation in `_notes.md` only. Accumulated total: 28 `I.review` items across four notes files; M1.review will be substantial.
 
 ---
 
@@ -196,23 +214,28 @@ Accumulated from per-category `_notes.md` files. To be resolved at M1.review and
 
 ## Notes for next briefing cycle
 
-- **M1.03 — comments fixtures for `tests/fixtures/03-comments/`** is the next dispatch. PLAN section E.1, user stories W3.1–W3.6. **Pivot point:** this is the FIRST category where narration `~ ...` inside fixtures is FORBIDDEN — comments are the subject under test, not a narration vehicle. All explanatory text moves to `_notes.md`.
-  - Read `/tests/fixtures/README.md` (conventions, especially the "comments that remain in the fixture are exactly what is being tested" clause), `/tests/fixtures/02-emphasis/_notes.md` (latest format reference), and `/examples/03-comments.wit` for grounding.
-  - Scenarios to cover (one fixture per purpose, kebab-case):
-    - `line-leading-comment.wit` — single `~ ` at start of line (single-line comment).
-    - `inline-comment.wit` — `~~ inline ~~/` mid-prose.
-    - `multi-line-block-comment.wit` — `~~ ... ~~/` spanning multiple lines.
-    - `internal-double-tilde-in-block.wit` — `~~` appearing inside an open `~~ ... ~~/` block as a divider — does it close or stay literal?
-    - `path-safety-in-comment.wit` — `~~ TODO save to ~/Documents ~~/`: confirms `~/` inside a comment body does NOT terminate; closer is strictly `~~/`.
-    - `tilde-discriminator-baseline.wit` — mid-line `~5`, `~/path`, `x ~ y` (no leading-tilde + space): these don't open comments. Cross-cuts `01-prose/tilde-*-mid-line.wit` but worth a baseline here.
-    - `empty-comment.wit` — `~~ ~~/` (and `~~~~/` if distinct): zero-content block — empty comment node, error, or elided?
-    - `comment-between-prose-lines.wit` — prose line, comment line, prose line: does the comment join the paragraphs or split them? (Direct probe of PLAN.md I.1.)
-  - Create `tests/fixtures/03-comments/_notes.md`. Expected open questions to surface (each H2 cites a PLAN.md `I.x` or flags `I.review`):
-    - PLAN.md I.1 — comments as AST nodes vs elided — directly probed.
-    - Comment-as-joiner vs comment-as-separator at paragraph boundary (carry-over from M1.00 `_notes.md`).
-    - Empty-comment legality.
-    - Block-comment closer discipline: any `~~/` mid-line closes, or only at certain positions?
-    - Nested `~~` inside an unclosed block — divider, no-op, or attempt to nest?
-  - Avoid `@`-references, `#`-defs, `*`/`_` emphasis, `!!` close — those belong elsewhere. (Light prose is fine to host comments, but it should not be the test subject.)
+- **M1.04 — nodes-use fixtures for `tests/fixtures/04-nodes-use/`** is the next dispatch. PLAN section E.1, user stories W4.1–W4.5, plus DS-4. **Narration in `.wit` remains FORBIDDEN from 03 forward** — all explanation lives in `_notes.md`. This category is the first contact with `@name`-references, the central syntactic feature of Wit.
+  - Read `/tests/fixtures/README.md` (especially the "no in-fixture narration from 03 forward" clause), `/tests/fixtures/03-comments/_notes.md` (latest format reference and the no-narration convention in practice), and `/examples/` files that exercise `@name` references (notably `15-references/` and any single-feature reference example) for grounding.
+  - Scenarios to cover (8–12 fixtures, one purpose each, kebab-case):
+    - `block-name-body.wit` — basic `@name ... name@` block form.
+    - `inline-name-body.wit` — `@name ... name@` mid-paragraph (inline form).
+    - `bare-reference.wit` — `@name` with no body, no closer, no parens — pure reference. Probes I.6 (where does the handle end?).
+    - `dotted-access.wit` — `@name.field` dot access (probes PLAN.md I.3 — where dot-access is legal).
+    - `hyphenated-name.wit` — `@paper-stats` (hyphen in identifier).
+    - `numeric-suffix.wit` — `@h1`, `@h2` (digit-tail identifiers).
+    - `underscored-name.wit` — `@chapter_one` (underscore in identifier).
+    - `nested-same-name.wit` — `@x @x x@ x@` — closer pairing discipline under name shadowing.
+    - `bare-reference-adjacent-prose.wit` — `@weil argued` — direct I.6 probe: handle terminates at whitespace? at punctuation? at apostrophe?
+    - `empty-body.wit` — `@x x@` (no content between).
+    - **Optional / judgment call:** `mismatched-close.wit` — `@x ... y@`. This may belong in `tests/errors/` rather than `fixtures/04-nodes-use/`. Implementer's call: include with an `_notes.md` note flagging the placement question, or defer to errors/.
+  - Create `tests/fixtures/04-nodes-use/_notes.md`. **No narration in `.wit` files.** Expected open questions to surface (each H2 cites PLAN.md `I.x` or flags `I.review`):
+    - **PLAN.md I.6 — bare reference boundary** — directly and centrally probed by `bare-reference-adjacent-prose.wit`, `numeric-suffix.wit`, `dotted-access.wit`. Expect concrete proposal in notes.
+    - **PLAN.md I.7 — `!!` greedy-parse risk** — not exercised here (no short-close), but flag as the next category's headache; downstream concern worth surfacing now while reference syntax is fresh.
+    - PLAN.md I.3 — `@name.field` legal positions — probed by `dotted-access.wit`.
+    - Identifier character class (hyphen, digit, underscore — first-char rules, mid-char rules) — likely new `I.review`.
+    - Closer-pairing discipline under name shadowing (nested-same-name) — likely new `I.review`.
+    - Mismatched-close placement (fixtures/ vs errors/) if included.
+  - Avoid `#`-definitions, `*`/`_` emphasis as the test subject, `!!` close, parens on references, pipes — those belong in later categories. Plain prose hosting the references is fine.
   - Do NOT add snapshot `.json` files — snapshot runner has not landed.
-- Keep this file under 250 lines. Prune resolved design questions into a separate "Decisions" section once they land.
+  - **Branch:** `m1-04-nodes-use-fixtures`. **Single commit message:** `M1.04: nodes-use fixtures (@name body name@, bare, dotted, edges)`.
+- Keep this file under 280 lines. Prune resolved design questions into a separate "Decisions" section once they land. (Currently approaching limit — next memory update should consider pruning oldest scaffold notes.)
