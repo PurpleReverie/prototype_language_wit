@@ -1,0 +1,8 @@
+<%
+const fragment = '@em the lamp had burned untended !!';
+lh.inject('inset', fragment);
+%>
+
+@chapter |title - The Keeper|
+@inset
+chapter@

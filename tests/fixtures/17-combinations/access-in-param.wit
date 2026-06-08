@@ -1,0 +1,3 @@
+#config: { lamp_path - /lights/fresnel-12.png }
+
+@figure |src @config.lamp_path|
