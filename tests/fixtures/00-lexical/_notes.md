@@ -34,7 +34,7 @@ No decisions here — see M1.review.
   before snapshots exist: does a comment line between two prose lines
   *join* them into one paragraph or *separate* them into two?
 
-## Newline conventions
+## Newline conventions (PLAN.md I.2)
 
 - `windows-newlines.wit`, `mac-newlines.wit`, `mixed-newlines.wit`
   were written via `printf` to guarantee exact byte sequences. Verified
@@ -46,7 +46,7 @@ No decisions here — see M1.review.
 - `multiple-trailing-newlines.wit` ends in `\n\n\n`. Does this produce
   one trailing empty paragraph, three, or zero? Spec is silent.
 
-## Whitespace / indentation
+## Whitespace / indentation (PLAN.md I.15)
 
 - I.15 is technically scoped to records, but `leading-whitespace.wit`
   and `tabs-vs-spaces.wit` show that the same question — "does leading
@@ -60,12 +60,12 @@ No decisions here — see M1.review.
 - `whitespace-only-line.wit` directly tests whether a line of pure
   whitespace functions as a paragraph break (see above).
 
-## File-edge cases
+## File-edge cases (no PLAN.md entry — new I.review item)
 
 - `empty.wit` is zero bytes. Open: does the parser return an empty
   document, an error, or a document with a single empty paragraph?
 - `no-trailing-newline.wit` ends mid-token-stream. Open: does the
   lexer require a terminating newline, synthesize one, or accept EOF
   as an implicit terminator?
-- `single-word.wit` is the minimal positive case — useful as a
+- `minimal-non-empty.wit` is the minimal positive case — useful as a
   smoke test that the parser produces *something* for non-empty input.
