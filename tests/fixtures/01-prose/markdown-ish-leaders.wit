@@ -1,0 +1,9 @@
+~ lines that LOOK like markdown block syntax must parse as plain prose.
+~ Wit has no blockquote, no bullet list, no ordered list.
+> she said, and the word hung in the air like a held breath.
+
+* the asterisk leading this line is just a typographic flourish, not a bullet.
+
+- and the hyphen here is a dash the writer left in, not a list marker.
+
+1. The first time he wrote a number followed by a period, nothing happened.

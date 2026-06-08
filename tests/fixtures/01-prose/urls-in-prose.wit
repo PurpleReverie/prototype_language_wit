@@ -1,0 +1,3 @@
+~ URLs and mailto-shaped strings sitting inside ordinary prose. No link syntax.
+~ note: the mailto contains an intentional @ — see _notes.md.
+He left a note pointing to https://example.com/x?y=1 and a second line reading mailto:keeper@example.org, neither of which the storm would let him send.
