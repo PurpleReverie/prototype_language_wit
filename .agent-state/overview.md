@@ -89,6 +89,8 @@ Packages:
 
 Tests:
 - `/tests/runner/package.json` — `@wit/test-runner`, exists only to satisfy pnpm workspaces; no source yet.
+- `/tests/fixtures/README.md` — fixture-authoring conventions (see "Fixture authoring conventions" below).
+- `/tests/fixtures/00-lexical/` — 13 lexical-layer fixtures: `empty.wit`, `minimal-non-empty.wit`, `single-paragraph.wit`, `multi-paragraph.wit`, `leading-whitespace.wit`, `tabs-vs-spaces.wit`, `whitespace-only-line.wit`, `trailing-newline.wit`, `no-trailing-newline.wit`, `multiple-trailing-newlines.wit`, `windows-newlines.wit`, `mac-newlines.wit`, `mixed-newlines.wit`. Plus `_notes.md` (the canonical template — 5 open questions logged, each H2 cites a PLAN.md `I.x` or flags a new `I.review` item). No `.test.ts` / snapshot files yet — those will arrive with the snapshot runner.
 
 CI/tooling:
 - `/.github/workflows/ci.yml` — `ubuntu-latest`, `pnpm/action-setup@v4`, Node 20 with pnpm cache; runs install/typecheck/test/build.
@@ -121,9 +123,37 @@ To be resolved during M1 (fixture-writing forces ambiguities to surface):
 
 ---
 
+## Fixture authoring conventions
+
+Codified in `/tests/fixtures/README.md`. Summary:
+
+- **Layout:** `tests/fixtures/<NN>-<category>/<scenario>.wit` + a single `_notes.md` per category. `NN` matches the M1.NN milestone (`00`–`17`).
+- **Filenames:** kebab-case, scenario-descriptive (`minimal-non-empty.wit`, not `one-word.wit`). One fixture = one purpose; if "and" appears in the name, split it. Combinations belong in `17-combinations/`.
+- **`_notes.md`:** one per category. Every H2 must cite a PLAN.md `I.x` open question (e.g. `## Paragraph boundaries (PLAN.md I.2)`). New questions not yet in PLAN are flagged `(no PLAN.md entry — new I.review item)` and surfaced at the next review. `tests/fixtures/00-lexical/_notes.md` is the canonical template — point new contributors at it.
+- **Byte-sensitive fixtures:** author via `printf` and verify with `od -c`; record the `printf` invocation in `_notes.md`. Do NOT edit these files in editors that may normalize line endings. `wc -l` undercounts files without a trailing LF — check `od -c` before "fixing" off-by-one line counts.
+- **Narration comments inside `.wit`:** allowed in `00-lexical`, `01-prose`, `02-emphasis` (the comment marker is barely under test). From `03-comments/` onward, narration must move to `_notes.md` — comments that remain in the fixture are exactly what is being tested.
+- **Workflow:** add fixture -> update `_notes.md` -> `pnpm test` (snapshots missing on first run; review diff then `pnpm test --update`) -> commit fixture + notes + snapshot together.
+
+---
+
+## Surfaced design questions (open)
+
+Accumulated from per-category `_notes.md` files. To be resolved at M1.review and folded into PLAN.md / spec v0.2.
+
+**From `00-lexical/_notes.md` (M1.00):**
+- Whitespace-only line (`   \t  \n`): does it count as a blank line / paragraph separator, or as content? Changes paragraph count in `whitespace-only-line.wit`.
+- Newline normalization: does the parser normalize CR/CRLF/LF -> LF pre-lex, or split paragraphs first and normalize after? Order of operations changes results in `mixed-newlines.wit`.
+- Comment line between two prose lines: does it *join* them into one paragraph or *separate* them into two? (Related to I.1 — AST nodes vs elided.)
+- `empty.wit` (0 bytes): empty document, error, or single empty paragraph?
+- Trailing-LF semantics: `\n\n\n` ending — zero, one, or three trailing empty paragraphs? Spec silent.
+- (Non-blocking, known M1.review item) Stale spec PDF: `wit-spec.pdf` pp. 3–4 shows old `\- ... -\` comment syntax; examples and fixtures use `~ ...`. Examples treated as source of truth.
+
+---
+
 ## Tasks completed
 
 - **Task 1 — M0 scaffold** (merge `8eec37e`): TS monorepo scaffold landed; `pnpm install/typecheck/test/build` all green. pnpm workspace with `packages/parser` (empty AST placeholder) and `tests/runner` workspace stub; root tsconfig solution file with project reference to parser; root vitest config; GitHub Actions CI on Node 20. Ready to receive fixture and parser code.
+- **Task 2 — M1.00 lexical fixtures** (merge `38d6e7b`): 13 `.wit` fixtures under `tests/fixtures/00-lexical/` covering empty/minimal inputs, paragraph boundaries, whitespace/tabs, and CR/LF/CRLF newline conventions. Byte-sensitive newline fixtures authored via `printf` and verified with `od -c`. `_notes.md` logs 5 open design questions (see above), each H2 citing PLAN.md `I.x` or flagging an `I.review` item. Established `tests/fixtures/README.md` codifying fixture-authoring conventions (see above). No snapshot runner yet — fixtures sit ready for when it lands.
 
 ---
 
@@ -142,9 +172,17 @@ To be resolved during M1 (fixture-writing forces ambiguities to surface):
 
 ## Notes for next briefing cycle
 
-- **M1.00 — write fixtures for `tests/fixtures/00-lexical/`** is the next dispatch. Implementer should be briefed to:
-  - Read `/wit-spec.pdf` and `/examples/01-prose.wit` first for lexical-layer grounding.
-  - Add a `00-lexical.test.ts` (or similar) under `tests/fixtures/00-lexical/` so the existing root `vitest.config.ts` `include` glob picks it up — no config change needed.
-  - Treat each `.wit` + `.json` fixture pair as the executable spec; snapshot helpers will be needed (likely in `tests/runner/`).
-  - Fixture authoring is expected to surface and resolve design questions I.1–I.17; record decisions back to PLAN.md and bump spec to v0.2.
+- **M1.01 — prose fixtures for `tests/fixtures/01-prose/`** is the next dispatch. PLAN section E.1 "Prose", user stories W1.1–W1.5. Implementer should be briefed to:
+  - Read `/tests/fixtures/README.md` first (the conventions) and `/tests/fixtures/00-lexical/_notes.md` as the format template for `_notes.md`.
+  - Read `/examples/01-prose.wit` and `wit-spec.pdf` prose section for grounding.
+  - **Narration comments (`~ ...`) inside fixtures are still permitted** at this category (00–02 window per the README).
+  - Scenarios to cover (one fixture per purpose, kebab-case names):
+    - pure single-paragraph prose (positive baseline)
+    - multi-paragraph prose (separator semantics in a richer-than-00 setting)
+    - lines starting with reserved/markdown-ish characters: `>`, `*`, `-`, `1.` — confirm Wit treats them as plain prose, not block syntax
+    - punctuation, URLs (e.g. `https://...`), numeric content embedded in prose — confirm no accidental tokenization
+    - any other W1.1–W1.5 angle not covered above
+  - Create `tests/fixtures/01-prose/_notes.md` with H2s citing PLAN.md `I.x` (especially I.2 soft-line-break, I.6 bare-reference termination — even though `@` won't appear yet, prose-edge cases inform the boundary). New questions flagged `(no PLAN.md entry — new I.review item)`.
+  - Avoid `@`-references, `#`-defs, `!!` close, emphasis, or any non-prose syntax — those belong to later categories.
+  - Do NOT add snapshot `.json` files yet — the snapshot runner has not landed. Fixtures + `_notes.md` only.
 - Keep this file under 250 lines. Prune resolved design questions into a separate "Decisions" section once they land.
