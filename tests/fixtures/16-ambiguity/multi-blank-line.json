@@ -1,0 +1,35 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "First paragraph."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Second paragraph after three blank lines."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Third paragraph after four blank lines.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

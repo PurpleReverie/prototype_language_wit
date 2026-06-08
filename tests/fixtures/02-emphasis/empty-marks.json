@@ -1,0 +1,40 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "adjacent mark characters with no token between them"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "open question: do __ and ** parse as literal punctuation, as an error, or as"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "an empty emphasis node — fixture pins the input, decision deferred to review"
+          },
+          {
+            "kind": "text",
+            "value": "\nHe drew __ on the slate, then ** beside it, and shrugged.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,67 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": true,
+        "body": [
+          {
+            "kind": "text",
+            "value": " "
+          },
+          {
+            "kind": "interpolation",
+            "name": "author"
+          },
+          {
+            "kind": "text",
+            "value": ", "
+          },
+          {
+            "kind": "interpolation",
+            "name": "work"
+          },
+          {
+            "kind": "text",
+            "value": " "
+          }
+        ],
+        "captures": [
+          "author",
+          "work"
+        ],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "bibliography",
+            "params": [
+              {
+                "name": "author",
+                "value": "Simone Weil"
+              },
+              {
+                "name": "work",
+                "value": "Gravity and Grace"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

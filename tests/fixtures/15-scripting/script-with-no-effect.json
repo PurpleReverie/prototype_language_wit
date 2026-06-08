@@ -1,0 +1,26 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "<%\nconst ok = lh.data.paper !== undefined;\nif (!ok) {\n  throw new Error('paper missing');\n}\n%>"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Prose unaffected by the script above.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

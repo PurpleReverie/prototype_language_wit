@@ -1,0 +1,84 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "emphasis as the first and last token of a paragraph"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "also: asterisks adjacent to blank lines (paragraph boundaries)"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Alone"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": ", the keeper waited."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The lamp burned through the night until "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "dawn"
+              }
+            ],
+            "kind": "bold"
+          },
+          {
+            "kind": "text",
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Morning"
+              }
+            ],
+            "kind": "bold"
+          },
+          {
+            "kind": "text",
+            "value": " arrived, and the silence broke.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

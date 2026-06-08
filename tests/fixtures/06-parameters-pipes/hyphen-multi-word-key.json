@@ -1,0 +1,41 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\nThe lantern room was unlit.\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "panel",
+        "params": [
+          {
+            "name": "background colour",
+            "value": "dark slate"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

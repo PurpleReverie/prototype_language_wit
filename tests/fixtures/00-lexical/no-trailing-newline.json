@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "no final newline. last byte is the period."
+          },
+          {
+            "kind": "text",
+            "value": "\nHe served thirty-one years."
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "a tilde followed by a digit appears mid-line, NOT in column 0. It must stay prose, not open a comment."
+          },
+          {
+            "kind": "text",
+            "value": "\nHe approximated the storm's duration as ~6 hours, give or take, and resumed his watch at the kettle.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

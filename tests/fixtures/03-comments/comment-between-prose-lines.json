@@ -1,0 +1,26 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The lighthouse was commissioned in 1847.\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "remember to verify this date before publishing"
+          },
+          {
+            "kind": "text",
+            "value": "\nHe served thirty-one years.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

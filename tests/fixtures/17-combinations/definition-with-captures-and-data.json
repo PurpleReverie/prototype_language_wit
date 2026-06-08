@@ -1,0 +1,88 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "{ author - Simone Weil, work - Gravity and Grace }"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": ": "
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": "author, work"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": " "
+          },
+          {
+            "kind": "interpolation",
+            "name": "author"
+          },
+          {
+            "kind": "text",
+            "value": ", "
+          },
+          {
+            "kind": "interpolation",
+            "name": "work"
+          },
+          {
+            "kind": "text",
+            "value": " "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "weil",
+        "shape": "value-block"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "@weil.author"
+              },
+              {
+                "name": "work",
+                "value": "@weil.work"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

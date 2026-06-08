@@ -1,0 +1,52 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "reference ./a.wit"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The keeper was "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "keeper",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " at "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "place",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": ".\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "a tilde followed by a slash appears mid-line, NOT in column 0. It must stay prose, not open a comment."
+          },
+          {
+            "kind": "text",
+            "value": "\nThe keeper kept his notes in ~/Documents, indifferent to whichever shell first invented the shorthand.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

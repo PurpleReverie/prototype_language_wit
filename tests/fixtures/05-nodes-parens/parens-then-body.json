@@ -1,0 +1,41 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " the keeper said nothing "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "aside",
+        "params": [
+          {
+            "name": "tone",
+            "value": "wry"
+          }
+        ],
+        "paramsSource": "parens"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

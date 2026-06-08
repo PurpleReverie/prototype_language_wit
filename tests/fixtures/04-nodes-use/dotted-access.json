@@ -1,0 +1,33 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The title is "
+          },
+          {
+            "access": [
+              "title"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "book",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " for this edition.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

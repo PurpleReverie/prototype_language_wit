@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "exactly one LF at end of file. POSIX-canonical."
+          },
+          {
+            "kind": "text",
+            "value": "\nHe served thirty-one years.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

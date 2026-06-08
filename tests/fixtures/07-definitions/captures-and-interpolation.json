@@ -1,0 +1,82 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\nChapter "
+              },
+              {
+                "kind": "interpolation",
+                "name": "number"
+              },
+              {
+                "kind": "text",
+                "value": " — "
+              },
+              {
+                "kind": "interpolation",
+                "name": "title"
+              },
+              {
+                "kind": "text",
+                "value": "\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "number",
+          "title"
+        ],
+        "kind": "nodeDef",
+        "name": "chapterhead",
+        "shape": "block"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "chapterhead",
+        "params": [
+          {
+            "name": "number",
+            "value": "I"
+          },
+          {
+            "name": "title",
+            "value": "The Keeper"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

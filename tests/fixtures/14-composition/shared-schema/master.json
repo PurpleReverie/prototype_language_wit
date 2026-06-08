@@ -1,0 +1,67 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "reference ./chapters/one.wit\nreference ./chapters/two.wit"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapterhead",
+            "params": [
+              {
+                "name": "number",
+                "value": "I"
+              },
+              {
+                "name": "title",
+                "value": "The Keeper"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapterhead",
+            "params": [
+              {
+                "name": "number",
+                "value": "II"
+              },
+              {
+                "name": "title",
+                "value": "The Lamp"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

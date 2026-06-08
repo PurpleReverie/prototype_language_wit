@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "E_UNCLOSED_DEFINITION",
+    "message": "unclosed #config: missing !!"
+  },
+  "ok": false
+}

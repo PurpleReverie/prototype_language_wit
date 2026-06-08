@@ -1,0 +1,167 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\n"
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": "\n"
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " "
+                      },
+                      {
+                        "kind": "interpolation",
+                        "name": "label"
+                      },
+                      {
+                        "kind": "text",
+                        "value": " "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "metriclabel",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "\n"
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " "
+                      },
+                      {
+                        "kind": "interpolation",
+                        "name": "value"
+                      },
+                      {
+                        "kind": "text",
+                        "value": " "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "metricvalue",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "\n"
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " "
+                      },
+                      {
+                        "kind": "interpolation",
+                        "name": "target"
+                      },
+                      {
+                        "kind": "text",
+                        "value": " "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "metrictarget",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "\n"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "metriccard",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "label",
+          "value",
+          "target"
+        ],
+        "kind": "nodeDef",
+        "name": "metric",
+        "shape": "block"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "metric",
+        "params": [
+          {
+            "name": "label",
+            "value": "Uptime"
+          },
+          {
+            "name": "value",
+            "value": "99.2%"
+          },
+          {
+            "name": "target",
+            "value": "99.5%"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

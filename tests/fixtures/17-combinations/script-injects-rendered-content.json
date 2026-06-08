@@ -1,0 +1,85 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "<%\nconst fragment = '"
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "em",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " the lamp had burned untended "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "';\nlh.inject('inset', fragment);\n%>"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\n"
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "inset",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "chapter",
+        "params": [
+          {
+            "name": "title",
+            "value": "The Keeper"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

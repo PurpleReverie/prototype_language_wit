@@ -1,0 +1,87 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "word"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": "'s meaning shifted over time."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "She borrowed the "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "book"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": "'s cover for the design, and the "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "author"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": "'s name too."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Even "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "multi-word phrase"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": "'s endings should close cleanly.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

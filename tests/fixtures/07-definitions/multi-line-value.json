@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "E_UNCLOSED_NODE",
+    "message": "unclosed @epigraph"
+  },
+  "ok": false
+}

@@ -1,0 +1,40 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "three paragraphs separated by single blank lines."
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The keeper had not spoken aloud in eleven days."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "He had not noticed, until his own voice surprised him."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The lamp burned steady through the storm.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

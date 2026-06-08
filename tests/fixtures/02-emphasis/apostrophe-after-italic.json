@@ -1,0 +1,35 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "the italic mark closes on the second underscore; the trailing 's stays plain"
+          },
+          {
+            "kind": "text",
+            "value": "\nThe "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "keeper"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": "'s lamp had not gone out in eleven days.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

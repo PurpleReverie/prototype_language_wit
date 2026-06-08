@@ -1,0 +1,52 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\nThe signal flag read red "
+              },
+              {
+                "kind": "text",
+                "value": ""
+              },
+              {
+                "kind": "text",
+                "value": " white "
+              },
+              {
+                "kind": "text",
+                "value": ""
+              },
+              {
+                "kind": "text",
+                "value": " red across the channel.\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "scene",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

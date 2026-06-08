@@ -1,0 +1,69 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\nHello, "
+              },
+              {
+                "kind": "interpolation",
+                "name": "name"
+              },
+              {
+                "kind": "text",
+                "value": ".\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "name"
+        ],
+        "kind": "nodeDef",
+        "name": "greeting",
+        "shape": "block"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "greeting",
+        "params": [
+          {
+            "name": "name",
+            "value": "reader"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,52 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "both orderings of nested marks: bold outside italic, then italic outside bold"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "each token is one word so the inner mark closes before the outer"
+          },
+          {
+            "kind": "text",
+            "value": "\nHe read the inscription _*aloud"
+          },
+          {
+            "kind": "text",
+            "value": "*"
+          },
+          {
+            "kind": "text",
+            "value": "_, then read it again *"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "silently"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": "*.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

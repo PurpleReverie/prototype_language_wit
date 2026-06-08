@@ -1,0 +1,84 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "finding",
+            "params": [
+              {
+                "name": "weight:",
+                "value": "3"
+              },
+              {
+                "name": "claim:",
+                "value": "\"low\""
+              }
+            ],
+            "paramsSource": "parens"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "finding",
+            "params": [
+              {
+                "name": "weight:",
+                "value": "9"
+              },
+              {
+                "name": "claim:",
+                "value": "\"high\""
+              }
+            ],
+            "paramsSource": "parens"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "finding",
+            "params": [
+              {
+                "name": "weight:",
+                "value": "6"
+              },
+              {
+                "name": "claim:",
+                "value": "\"mid\""
+              }
+            ],
+            "paramsSource": "parens"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "<%\nlh.sort('finding', (a, b) => b.weight - a.weight);\n%>\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

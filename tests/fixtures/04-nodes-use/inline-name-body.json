@@ -1,0 +1,35 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "She crossed the "
+          },
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " last threshold "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "highlight",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " alone.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

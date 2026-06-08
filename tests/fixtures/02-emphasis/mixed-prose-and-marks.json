@@ -1,0 +1,57 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "a single paragraph mixing plain prose, italic, bold, and plain prose"
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "smoke test for 2.C.1: marks interleave with prose without disturbing it"
+          },
+          {
+            "kind": "text",
+            "value": "\nThe keeper polished the "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "lens"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": " until it gleamed and the "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "flame"
+              }
+            ],
+            "kind": "bold"
+          },
+          {
+            "kind": "text",
+            "value": " held steady through the long night.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

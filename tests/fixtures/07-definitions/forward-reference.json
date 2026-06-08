@@ -1,0 +1,82 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The year was "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "year",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " and the keeper was "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "keeper",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "1923 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "year",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": ": Aldous Vane "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

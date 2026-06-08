@@ -1,0 +1,22 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "leading tab, leading spaces, mixed tab+space on different lines."
+          },
+          {
+            "kind": "text",
+            "value": "\n\tTab-indented prose line.\n    Space-indented prose line.\n \t Mixed leading whitespace prose line.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

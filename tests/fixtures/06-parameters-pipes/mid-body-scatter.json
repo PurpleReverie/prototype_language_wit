@@ -1,0 +1,73 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\nThe harbour was still.\n"
+              },
+              {
+                "kind": "text",
+                "value": ""
+              },
+              {
+                "kind": "text",
+                "value": "p second"
+              },
+              {
+                "kind": "text",
+                "value": ""
+              },
+              {
+                "kind": "text",
+                "value": "\nThen the bell began to ring.\n"
+              },
+              {
+                "kind": "text",
+                "value": ""
+              },
+              {
+                "kind": "text",
+                "value": "p third"
+              },
+              {
+                "kind": "text",
+                "value": ""
+              },
+              {
+                "kind": "text",
+                "value": "\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "scene",
+        "params": [
+          {
+            "name": "p",
+            "value": "first"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,31 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "leading spaces on prose lines. per spec, indentation is cosmetic."
+          },
+          {
+            "kind": "text",
+            "value": "\n    The keeper had not spoken aloud in eleven days."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "  He had not noticed, until his own voice surprised him.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,88 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\n"
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": "\n"
+                  },
+                  {
+                    "kind": "bodySlot"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "\n"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "panel",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "wrapper",
+        "shape": "block"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "\nFirst paragraph of contributed body."
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Second paragraph of contributed body.\n"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "wrapper",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

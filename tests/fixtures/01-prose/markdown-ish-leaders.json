@@ -1,0 +1,58 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "lines that LOOK like markdown block syntax must parse as plain prose."
+          },
+          {
+            "kind": "text",
+            "value": "\n"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Wit has no blockquote, no bullet list, no ordered list."
+          },
+          {
+            "kind": "text",
+            "value": "\n> she said, and the word hung in the air like a held breath."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "* the asterisk leading this line is just a typographic flourish, not a bullet."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "- and the hyphen here is a dash the writer left in, not a list marker."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "1. The first time he wrote a number followed by a period, nothing happened.\n"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}
