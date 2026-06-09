@@ -1,0 +1,42 @@
+{
+  "name": "wit-vscode",
+  "displayName": "Wit Language",
+  "description": "Language support for Wit (.wit) files: syntax highlighting and language server.",
+  "version": "0.0.0",
+  "private": true,
+  "publisher": "wit",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./client/dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "wit",
+        "aliases": [
+          "Wit",
+          "wit"
+        ],
+        "extensions": [
+          ".wit"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "wit",
+        "scopeName": "source.wit",
+        "path": "./syntaxes/wit.tmLanguage.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.5.4",
+    "vsce": "^2.15.0"
+  }
+}
