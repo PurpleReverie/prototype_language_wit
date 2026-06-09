@@ -20,6 +20,14 @@
 
 import type { Block, NodeDef, DataDef, NodeUse, Loc } from '@wit/parser';
 
+// A NodeDef produced by collapsing `+#name` partials (and an optional
+// base `#name`) carries `partialSources` — the locs of every partial
+// that contributed. Structurally still a NodeDef so callers that only
+// need the base shape stay typed.
+export interface MergedNodeDef extends NodeDef {
+  partialSources: Loc[];
+}
+
 export type Binding = NodeDef | DataDef;
 
 export interface ResolvedDocument {

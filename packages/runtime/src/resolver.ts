@@ -31,6 +31,7 @@ import {
   type FileReader,
   type MergeTargets,
 } from './resolver-files.js';
+import { mergePartials } from './resolver-partials.js';
 
 export interface ResolveOptions {
   rootPath?: string;
@@ -79,8 +80,9 @@ function resolveDocument(
     partials: new Map<string, NodeDef[]>(),
     resolvedFiles: new Map<string, ResolvedDocument>(),
   };
-  collectDefs(doc.children, targets.definitions, targets.dataDefs, targets.partials);
   mergeReferences(doc, rootPath, ctx, targets);
+  collectDefs(doc.children, targets.definitions, targets.dataDefs, targets.partials);
+  mergePartials(targets.definitions, targets.partials);
   const references = new Set<string>();
   const bindings = new Map<NodeUse, Binding>();
   bindUses(doc.children, targets.definitions, targets.dataDefs, references, bindings);
