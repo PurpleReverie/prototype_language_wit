@@ -5,8 +5,8 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ ]"
+            "items": [],
+            "kind": "collection"
           }
         ],
         "captures": [],

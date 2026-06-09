@@ -5,8 +5,47 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ { name - Marlow, post - bridge }, { name - Singleton, post - foredeck } ]"
+            "items": [
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Marlow"
+                    }
+                  },
+                  {
+                    "key": "post",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "bridge"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Singleton"
+                    }
+                  },
+                  {
+                    "key": "post",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "foredeck"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

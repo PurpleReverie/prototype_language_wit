@@ -5,8 +5,66 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[\n  { name - Dunmore Head, status - operational }\n  { name - Carrick Point, status - maintenance }\n  { name - Ines Rock, status - operational }\n]"
+            "items": [
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Dunmore Head"
+                    }
+                  },
+                  {
+                    "key": "status",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "operational"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Carrick Point"
+                    }
+                  },
+                  {
+                    "key": "status",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "maintenance"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Ines Rock"
+                    }
+                  },
+                  {
+                    "key": "status",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "operational"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

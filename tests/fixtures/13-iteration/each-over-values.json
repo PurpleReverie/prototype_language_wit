@@ -5,8 +5,21 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ attention, perception, failure ]"
+            "items": [
+              {
+                "kind": "stringValue",
+                "value": "attention"
+              },
+              {
+                "kind": "stringValue",
+                "value": "perception"
+              },
+              {
+                "kind": "stringValue",
+                "value": "failure"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

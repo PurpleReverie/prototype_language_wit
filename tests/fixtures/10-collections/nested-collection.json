@@ -5,8 +5,35 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ [ 1, 2 ], [ 3, 4 ] ]"
+            "items": [
+              {
+                "items": [
+                  {
+                    "kind": "stringValue",
+                    "value": "1"
+                  },
+                  {
+                    "kind": "stringValue",
+                    "value": "2"
+                  }
+                ],
+                "kind": "collection"
+              },
+              {
+                "items": [
+                  {
+                    "kind": "stringValue",
+                    "value": "3"
+                  },
+                  {
+                    "kind": "stringValue",
+                    "value": "4"
+                  }
+                ],
+                "kind": "collection"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

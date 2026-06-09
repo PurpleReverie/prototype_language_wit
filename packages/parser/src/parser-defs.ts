@@ -14,12 +14,10 @@
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
 import { ErrorCode } from './errors.js';
-import { maybeAsRecord } from './parser-data.js';
+import { maybeAsDataValue } from './parser-data.js';
 import { ParseError } from './parser-errors.js';
 import type {
-  Block,
-  Inline,
-  NodeDef,
+  Block, Collection as CollectionNode, Inline, NodeDef,
   Record as RecordNode,
 } from './ast.js';
 import type { Loc } from './loc.js';
@@ -186,8 +184,8 @@ function parseBangBangDef(
   stripLeadingColon(cursor);
   const raw = shape === 'single-line'
     ? collectSingleLineValue(cursor, opts) : collectValueBlock(cursor, opts);
-  const body: (Block | Inline | RecordNode)[] =
-    shape === 'single-line' ? maybeAsRecord(raw) : raw;
+  const body: (Block | Inline | RecordNode | CollectionNode)[] =
+    shape === 'single-line' ? maybeAsDataValue(raw) : raw;
   const closeLoc = expectBangBang(cursor, open);
   return {
     kind: 'nodeDef', name: open.name, captures, shape, body, additive,

@@ -5,8 +5,66 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[\n  { name - Marlow, awake - true }\n  { name - Singleton, awake - false }\n  { name - Vane, awake - true }\n]"
+            "items": [
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Marlow"
+                    }
+                  },
+                  {
+                    "key": "awake",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "true"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Singleton"
+                    }
+                  },
+                  {
+                    "key": "awake",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "false"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Vane"
+                    }
+                  },
+                  {
+                    "key": "awake",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "true"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

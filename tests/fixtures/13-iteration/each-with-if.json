@@ -5,8 +5,47 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ { name - Marlow, awake - true }, { name - Singleton, awake - false } ]"
+            "items": [
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Marlow"
+                    }
+                  },
+                  {
+                    "key": "awake",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "true"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "Singleton"
+                    }
+                  },
+                  {
+                    "key": "awake",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "false"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],
