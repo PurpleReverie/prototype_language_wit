@@ -20,6 +20,11 @@
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
 import { parseNodeUse } from './parser-nodes.js';
+import {
+  isScriptCallStart,
+  parseScriptBlock,
+  parseScriptCall,
+} from './parser-script.js';
 import type {
   Bold,
   BodySlot,
@@ -28,6 +33,8 @@ import type {
   Interpolation,
   Italic,
   NodeUse,
+  ScriptBlock,
+  ScriptCall,
   Text,
 } from './ast.js';
 import type { Loc } from './loc.js';
@@ -75,7 +82,11 @@ function parseOneInline(cursor: TokenCursor): Inline | null {
   if (tok.kind === 'blockCommentOpen') return takeBlockComment(cursor);
   if (tok.kind === 'blockCommentContent') return contentAsText(cursor);
   if (tok.kind === 'blockCommentClose') return closerAsText(cursor);
+  if (tok.kind === 'nodeOpen' && isScriptCallStart(cursor)) {
+    return takeScriptCall(cursor);
+  }
   if (tok.kind === 'nodeOpen') return takeInlineNodeUse(cursor);
+  if (tok.kind === 'scriptOpen') return takeInlineScriptBlock(cursor);
   if (tok.kind === 'interpolationOpen') return takeInterpolation(cursor);
   if (tok.kind === 'bodySlotMarker') return takeBodySlot(cursor);
   return fallbackText(cursor);
@@ -94,6 +105,14 @@ function takeInlineNodeUse(cursor: TokenCursor): NodeUse {
     parseBodyInline: parseInline,
     parseBodyBlocks: () => [],
   });
+}
+
+function takeInlineScriptBlock(cursor: TokenCursor): ScriptBlock {
+  return parseScriptBlock(cursor, true);
+}
+
+function takeScriptCall(cursor: TokenCursor): ScriptCall {
+  return parseScriptCall(cursor);
 }
 
 function takeInterpolation(cursor: TokenCursor): Interpolation {

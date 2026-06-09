@@ -15,19 +15,20 @@
         "shape": "single-line"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "<%\nlh.set('paper.word count', 1200);\n%>"
-          }
-        ],
-        "kind": "paragraph"
+        "content": "\nlh.set('paper.word count', 1200);\n",
+        "inline": false,
+        "kind": "scriptBlock"
       },
       {
         "children": [
           {
             "kind": "text",
-            "value": "Current count: <% lh.data.paper['word count'] %>"
+            "value": "Current count: "
+          },
+          {
+            "content": " lh.data.paper['word count'] ",
+            "inline": true,
+            "kind": "scriptBlock"
           }
         ],
         "kind": "paragraph"

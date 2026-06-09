@@ -198,6 +198,7 @@ export type Inline =
   | BodySlot
   | NodeUse
   | ScriptCall
+  | ScriptBlock
   | Comment;
 
 export type Block =

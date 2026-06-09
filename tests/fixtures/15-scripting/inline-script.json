@@ -5,7 +5,16 @@
         "children": [
           {
             "kind": "text",
-            "value": "The paper has <% lh.data.paper.wordCount %> words total."
+            "value": "The paper has "
+          },
+          {
+            "content": " lh.data.paper.wordCount ",
+            "inline": true,
+            "kind": "scriptBlock"
+          },
+          {
+            "kind": "text",
+            "value": " words total."
           }
         ],
         "kind": "paragraph"

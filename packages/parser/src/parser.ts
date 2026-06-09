@@ -17,6 +17,7 @@ import { ParseError } from './parser-errors.js';
 import { TokenCursor } from './parser-cursor.js';
 import { parseInline, parseInlineComment } from './parser-inline.js';
 import { parseNodeUse } from './parser-nodes.js';
+import { parseScriptBlock } from './parser-script.js';
 import {
   isStatementStart,
   parseStatementAfterParen,
@@ -72,6 +73,9 @@ function skipParagraphBreaks(cursor: TokenCursor): void {
 function parseBlock(cursor: TokenCursor): Block | null {
   const tok = cursor.current();
   if (tok.kind === 'referenceDirective') return parseReferenceDirective(cursor);
+  if (tok.kind === 'scriptOpen' && isBlockLevelScript(cursor)) {
+    return parseScriptBlock(cursor, false);
+  }
   if (isDefStart(tok.kind)) return parseDefBlock(cursor);
   if (tok.kind === 'nodeOpen' && isBlockBodiedOpen(cursor)) {
     return parseUseBlock(cursor);
@@ -79,6 +83,23 @@ function parseBlock(cursor: TokenCursor): Block | null {
   if (isStatementStart(cursor)) return parseStatementBlock(cursor);
   if (isStandaloneComment(cursor)) return parseStandaloneComment(cursor);
   return parseParagraph(cursor);
+}
+
+function isBlockLevelScript(cursor: TokenCursor): boolean {
+  // A scriptOpen at the start of a block is a block-level ScriptBlock
+  // when nothing follows it on the same paragraph (next non-script
+  // tokens are paragraphBreak or EOF). Inline `<% %>` mid-prose is
+  // dispatched from parser-inline instead.
+  let i = 0;
+  while (true) {
+    const tok = cursor.peek(i);
+    if (tok.kind === 'scriptClose') {
+      const after = cursor.peek(i + 1);
+      return after.kind === 'paragraphBreak' || after.kind === 'eof';
+    }
+    if (tok.kind === 'eof' || tok.kind === 'paragraphBreak') return true;
+    i += 1;
+  }
 }
 
 function parseReferenceDirective(cursor: TokenCursor): ReferenceDirective {
