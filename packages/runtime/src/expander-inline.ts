@@ -27,7 +27,6 @@ import type {
   Inline,
   NodeUse,
   NodeDef,
-  DataDef,
   DataValue,
   Param,
   Loc,
@@ -134,12 +133,12 @@ function substituteInlines(
 }
 
 // ---------------------------------------------------------------------------
-// DataDef resolution.
+// DataDef / iteration-item resolution.
 // ---------------------------------------------------------------------------
 
-export function expandDataRef(use: NodeUse, def: DataDef): Splice | null {
+export function expandDataValue(use: NodeUse, root: DataValue): Splice | null {
   const access = use.access ?? [];
-  const value = walkAccess(def.value, access);
+  const value = walkAccess(root, access);
   if (value === null) return null;
   const rendered = renderTerminal(value, use.loc);
   if (rendered === null) return null;

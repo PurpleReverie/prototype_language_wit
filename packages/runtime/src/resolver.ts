@@ -226,6 +226,10 @@ interface BindCtx {
   data: Map<string, DataDef>;
   refs: Set<string>;
   bindings: Map<NodeUse, Binding>;
+  // Iteration item names currently in scope (each ... as X stack). A
+  // NodeUse whose name matches a scope entry resolves at expand time
+  // against the iteration env, not the defs map — no binding recorded.
+  iterScope: string[];
 }
 
 function bindUses(
@@ -235,7 +239,7 @@ function bindUses(
   refs: Set<string>,
   bindings: Map<NodeUse, Binding>,
 ): void {
-  const ctx: BindCtx = { defs, data, refs, bindings };
+  const ctx: BindCtx = { defs, data, refs, bindings, iterScope: [] };
   for (const block of blocks) bindBlock(block, ctx);
 }
 
@@ -253,11 +257,20 @@ function bindIf(block: IfStatement, ctx: BindCtx): void {
 }
 
 function bindEach(block: EachStatement, ctx: BindCtx): void {
-  for (const b of block.body) bindBlock(b, ctx);
+  ctx.iterScope.push(block.itemName);
+  try {
+    for (const b of block.body) bindBlock(b, ctx);
+  } finally {
+    ctx.iterScope.pop();
+  }
 }
 
 function bindNodeUse(use: NodeUse, ctx: BindCtx): void {
   ctx.refs.add(use.name);
+  if (ctx.iterScope.includes(use.name)) {
+    if (use.body) bindChildren(use.body, ctx);
+    return;
+  }
   const binding = lookupBinding(use, ctx);
   if (binding === undefined) {
     throw new ResolverError(

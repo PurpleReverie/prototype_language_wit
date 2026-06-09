@@ -193,6 +193,109 @@ describe('expander — IfStatement evaluation', () => {
   });
 });
 
+describe('expander — EachStatement evaluation', () => {
+  it('iterates a string collection and inlines the item value', () => {
+    const src =
+      '#themes: [ attention, perception, failure ]\n\n' +
+      '(each @themes as item)\nthe @item.\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    for (const child of expanded.children) {
+      expect(child.kind).not.toBe('eachStatement');
+    }
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('attention');
+    expect(flat).toContain('perception');
+    expect(flat).toContain('failure');
+  });
+
+  it('iterates a record collection with field access', () => {
+    const src =
+      '#watchers: [ { name - Marlow, post - bridge }, { name - Singleton, post - foredeck } ]\n\n' +
+      '(each @watchers as w)\n@w.name kept the @w.post.\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('Marlow');
+    expect(flat).toContain('bridge');
+    expect(flat).toContain('Singleton');
+    expect(flat).toContain('foredeck');
+  });
+
+  it('emits no body for an empty collection', () => {
+    const src =
+      '#empty: [ ]\n\n' +
+      '(each @empty as x)\nNEVER\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).not.toContain('NEVER');
+  });
+
+  it('inner each shadows outer with the same name', () => {
+    const src =
+      '#outer: [ a, b ]\n' +
+      '#inner: [ x, y ]\n\n' +
+      '(each @outer as item)' +
+      '(each @inner as item)<@item>(end)' +
+      '(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('x');
+    expect(flat).toContain('y');
+    expect(flat).not.toContain('<a>');
+    expect(flat).not.toContain('<b>');
+  });
+
+  it('throws E_NOT_ITERABLE when target is not a collection', () => {
+    const src =
+      '#x: { name - Ada }\n\n' +
+      '(each @x as item)\n@item.name\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    expect(() => expand(resolved)).toThrowError(ExpanderError);
+    try {
+      expand(resolved);
+    } catch (e) {
+      expect((e as ExpanderError).code).toBe(
+        RuntimeErrorCode.E_NOT_ITERABLE,
+      );
+    }
+  });
+
+  it('iteration item masks a same-name DataDef', () => {
+    const src =
+      '#item: outer-data !!\n\n' +
+      '#things: [ inner-1, inner-2 ]\n\n' +
+      '(each @things as item) the @item. (end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('inner-1');
+    expect(flat).toContain('inner-2');
+    expect(flat).not.toContain('outer-data');
+  });
+
+  it('if inside each evaluates against the iteration item', () => {
+    const src =
+      '#items: [ { name - A, ok - yes }, { name - B, ok - no } ]\n\n' +
+      '(each @items as it) (if @it.ok is yes) KEEP @it.name (end) (end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('KEEP');
+    expect(flat).toContain('A');
+    expect(flat).not.toContain('B');
+  });
+});
+
 describe('expander — paragraph child preservation', () => {
   it('leaves a no-binding-needed paragraph intact', () => {
     const doc = parse('a paragraph here\n', '<inline>');

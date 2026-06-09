@@ -15,6 +15,7 @@ export const RuntimeErrorCode = {
   E_TYPE_MISMATCH: 'E_TYPE_MISMATCH',
   E_DUPLICATE_DEFINITION: 'E_DUPLICATE_DEFINITION',
   E_EXPANSION_DEPTH_LIMIT: 'E_EXPANSION_DEPTH_LIMIT',
+  E_NOT_ITERABLE: 'E_NOT_ITERABLE',
 } as const;
 
 export type RuntimeErrorCodeName =

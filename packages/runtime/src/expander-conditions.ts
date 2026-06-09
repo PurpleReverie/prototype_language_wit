@@ -34,6 +34,10 @@ import type {
 export interface DataLookups {
   dataDefs: Map<string, DataDef>;
   defs: Map<string, NodeDef>;
+  // Iteration env: a stack of frames. Item-name lookup checks this
+  // BEFORE dataDefs / defs so loop variables mask global data. M4.eval-
+  // iteration owns the push/pop. Undefined for non-iteration callers.
+  iterEnv?: Map<string, DataValue>[];
 }
 
 export function evaluateCondition(
@@ -75,10 +79,24 @@ export function resolveAccessPath(
 }
 
 function resolveRoot(name: string, lookups: DataLookups): DataValue | null {
+  const fromIter = lookupIterFrame(lookups.iterEnv, name);
+  if (fromIter !== null) return fromIter;
   const dataDef = lookups.dataDefs.get(name);
   if (dataDef !== undefined) return dataDef.value;
   const nodeDef = lookups.defs.get(name);
   if (nodeDef !== undefined) return nodeDefAsDataValue(nodeDef);
+  return null;
+}
+
+function lookupIterFrame(
+  env: Map<string, DataValue>[] | undefined,
+  name: string,
+): DataValue | null {
+  if (env === undefined) return null;
+  for (let i = env.length - 1; i >= 0; i--) {
+    const found = env[i]!.get(name);
+    if (found !== undefined) return found;
+  }
   return null;
 }
 

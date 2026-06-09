@@ -21,21 +21,32 @@ import type {
   NodeUse,
   NodeDef,
   DataDef,
+  DataValue,
   Paragraph,
   IfStatement,
   EachStatement,
+  Loc,
+  Text,
 } from '@wit/parser';
 import type { ResolvedDocument } from './resolved-ast.js';
 import type { ExpandedDocument } from './expanded-ast.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
-import { expandNodeDef, expandDataRef, type Splice } from './expander-inline.js';
-import { evaluateCondition } from './expander-conditions.js';
+import { expandNodeDef, expandDataValue, type Splice } from './expander-inline.js';
+import { evaluateCondition, type DataLookups } from './expander-conditions.js';
+import {
+  createIterEnv,
+  evalEachStatement,
+  lookupIterEnv,
+  type IterEnv,
+  type IterFrame,
+} from './expander-iteration.js';
 
 const DEPTH_LIMIT = 256;
 
 interface ExpandCtx {
   defs: Map<string, NodeDef>;
   dataDefs: Map<string, DataDef>;
+  iterEnv: IterEnv;
   depth: number;
 }
 
@@ -43,6 +54,7 @@ export function expand(resolved: ResolvedDocument): ExpandedDocument {
   const ctx: ExpandCtx = {
     defs: resolved.definitions,
     dataDefs: resolved.dataDefs,
+    iterEnv: createIterEnv(),
     depth: 0,
   };
   return {
@@ -50,6 +62,10 @@ export function expand(resolved: ResolvedDocument): ExpandedDocument {
     children: expandBlocks(resolved.children, ctx),
     loc: structuredClone(resolved.loc),
   };
+}
+
+function lookupsFromCtx(ctx: ExpandCtx): DataLookups {
+  return { dataDefs: ctx.dataDefs, defs: ctx.defs, iterEnv: ctx.iterEnv };
 }
 
 // ---------------------------------------------------------------------------
@@ -71,7 +87,7 @@ function expandBlock(block: Block, ctx: ExpandCtx): Block[] {
   if (block.kind === 'nodeUse') return spliceAsBlocks(expandUse(block, ctx));
   if (block.kind === 'paragraph') return [expandParagraph(block, ctx)];
   if (block.kind === 'ifStatement') return expandIf(block, ctx);
-  if (block.kind === 'eachStatement') return [expandEach(block, ctx)];
+  if (block.kind === 'eachStatement') return expandEach(block, ctx);
   return [structuredClone(block) as Block];
 }
 
@@ -99,21 +115,22 @@ function expandParagraph(p: Paragraph, ctx: ExpandCtx): Paragraph {
 }
 
 function expandIf(block: IfStatement, ctx: ExpandCtx): Block[] {
-  const lookups = { dataDefs: ctx.dataDefs, defs: ctx.defs };
+  const lookups = lookupsFromCtx(ctx);
   const branch = evaluateCondition(block.cond, lookups)
     ? block.then
     : (block.else ?? []);
   return expandBlocks(branch, ctx);
 }
 
-function expandEach(block: EachStatement, ctx: ExpandCtx): EachStatement {
-  return {
-    kind: 'eachStatement',
-    collection: structuredClone(block.collection),
-    itemName: block.itemName,
-    body: expandBlocks(block.body, ctx),
-    loc: structuredClone(block.loc),
-  };
+function expandEach(block: EachStatement, ctx: ExpandCtx): Block[] {
+  return evalEachStatement(block, {
+    lookups: lookupsFromCtx(ctx),
+    expandBody: (body) => expandBlocks(body, ctx),
+    pushFrame: (frame: IterFrame) => ctx.iterEnv.push(frame),
+    popFrame: () => {
+      ctx.iterEnv.pop();
+    },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -159,11 +176,13 @@ function toInlines(node: Block | Inline): Inline[] {
 // ---------------------------------------------------------------------------
 
 function expandUse(use: NodeUse, ctx: ExpandCtx): Splice {
+  const iterValue = lookupIterEnv(ctx.iterEnv, use.name);
+  if (iterValue !== undefined) return expandIterRef(use, iterValue);
   const def = ctx.defs.get(use.name);
   if (def !== undefined) return expandWithDef(use, def, ctx);
   const data = ctx.dataDefs.get(use.name);
   if (data !== undefined) {
-    const splice = expandDataRef(use, data);
+    const splice = expandDataValue(use, data.value);
     if (splice !== null) return splice;
     // Container without access path — defer per M1.11; pass through.
     return [structuredClone(use) as NodeUse];
@@ -173,6 +192,18 @@ function expandUse(use: NodeUse, ctx: ExpandCtx): Splice {
     `Unresolved reference @${use.name}`,
     use.loc,
   );
+}
+
+function expandIterRef(use: NodeUse, value: DataValue): Splice {
+  const splice = expandDataValue(use, value);
+  if (splice !== null) return splice;
+  // Container without access path inside iteration — defer per M1.11
+  // (matches DataDef behavior). Emit empty text so the prose stays sane.
+  return [emptyTextAt(use.loc)];
+}
+
+function emptyTextAt(loc: Loc): Text {
+  return { kind: 'text', value: '', loc: structuredClone(loc) };
 }
 
 function expandWithDef(use: NodeUse, def: NodeDef, ctx: ExpandCtx): Splice {
