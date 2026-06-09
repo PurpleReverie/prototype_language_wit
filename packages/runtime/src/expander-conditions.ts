@@ -28,8 +28,8 @@ import type {
   DataDef,
   DataValue,
   NodeDef,
-  Record as RecordNode,
 } from '@wit/parser';
+import { lookupRecordField } from './canonical-key.js';
 
 export interface DataLookups {
   dataDefs: Map<string, DataDef>;
@@ -117,9 +117,9 @@ function walkSegments(
   let current: DataValue = value;
   for (const seg of segments) {
     if (current.kind !== 'record') return null;
-    const field = (current as RecordNode).fields.find((f) => f.key === seg);
-    if (field === undefined) return null;
-    current = field.value;
+    const found = lookupRecordField(current, seg);
+    if (found === undefined) return null;
+    current = found;
   }
   return current;
 }
