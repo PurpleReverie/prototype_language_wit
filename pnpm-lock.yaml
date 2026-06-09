@@ -31,6 +31,9 @@ importers:
       '@wit/parser':
         specifier: workspace:*
         version: link:../../packages/parser
+      '@wit/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
 
 packages:
 

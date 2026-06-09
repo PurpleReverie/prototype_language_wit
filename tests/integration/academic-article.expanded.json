@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": "E_UNRESOLVED_REFERENCE",
+    "message": "Unresolved reference @theoremheader"
+  },
+  "ok": false,
+  "stage": "resolve"
+}
