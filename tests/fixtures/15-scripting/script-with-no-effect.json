@@ -2,13 +2,9 @@
   "ast": {
     "children": [
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "<%\nconst ok = lh.data.paper !== undefined;\nif (!ok) {\n  throw new Error('paper missing');\n}\n%>"
-          }
-        ],
-        "kind": "paragraph"
+        "content": "\nconst ok = lh.data.paper !== undefined;\nif (!ok) {\n  throw new Error('paper missing');\n}\n",
+        "inline": false,
+        "kind": "scriptBlock"
       },
       {
         "children": [

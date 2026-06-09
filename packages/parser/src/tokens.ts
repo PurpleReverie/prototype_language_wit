@@ -165,6 +165,13 @@ export interface ScriptClose extends HasLoc {
   kind: 'scriptClose';
 }
 
+export interface ScriptBlockContent extends HasLoc {
+  // Raw opaque content between `<%` and `%>`. The parser hands this text
+  // unchanged into a ScriptBlock AST node — no Wit lexing happens inside.
+  kind: 'scriptBlockContent';
+  text: string;
+}
+
 export interface HashOpen extends HasLoc {
   // `#name` — start of a node-definition.
   kind: 'hashOpen';
@@ -258,6 +265,7 @@ export type Token =
   | Keyword
   | ScriptOpen
   | ScriptClose
+  | ScriptBlockContent
   | HashOpen
   | HashClose
   | InterpolationName

@@ -2,13 +2,9 @@
   "ast": {
     "children": [
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "<%\nfunction greet(name) {\n  return `hello, ${name}`;\n}\n%>"
-          }
-        ],
-        "kind": "paragraph"
+        "content": "\nfunction greet(name) {\n  return `hello, ${name}`;\n}\n",
+        "inline": false,
+        "kind": "scriptBlock"
       },
       {
         "children": [
@@ -17,22 +13,11 @@
             "value": "The system says: "
           },
           {
-            "body": null,
-            "closeStyle": "parens",
-            "inline": false,
-            "kind": "nodeUse",
-            "name": "scriptCall",
-            "params": [
-              {
-                "name": null,
-                "value": "greet"
-              },
-              {
-                "name": null,
-                "value": "\"world\""
-              }
+            "args": [
+              "\"world\""
             ],
-            "paramsSource": "parens"
+            "fnName": "greet",
+            "kind": "scriptCall"
           }
         ],
         "kind": "paragraph"

@@ -61,13 +61,9 @@
         "kind": "paragraph"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "<%\nlh.sort('finding', (a, b) => b.weight - a.weight);\n%>"
-          }
-        ],
-        "kind": "paragraph"
+        "content": "\nlh.sort('finding', (a, b) => b.weight - a.weight);\n",
+        "inline": false,
+        "kind": "scriptBlock"
       }
     ],
     "kind": "document"

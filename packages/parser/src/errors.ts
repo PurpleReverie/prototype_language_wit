@@ -12,6 +12,7 @@ export const ErrorCode = {
   E_MISMATCHED_CLOSE: 'E_MISMATCHED_CLOSE',
   E_MALFORMED_RECORD: 'E_MALFORMED_RECORD',
   E_UNCLOSED_COLLECTION: 'E_UNCLOSED_COLLECTION',
+  E_UNCLOSED_SCRIPT: 'E_UNCLOSED_SCRIPT',
 } as const;
 
 export type ErrorCodeName = (typeof ErrorCode)[keyof typeof ErrorCode];
