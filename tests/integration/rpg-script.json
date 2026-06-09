@@ -17,95 +17,80 @@
         "text": "characters and world state"
       },
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "name",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Frodo"
-                }
-              },
-              {
-                "key": "has ring",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "true"
-                }
-              },
-              {
-                "key": "knowledge",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "low"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "frodo",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "name",
+              "value": {
+                "kind": "stringValue",
+                "value": "Frodo"
+              }
+            },
+            {
+              "key": "has ring",
+              "value": {
+                "kind": "stringValue",
+                "value": "true"
+              }
+            },
+            {
+              "key": "knowledge",
+              "value": {
+                "kind": "stringValue",
+                "value": "low"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "name",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Gandalf"
-                }
-              },
-              {
-                "key": "mood",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "grave"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "gandalf",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "name",
+              "value": {
+                "kind": "stringValue",
+                "value": "Gandalf"
+              }
+            },
+            {
+              "key": "mood",
+              "value": {
+                "kind": "stringValue",
+                "value": "grave"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "location",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Bag End"
-                }
-              },
-              {
-                "key": "sauron knows",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "false"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "world",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "location",
+              "value": {
+                "kind": "stringValue",
+                "value": "Bag End"
+              }
+            },
+            {
+              "key": "sauron knows",
+              "value": {
+                "kind": "stringValue",
+                "value": "false"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
         "inline": false,

@@ -187,7 +187,11 @@ function tryRecognizeEmphasisClose(
   if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
   else flushTextRun(state, buf);
   emitEmphasisClose(state, marker);
-  if (state.src.charAt(state.cur.offset) !== '\n') state.afterInline = true;
+  // M7.datadef-classify polish: always set afterInline so a following
+  // text run's leading newline (`_italic_\nword`) becomes a space, not
+  // a strip. The previous guard skipped the flag when newline followed,
+  // which caused `<em>italic</em>word` glue.
+  state.afterInline = true;
   return true;
 }
 

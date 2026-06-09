@@ -33,11 +33,7 @@ describe('createLhBridge', () => {
 });
 
 describe('lh.data', () => {
-  it('exposes DataDef records by name when present in the resolved doc', () => {
-    // The parser currently emits NodeDef for `#name: { ... }` shapes;
-    // DataDefs are produced via direct construction in tests. We splice
-    // a synthetic DataDef into the resolved map to confirm the proxy
-    // reads from it without mutation surface.
+  it('exposes a DataDef scalar as a plain JS value', () => {
     const { resolved, expanded } = build('hi\n');
     const loc = resolved.loc;
     const synthetic = {
@@ -47,9 +43,19 @@ describe('lh.data', () => {
       loc,
     };
     resolved.dataDefs.set('book', synthetic);
-    const { createLhBridge: f } = { createLhBridge };
-    const bridge = f({ expanded, resolved });
-    expect(bridge.data['book']?.kind).toBe('stringValue');
+    const bridge = createLhBridge({ expanded, resolved });
+    expect(bridge.data['book']).toBe('The Keeper');
+  });
+
+  it('exposes a DataDef record as a nested object with canonical keys', () => {
+    // M7.datadef-classify: `#paper: { word target - 5000 }` should be
+    // reachable as `lh.data.paper.word_target` from scripts.
+    const src = '#paper: { word target - 5000, status - draft } !!\n\nhi\n';
+    const { bridge } = build(src);
+    const paper = bridge.data['paper'] as Record<string, unknown> | undefined;
+    expect(paper).toBeDefined();
+    expect(paper!['word_target']).toBe('5000');
+    expect(paper!['status']).toBe('draft');
   });
 
   it('returns undefined for unknown names', () => {

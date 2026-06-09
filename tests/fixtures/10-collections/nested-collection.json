@@ -2,44 +2,39 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "items": [
-                  {
-                    "kind": "stringValue",
-                    "value": "1"
-                  },
-                  {
-                    "kind": "stringValue",
-                    "value": "2"
-                  }
-                ],
-                "kind": "collection"
-              },
-              {
-                "items": [
-                  {
-                    "kind": "stringValue",
-                    "value": "3"
-                  },
-                  {
-                    "kind": "stringValue",
-                    "value": "4"
-                  }
-                ],
-                "kind": "collection"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "grid",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "items": [
+                {
+                  "kind": "stringValue",
+                  "value": "1"
+                },
+                {
+                  "kind": "stringValue",
+                  "value": "2"
+                }
+              ],
+              "kind": "collection"
+            },
+            {
+              "items": [
+                {
+                  "kind": "stringValue",
+                  "value": "3"
+                },
+                {
+                  "kind": "stringValue",
+                  "value": "4"
+                }
+              ],
+              "kind": "collection"
+            }
+          ],
+          "kind": "collection"
+        }
       }
     ],
     "kind": "document"

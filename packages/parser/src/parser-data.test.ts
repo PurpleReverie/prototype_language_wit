@@ -8,6 +8,7 @@ import {
 } from './parser-data.js';
 import type {
   Collection as CollectionNode,
+  DataDef,
   NodeDef,
   Record as RecordNode,
   StringValue,
@@ -87,29 +88,31 @@ describe('tryParseRecordFromText', () => {
 });
 
 describe('parse — single-line def with record literal body', () => {
-  it('parses `#x: { a - 1 }` as a Record body', () => {
+  it('parses `#x: { a - 1 }` as a DataDef wrapping a Record', () => {
+    // M7.datadef-classify: a single-line def whose value is purely a
+    // record literal is data, not a node template.
     const doc = parse('#x: { a - 1 }');
-    const def = doc.children[0] as NodeDef;
-    expect(def.kind).toBe('nodeDef');
-    expect(def.shape).toBe('single-line');
-    expect(def.body).toHaveLength(1);
-    const rec = def.body[0] as RecordNode;
+    const def = doc.children[0] as DataDef;
+    expect(def.kind).toBe('dataDef');
+    expect(def.name).toBe('x');
+    const rec = def.value as RecordNode;
     expect(rec.kind).toBe('record');
     expect(rec.fields[0].key).toBe('a');
   });
 
-  it('preserves Text body when value is not a record', () => {
+  it('preserves Text body (NodeDef) when value is not a record', () => {
     const doc = parse('#x: just a string');
     const def = doc.children[0] as NodeDef;
+    expect(def.kind).toBe('nodeDef');
     expect(def.body[0].kind).toBe('text');
   });
 
-  it('parses a multi-line record def body', () => {
+  it('parses a multi-line record def body as DataDef', () => {
     const src = '#k: {\n  name - Aldous Vane\n  years at post - 31\n}';
     const doc = parse(src);
-    const def = doc.children[0] as NodeDef;
-    expect(def.shape).toBe('single-line');
-    const rec = def.body[0] as RecordNode;
+    const def = doc.children[0] as DataDef;
+    expect(def.kind).toBe('dataDef');
+    const rec = def.value as RecordNode;
     expect(rec.kind).toBe('record');
     expect(rec.fields.map((f) => f.key)).toEqual([
       'name',
@@ -193,11 +196,12 @@ describe('tryParseCollectionFromText', () => {
 });
 
 describe('parse — single-line def with collection literal body', () => {
-  it('parses `#xs: [ a, b, c ]` as a Collection body', () => {
+  it('parses `#xs: [ a, b, c ]` as a DataDef wrapping a Collection', () => {
+    // M7.datadef-classify: pure collection literal → DataDef.
     const doc = parse('#xs: [ a, b, c ]');
-    const def = doc.children[0] as NodeDef;
-    expect(def.shape).toBe('single-line');
-    const coll = def.body[0] as CollectionNode;
+    const def = doc.children[0] as DataDef;
+    expect(def.kind).toBe('dataDef');
+    const coll = def.value as CollectionNode;
     expect(coll.kind).toBe('collection');
     expect(coll.items).toHaveLength(3);
   });
@@ -206,8 +210,9 @@ describe('parse — single-line def with collection literal body', () => {
     const src =
       '#sites: [\n  { name - A, status - ok }\n  { name - B, status - down }\n]';
     const doc = parse(src);
-    const def = doc.children[0] as NodeDef;
-    const coll = def.body[0] as CollectionNode;
+    const def = doc.children[0] as DataDef;
+    expect(def.kind).toBe('dataDef');
+    const coll = def.value as CollectionNode;
     expect(coll.kind).toBe('collection');
     expect(coll.items).toHaveLength(2);
     const first = coll.items[0] as RecordNode;

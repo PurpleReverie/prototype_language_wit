@@ -2,42 +2,37 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "fields": [
-                  {
-                    "key": "claim",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "lamp lit"
-                    }
-                  }
-                ],
-                "kind": "record"
-              },
-              {
-                "fields": [
-                  {
-                    "key": "claim",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "logbook signed"
-                    }
-                  }
-                ],
-                "kind": "record"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "findings",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "fields": [
+                {
+                  "key": "claim",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "lamp lit"
+                  }
+                }
+              ],
+              "kind": "record"
+            },
+            {
+              "fields": [
+                {
+                  "key": "claim",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "logbook signed"
+                  }
+                }
+              ],
+              "kind": "record"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "children": [

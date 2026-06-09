@@ -2,26 +2,21 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "moral failure"
-              },
-              {
-                "kind": "stringValue",
-                "value": "attention"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "themes",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "moral failure"
+            },
+            {
+              "kind": "stringValue",
+              "value": "attention"
+            }
+          ],
+          "kind": "collection"
+        }
       }
     ],
     "kind": "document"

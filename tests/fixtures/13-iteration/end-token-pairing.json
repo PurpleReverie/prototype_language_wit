@@ -2,48 +2,38 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "Marlow"
-              },
-              {
-                "kind": "stringValue",
-                "value": "Singleton"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "watch",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "Marlow"
+            },
+            {
+              "kind": "stringValue",
+              "value": "Singleton"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "Wait"
-              },
-              {
-                "kind": "stringValue",
-                "value": "Donkin"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "relief",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "Wait"
+            },
+            {
+              "kind": "stringValue",
+              "value": "Donkin"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "body": [

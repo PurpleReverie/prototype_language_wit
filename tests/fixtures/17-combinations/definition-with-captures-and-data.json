@@ -2,32 +2,27 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "author",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Simone Weil"
-                }
-              },
-              {
-                "key": "work",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Gravity and Grace"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "weil",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "author",
+              "value": {
+                "kind": "stringValue",
+                "value": "Simone Weil"
+              }
+            },
+            {
+              "key": "work",
+              "value": {
+                "kind": "stringValue",
+                "value": "Gravity and Grace"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
         "additive": false,

@@ -7,7 +7,7 @@ import { ErrorCode } from './errors.js';
 import { maybeAsDataValue } from './parser-data.js';
 import { ParseError } from './parser-errors.js';
 import type {
-  Block, Collection as CollectionNode, Inline, NodeDef,
+  Block, Collection as CollectionNode, DataDef, Inline, NodeDef,
   Record as RecordNode,
 } from './ast.js';
 import type { Loc } from './loc.js';
@@ -26,7 +26,7 @@ export interface NodeDefOptions {
 export function parseNodeDef(
   cursor: TokenCursor,
   opts: NodeDefOptions,
-): NodeDef {
+): NodeDef | DataDef {
   const additive = consumeAdditive(cursor);
   const open = cursor.advance() as HashOpen;
   const captures = consumeCaptures(cursor);
@@ -110,8 +110,7 @@ function detectDefShape(cursor: TokenCursor, name: string): DefShape {
 }
 
 function lookaheadTerminator(
-  cursor: TokenCursor,
-  name: string,
+  cursor: TokenCursor, name: string,
 ): 'hashClose' | 'bangBang' | 'eof' {
   // Subsequent def-start (`#x`, `+#x`) is a hard boundary.
   let i = 0;
@@ -150,7 +149,7 @@ function scansAcrossBreak(cursor: TokenCursor): boolean {
 function parseSingleLineDef(
   cursor: TokenCursor, open: HashOpen, captures: string[],
   additive: boolean, opts: NodeDefOptions,
-): NodeDef {
+): NodeDef | DataDef {
   return parseBangBangDef(cursor, open, captures, additive, opts, 'single-line');
 }
 
@@ -158,14 +157,14 @@ function parseValueBlockDef(
   cursor: TokenCursor, open: HashOpen, captures: string[],
   additive: boolean, opts: NodeDefOptions,
 ): NodeDef {
-  return parseBangBangDef(cursor, open, captures, additive, opts, 'value-block');
+  return parseBangBangDef(cursor, open, captures, additive, opts, 'value-block') as NodeDef;
 }
 
 function parseBangBangDef(
   cursor: TokenCursor, open: HashOpen, captures: string[],
   additive: boolean, opts: NodeDefOptions,
   shape: 'single-line' | 'value-block',
-): NodeDef {
+): NodeDef | DataDef {
   stripLeadingColon(cursor);
   const raw = shape === 'single-line'
     ? collectSingleLineValue(cursor, opts) : collectValueBlock(cursor, opts);
@@ -173,16 +172,31 @@ function parseBangBangDef(
   const body: (Block | Inline | RecordNode | CollectionNode)[] =
     shape === 'single-line' ? maybeAsDataValue(trimmed) : trimmed;
   const closeLoc = expectBangBang(cursor, open);
+  const loc = spanLoc(open.loc, closeLoc);
+  if (shape === 'single-line' && !additive) {
+    const dataValue = extractPureDataValue(body);
+    if (dataValue !== null) {
+      return { kind: 'dataDef', name: open.name, value: dataValue, loc };
+    }
+  }
   return {
-    kind: 'nodeDef', name: open.name, captures, shape, body, additive,
-    loc: spanLoc(open.loc, closeLoc),
+    kind: 'nodeDef', name: open.name, captures, shape, body, additive, loc,
   };
 }
 
-// Single-line def values capture the trailing whitespace between the
-// value and the closing `!!` (or EOL). Trim it so `#year: 1923 !!` defs
-// `1923` not `1923 ` — otherwise `@year` splices "1923 " and prose
-// reads `1923 ,` with a stray space.
+// A single-line def whose body collapsed to exactly a Record or
+// Collection (no surrounding text) is data, not a node template.
+function extractPureDataValue(
+  body: (Block | Inline | RecordNode | CollectionNode)[],
+): RecordNode | CollectionNode | null {
+  if (body.length !== 1) return null;
+  const only = body[0]!;
+  if (only.kind === 'record' || only.kind === 'collection') return only;
+  return null;
+}
+
+// Trim trailing whitespace from the last Text node in a single-line def
+// body (M7.fix-whitespace) so `@year` splices `1923` not `1923 `.
 function trimTrailingTextWs(body: (Block | Inline)[]): (Block | Inline)[] {
   if (body.length === 0) return body;
   const last = body[body.length - 1];
@@ -205,20 +219,13 @@ function stripLeadingColon(cursor: TokenCursor): void {
 }
 
 function rewriteCurrentText(
-  cursor: TokenCursor,
-  newValue: string,
-  oldLoc: Loc,
-  stripped: number,
+  cursor: TokenCursor, newValue: string, oldLoc: Loc, stripped: number,
 ): void {
-  // Mutate the current token in place to advance past the colon. The
-  // cursor's underlying array is mutable for our purposes (tokens
-  // produced fresh by lex()).
+  // Mutate current token in place to advance past the colon.
   if (newValue.length === 0) { cursor.advance(); return; }
   const tokens = cursorTokens(cursor);
   tokens[cursor.position()] = {
-    kind: 'textRun',
-    value: newValue,
-    loc: shiftLoc(oldLoc, stripped),
+    kind: 'textRun', value: newValue, loc: shiftLoc(oldLoc, stripped),
   };
 }
 
@@ -230,8 +237,7 @@ function shiftLoc(loc: Loc, n: number): Loc {
 }
 
 function cursorTokens(cursor: TokenCursor): Token[] {
-  // Reach into the cursor for in-place rewrite. Encapsulation-light by
-  // design — see parser-cursor.ts comment.
+  // Reach into cursor for in-place rewrite. See parser-cursor.ts.
   return (cursor as unknown as { tokens: Token[] }).tokens;
 }
 
@@ -298,22 +304,14 @@ function isImplicitDefTerminator(kind: string): boolean {
 // ---------------------------------------------------------------------------
 
 function parseBlockDef(
-  cursor: TokenCursor,
-  open: HashOpen,
-  captures: string[],
-  additive: boolean,
-  opts: NodeDefOptions,
+  cursor: TokenCursor, open: HashOpen, captures: string[],
+  additive: boolean, opts: NodeDefOptions,
 ): NodeDef {
   const body = opts.parseBlocks(cursor, open.name);
   const closeLoc = expectHashClose(cursor, open);
   return {
-    kind: 'nodeDef',
-    name: open.name,
-    captures,
-    shape: 'block',
-    body,
-    additive,
-    loc: spanLoc(open.loc, closeLoc),
+    kind: 'nodeDef', name: open.name, captures, shape: 'block', body,
+    additive, loc: spanLoc(open.loc, closeLoc),
   };
 }
 
@@ -321,17 +319,14 @@ function expectHashClose(cursor: TokenCursor, open: HashOpen): Loc {
   const tok = cursor.current();
   if (tok.kind !== 'hashClose') {
     throw new ParseError(
-      ErrorCode.E_UNCLOSED_DEFINITION,
-      `unclosed #${open.name}`,
-      open.loc,
+      ErrorCode.E_UNCLOSED_DEFINITION, `unclosed #${open.name}`, open.loc,
     );
   }
   const close = tok as HashClose;
   if (close.name !== open.name) {
     throw new ParseError(
       ErrorCode.E_MISMATCHED_CLOSE,
-      `expected ${open.name}# but got ${close.name}#`,
-      close.loc,
+      `expected ${open.name}# but got ${close.name}#`, close.loc,
     );
   }
   cursor.advance();
@@ -340,10 +335,7 @@ function expectHashClose(cursor: TokenCursor, open: HashOpen): Loc {
 
 function spanLoc(start: Loc, end: Loc): Loc {
   return {
-    file: start.file,
-    line: start.line,
-    col: start.col,
-    offset: start.offset,
-    length: end.offset + end.length - start.offset,
+    file: start.file, line: start.line, col: start.col,
+    offset: start.offset, length: end.offset + end.length - start.offset,
   };
 }

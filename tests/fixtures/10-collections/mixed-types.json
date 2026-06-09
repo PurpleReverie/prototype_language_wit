@@ -2,30 +2,25 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "1"
-              },
-              {
-                "kind": "stringValue",
-                "value": "two"
-              },
-              {
-                "kind": "stringValue",
-                "value": "true"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "mix",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "1"
+            },
+            {
+              "kind": "stringValue",
+              "value": "two"
+            },
+            {
+              "kind": "stringValue",
+              "value": "true"
+            }
+          ],
+          "kind": "collection"
+        }
       }
     ],
     "kind": "document"

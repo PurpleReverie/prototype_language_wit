@@ -3,7 +3,13 @@
 
 import { describe, expect, it } from 'vitest';
 import { parse } from './parser.js';
-import type { Interpolation, NodeDef, Paragraph, Text } from './ast.js';
+import type {
+  DataDef,
+  Interpolation,
+  NodeDef,
+  Paragraph,
+  Text,
+} from './ast.js';
 
 describe('parseNodeDef — block shape', () => {
   it('parses `#sidebar body sidebar#`', () => {
@@ -112,6 +118,47 @@ describe('parseNodeDef — additive prefix', () => {
     expect(def.additive).toBe(true);
     expect(def.shape).toBe('single-line');
     expect(def.name).toBe('x');
+  });
+});
+
+describe('M7.datadef-classify — pure record/collection bodies', () => {
+  it('classifies `#x: { a - 1 } !!` as DataDef, not NodeDef', () => {
+    const doc = parse('#x: { a - 1 } !!');
+    const def = doc.children[0] as DataDef;
+    expect(def.kind).toBe('dataDef');
+    expect(def.name).toBe('x');
+    expect(def.value.kind).toBe('record');
+  });
+
+  it('classifies a pure collection body `#xs: [ a, b ] !!` as DataDef', () => {
+    const doc = parse('#xs: [ a, b ] !!');
+    const def = doc.children[0] as DataDef;
+    expect(def.kind).toBe('dataDef');
+    expect(def.value.kind).toBe('collection');
+  });
+
+  it('keeps NodeDef for plain text single-line defs (`#x: text !!`)', () => {
+    const doc = parse('#x: text !!');
+    const def = doc.children[0] as NodeDef;
+    expect(def.kind).toBe('nodeDef');
+  });
+
+  it('keeps NodeDef when value mixes interpolation with text content', () => {
+    // `#cite: ::author:: (::year::) !!` — has interpolation tokens, not
+    // a pure record/collection literal. Must stay NodeDef.
+    const doc = parse('#cite ||author, year||: ::author:: (::year::) !!');
+    const def = doc.children[0] as NodeDef;
+    expect(def.kind).toBe('nodeDef');
+    expect(def.shape).toBe('single-line');
+  });
+
+  it('keeps NodeDef for additive single-line defs with record literal', () => {
+    // Additive defs feed merge logic — reclassifying mid-stack would
+    // surprise the resolver. Leave as NodeDef for now (OUT OF SCOPE).
+    const doc = parse('+#x: { a - 1 } !!');
+    const def = doc.children[0] as NodeDef;
+    expect(def.kind).toBe('nodeDef');
+    expect(def.additive).toBe(true);
   });
 });
 

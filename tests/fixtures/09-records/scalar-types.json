@@ -2,39 +2,34 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "title",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Q3 Operations Review"
-                }
-              },
-              {
-                "key": "quarter",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "2024"
-                }
-              },
-              {
-                "key": "final",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "true"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "report",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "Q3 Operations Review"
+              }
+            },
+            {
+              "key": "quarter",
+              "value": {
+                "kind": "stringValue",
+                "value": "2024"
+              }
+            },
+            {
+              "key": "final",
+              "value": {
+                "kind": "stringValue",
+                "value": "true"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       }
     ],
     "kind": "document"

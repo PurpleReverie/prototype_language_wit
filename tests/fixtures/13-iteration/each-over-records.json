@@ -2,56 +2,51 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "fields": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "Marlow"
-                    }
-                  },
-                  {
-                    "key": "post",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "bridge"
-                    }
-                  }
-                ],
-                "kind": "record"
-              },
-              {
-                "fields": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "Singleton"
-                    }
-                  },
-                  {
-                    "key": "post",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "foredeck"
-                    }
-                  }
-                ],
-                "kind": "record"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "watchers",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "Marlow"
+                  }
+                },
+                {
+                  "key": "post",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "bridge"
+                  }
+                }
+              ],
+              "kind": "record"
+            },
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "Singleton"
+                  }
+                },
+                {
+                  "key": "post",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "foredeck"
+                  }
+                }
+              ],
+              "kind": "record"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "body": [

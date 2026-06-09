@@ -119,6 +119,34 @@ describe('expander — DataDef resolution', () => {
     const flat = collectText(expanded.children);
     expect(flat).toContain('Ada');
   });
+
+  it('M7.datadef-classify: `@x.field` resolves through dataDefs', () => {
+    // Record key `word target` (with space) must reach via the
+    // canonical `word_target` access path used in prose.
+    const src =
+      '#paper: { word target - 5000, status - draft } !!\n\n' +
+      'The target is @paper.word_target words.\n' +
+      'The status is @paper.status.\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    expect(resolved.dataDefs.has('paper')).toBe(true);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('5000');
+    expect(flat).toContain('draft');
+  });
+
+  it('M7.datadef-classify: emphasis-close before newline preserves space', () => {
+    // `_italic_\nword` previously rendered as `<em>italic</em>word`.
+    const src = 'A note in _italic_\nshould preserve the space.\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    // The text node immediately after the italic must start with a space
+    // so prose reads "italic should preserve" rather than "italicshould".
+    expect(flat).not.toContain('italicshould');
+  });
 });
 
 describe('expander — loop guard', () => {

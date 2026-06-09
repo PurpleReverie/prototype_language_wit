@@ -28,46 +28,41 @@
         "path": "./chapters/two.wit"
       },
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "title",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "The Keeper"
-                }
-              },
-              {
-                "key": "subtitle",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Essays on attention and the moral life"
-                }
-              },
-              {
-                "key": "author",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Aldous Vane"
-                }
-              },
-              {
-                "key": "status",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "draft"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "book",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "The Keeper"
+              }
+            },
+            {
+              "key": "subtitle",
+              "value": {
+                "kind": "stringValue",
+                "value": "Essays on attention and the moral life"
+              }
+            },
+            {
+              "key": "author",
+              "value": {
+                "kind": "stringValue",
+                "value": "Aldous Vane"
+              }
+            },
+            {
+              "key": "status",
+              "value": {
+                "kind": "stringValue",
+                "value": "draft"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
         "body": [

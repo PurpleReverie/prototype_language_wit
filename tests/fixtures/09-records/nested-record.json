@@ -2,33 +2,28 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "a",
-                "value": {
-                  "fields": [
-                    {
-                      "key": "b",
-                      "value": {
-                        "kind": "stringValue",
-                        "value": "1"
-                      }
-                    }
-                  ],
-                  "kind": "record"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "x",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "a",
+              "value": {
+                "fields": [
+                  {
+                    "key": "b",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "1"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       }
     ],
     "kind": "document"

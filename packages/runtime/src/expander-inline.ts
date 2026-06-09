@@ -31,8 +31,8 @@ import type {
   Param,
   Loc,
   Text,
-  Record as RecordNode,
 } from '@wit/parser';
+import { lookupRecordField } from './canonical-key.js';
 
 export type Splice = (Block | Inline)[];
 
@@ -152,9 +152,9 @@ function walkAccess(
   let current: DataValue = value;
   for (const seg of segments) {
     if (current.kind !== 'record') return null;
-    const field = (current as RecordNode).fields.find((f) => f.key === seg);
-    if (field === undefined) return null;
-    current = field.value;
+    const found = lookupRecordField(current, seg);
+    if (found === undefined) return null;
+    current = found;
   }
   return current;
 }

@@ -2,50 +2,45 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "one"
-              },
-              {
-                "kind": "stringValue",
-                "value": "two"
-              },
-              {
-                "kind": "stringValue",
-                "value": "three"
-              },
-              {
-                "kind": "stringValue",
-                "value": "four"
-              },
-              {
-                "kind": "stringValue",
-                "value": "five"
-              },
-              {
-                "kind": "stringValue",
-                "value": "six"
-              },
-              {
-                "kind": "stringValue",
-                "value": "seven"
-              },
-              {
-                "kind": "stringValue",
-                "value": "eight"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "bells",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "one"
+            },
+            {
+              "kind": "stringValue",
+              "value": "two"
+            },
+            {
+              "kind": "stringValue",
+              "value": "three"
+            },
+            {
+              "kind": "stringValue",
+              "value": "four"
+            },
+            {
+              "kind": "stringValue",
+              "value": "five"
+            },
+            {
+              "kind": "stringValue",
+              "value": "six"
+            },
+            {
+              "kind": "stringValue",
+              "value": "seven"
+            },
+            {
+              "kind": "stringValue",
+              "value": "eight"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "body": [
