@@ -1,0 +1,5 @@
+<!-- TODO: replace with a real icon for .wit files (M5 polish). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <rect x="1" y="1" width="14" height="14" fill="#888" />
+  <text x="8" y="11" font-size="6" text-anchor="middle" fill="#fff" font-family="monospace">wit</text>
+</svg>

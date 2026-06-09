@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "noEmit": false,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "types": ["vscode", "node"]
+  },
+  "include": [
+    "client/**/*.ts",
+    "server/**/*.ts"
+  ]
+}
