@@ -1,0 +1,174 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "chapters/one.wit — registers itself into @toc and @bibliography"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "via additive partials, then renders its prose."
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "tocrow",
+            "params": [
+              {
+                "name": "number",
+                "value": "I"
+              },
+              {
+                "name": "title",
+                "value": "The Lamp"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "toc",
+        "shape": "single-line"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "weil",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " Simone Weil, Gravity and Grace, 1952, Routledge "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": "The sea does not forgive forgetting."
+                      }
+                    ],
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "epigraph",
+                "params": [
+                  {
+                    "name": "source",
+                    "value": "coastal proverb"
+                  }
+                ],
+                "paramsSource": "pipes"
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "For eleven days the lamp had burned untended, and Aldous told\nhimself this was "
+                  },
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": "fine"
+                      }
+                    ],
+                    "kind": "italic"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "."
+                  }
+                ],
+                "kind": "paragraph"
+              },
+              {
+                "body": [
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": " "
+                      }
+                    ],
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "scenebreak",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "He had not spoken aloud in so long that his own voice, when it\ncame, surprised him."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapter",
+            "params": [
+              {
+                "name": "number",
+                "value": "I"
+              },
+              {
+                "name": "title",
+                "value": "The Lamp"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "chapter_one",
+        "shape": "block"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

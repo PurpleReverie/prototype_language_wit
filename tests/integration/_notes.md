@@ -185,3 +185,81 @@ preserved.
 single-word keys; the ` - ` separator is reserved for *keys* that
 contain spaces. Hyphens inside values are content, not syntax. Rule
 (a).
+
+## M3.integration — parser-gap findings (no PLAN.md entry — new I.review items)
+
+After M3.records / M3.collections / M3.conditionals / M3.iteration /
+M3.references / M3.scripting all landed, parsing every integration
+fixture produces a snapshot. Eight of ten now parse `ok: true`; two
+remain `ok: false`. Both come from real language gaps acknowledged
+upstream, not parser bugs in this milestone's already-merged work.
+
+### Parser fix applied here (small, in-scope)
+
+`@x.y.z` (a NodeUse with an access path) was being mis-classified as
+"bodied" whenever a `z@` / `y@` / `x@` close happened to exist later
+in the document. Result: the access-path use swallowed everything to
+that close, breaking the OUTER bodied node it sat inside. Fix in
+`packages/parser/src/parser-nodes.ts`: if `consumeAccessPath` returned
+any segments, force `'bare'` shape regardless of close availability.
+Access-path references are never bodied — that's a data lookup, not a
+node opener. This flipped `book-manuscript/master.wit` from `ok:false`
+(E_MISMATCHED_CLOSE) to `ok:true`. No existing tests regressed.
+
+### Fixture edit applied here
+
+`book-manuscript/master.wit`: the `#book` record's `subtitle` value
+used commas (`Attention, Perception, and the Moral Life`). Commas are
+the canonical field separator inside `{ ... }` records — there is no
+in-value escape for them in the locked syntax. Rewrote to a
+comma-free phrasing. Reviewer should confirm that records keeping
+commas only as separators is the locked rule and that adding an
+escape (e.g. `\,`) is out of scope for v1.
+
+**Concrete proposal:** record string values may not contain `,` or
+`\n` in v1; authors rephrase. Rule (a).
+
+### Remaining `ok: false` — language gaps (not in-scope for M3)
+
+- `report.wit` → `E_UNCLOSED_NODE @metriccard`. Root cause is the
+  conditional inside the `#metric` def body: `(if ::met:: is true)`.
+  The condition LHS is an interpolation (`::met::`, a capture
+  reference), not an access path (`@x.y`). `parser-statements.ts`
+  only recognises `nodeOpen`-led access paths in `parseCondition`,
+  so the entire `(if ::met:: is true) ... (end)` block parses as
+  loose paragraphs that swallow the `(end)` and the surrounding
+  `metriccard@` close. Already flagged in the `report.wit` H2 above
+  ("captured parameter used as the operand of a conditional inside a
+  node definition"). Estimated fix: extend `parseCondition` /
+  `parseAccessPath` to accept `interpolationOpen` + name +
+  `interpolationClose` as a Condition LHS — roughly 30-50 LOC across
+  parser-statements.ts + tests, but it pulls in new AST shape
+  decisions (does the condition AST carry an `InterpolationRef` arm,
+  or do we normalize captures to a synthetic access path?). Defer to
+  a dedicated M3.condition-captures task.
+
+- `blog-post.wit` → `E_UNCLOSED_NODE @tag`. The body of
+  `(each @tags as tag) ... (end)` contains `@tag @tag tag@`. Two
+  same-name opens and one same-name close: under the current LIFO
+  pairing (covered by `parser-nodes.test.ts > nested same-name
+  LIFO`), the FIRST `tag@` pairs with the INNER `@tag`, leaving the
+  outer unmatched. The author's intent is presumably "outer bodied
+  `@tag` containing a bare reference to the iteration variable
+  `@tag`", which is the opposite ownership rule (outer-first /
+  FIFO). Both interpretations are coherent; the locked semantics
+  pick LIFO and this fixture trips on it.
+
+  **Concrete proposal:** keep LIFO same-name pairing. Authors avoid
+  ambiguity by NOT reusing the iteration variable's name as the
+  enclosing node-handle. Rewrite the fixture later (e.g.
+  `@tagchip @tag tagchip@`). Rule (b). Left as-is here so the gap
+  is visible in the snapshot.
+
+### Wiring note
+
+`tests/runner/integration.test.ts` now drives the integration corpus
+through the same snapshot harness as `tests/fixtures/`, via a new
+`walkIntegration` helper in `tests/runner/walk.ts`. Each `.wit` under
+`tests/integration/` (including all five `book-manuscript/` sub-files)
+is parsed independently and snapshotted as a sibling `.json`. Total
+new tests: 11 (10 fixtures + 1 discovery sanity).

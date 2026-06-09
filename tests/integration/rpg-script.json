@@ -1,0 +1,638 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "non-linear RPG script — branching dialogue at Bag End, Ring newly revealed."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "branches are nested @choice nodes; conditions gate on @world / @character state."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "characters and world state"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "fields": [
+              {
+                "key": "name",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Frodo"
+                }
+              },
+              {
+                "key": "has ring",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "true"
+                }
+              },
+              {
+                "key": "knowledge",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "low"
+                }
+              }
+            ],
+            "kind": "record"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "frodo",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "fields": [
+              {
+                "key": "name",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Gandalf"
+                }
+              },
+              {
+                "key": "mood",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "grave"
+                }
+              }
+            ],
+            "kind": "record"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "gandalf",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "fields": [
+              {
+                "key": "location",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Bag End"
+                }
+              },
+              {
+                "key": "sauron knows",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "false"
+                }
+              }
+            ],
+            "kind": "record"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "world",
+        "shape": "single-line"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "one node for a spoken line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "bodySlot"
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "line",
+            "params": [
+              {
+                "name": "speaker",
+                "value": "::who::"
+              },
+              {
+                "name": "mood",
+                "value": "::mood::"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "captures": [
+          "who",
+          "mood"
+        ],
+        "kind": "nodeDef",
+        "name": "say",
+        "shape": "block"
+      },
+      {
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "The fire confirms it. This is no trinket, Frodo. It is the\nEnemy's own — and while it rests in the Shire, the Shire is\nin peril."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "say",
+            "params": [
+              {
+                "name": "who",
+                "value": "Gandalf"
+              },
+              {
+                "name": "mood",
+                "value": "grave"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "body": [
+              {
+                "inline": false,
+                "kind": "comment",
+                "text": "branch: offer it away"
+              },
+              {
+                "body": [
+                  {
+                    "body": [
+                      {
+                        "children": [
+                          {
+                            "kind": "text",
+                            "value": "Then you take it. You're wise, you're strong. Keep it hidden."
+                          }
+                        ],
+                        "kind": "paragraph"
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": false,
+                    "kind": "nodeUse",
+                    "name": "say",
+                    "params": [
+                      {
+                        "name": "who",
+                        "value": "Frodo"
+                      },
+                      {
+                        "name": "mood",
+                        "value": "afraid"
+                      }
+                    ],
+                    "paramsSource": "pipes"
+                  },
+                  {
+                    "body": [
+                      {
+                        "children": [
+                          {
+                            "kind": "text",
+                            "value": "Do not offer it to me. I dare not so much as hold it. The Ring\nwould find the good in me and turn it to ruin."
+                          }
+                        ],
+                        "kind": "paragraph"
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": false,
+                    "kind": "nodeUse",
+                    "name": "say",
+                    "params": [
+                      {
+                        "name": "who",
+                        "value": "Gandalf"
+                      },
+                      {
+                        "name": "mood",
+                        "value": "urgent"
+                      }
+                    ],
+                    "paramsSource": "pipes"
+                  },
+                  {
+                    "children": [
+                      {
+                        "body": null,
+                        "closeStyle": "parens",
+                        "inline": false,
+                        "kind": "nodeUse",
+                        "name": "goto",
+                        "params": [
+                          {
+                            "name": "scene",
+                            "value": "what-must-be-done"
+                          }
+                        ],
+                        "paramsSource": "pipes"
+                      }
+                    ],
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "choice",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "inline": false,
+                "kind": "comment",
+                "text": "branch: ask why"
+              },
+              {
+                "body": [
+                  {
+                    "body": [
+                      {
+                        "children": [
+                          {
+                            "kind": "text",
+                            "value": "But why me? I'm no one — a hobbit who's never been past Bree."
+                          }
+                        ],
+                        "kind": "paragraph"
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": false,
+                    "kind": "nodeUse",
+                    "name": "say",
+                    "params": [
+                      {
+                        "name": "who",
+                        "value": "Frodo"
+                      },
+                      {
+                        "name": "mood",
+                        "value": "lost"
+                      }
+                    ],
+                    "paramsSource": "pipes"
+                  },
+                  {
+                    "body": [
+                      {
+                        "children": [
+                          {
+                            "kind": "text",
+                            "value": "Small hands turn the wheel of the world while the eyes of the\ngreat look elsewhere. It fell to you. That is reason enough."
+                          }
+                        ],
+                        "kind": "paragraph"
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": false,
+                    "kind": "nodeUse",
+                    "name": "say",
+                    "params": [
+                      {
+                        "name": "who",
+                        "value": "Gandalf"
+                      },
+                      {
+                        "name": "mood",
+                        "value": "gentle"
+                      }
+                    ],
+                    "paramsSource": "pipes"
+                  },
+                  {
+                    "body": [
+                      {
+                        "body": [
+                          {
+                            "body": [
+                              {
+                                "children": [
+                                  {
+                                    "kind": "text",
+                                    "value": "Then I'll carry it. Wherever it must go."
+                                  }
+                                ],
+                                "kind": "paragraph"
+                              }
+                            ],
+                            "closeStyle": "named",
+                            "inline": false,
+                            "kind": "nodeUse",
+                            "name": "say",
+                            "params": [
+                              {
+                                "name": "who",
+                                "value": "Frodo"
+                              },
+                              {
+                                "name": "mood",
+                                "value": "resolved"
+                              }
+                            ],
+                            "paramsSource": "pipes"
+                          },
+                          {
+                            "children": [
+                              {
+                                "body": null,
+                                "closeStyle": "parens",
+                                "inline": false,
+                                "kind": "nodeUse",
+                                "name": "goto",
+                                "params": [
+                                  {
+                                    "name": "scene",
+                                    "value": "the-road-begins"
+                                  }
+                                ],
+                                "paramsSource": "pipes"
+                              }
+                            ],
+                            "kind": "paragraph"
+                          }
+                        ],
+                        "closeStyle": "named",
+                        "inline": false,
+                        "kind": "nodeUse",
+                        "name": "choice",
+                        "params": [],
+                        "paramsSource": "none"
+                      },
+                      {
+                        "inline": false,
+                        "kind": "comment",
+                        "text": "only unlocks once Frodo has pieced things together"
+                      },
+                      {
+                        "cond": {
+                          "kind": "comparisonCondition",
+                          "left": {
+                            "segments": [
+                              "frodo",
+                              "knowledge"
+                            ]
+                          },
+                          "op": "is",
+                          "right": {
+                            "kind": "stringValue",
+                            "value": "high"
+                          }
+                        },
+                        "kind": "ifStatement",
+                        "then": [
+                          {
+                            "body": [
+                              {
+                                "body": [
+                                  {
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "value": "The Enemy is already stirring in the East, isn't he."
+                                      }
+                                    ],
+                                    "kind": "paragraph"
+                                  }
+                                ],
+                                "closeStyle": "named",
+                                "inline": false,
+                                "kind": "nodeUse",
+                                "name": "say",
+                                "params": [
+                                  {
+                                    "name": "who",
+                                    "value": "Frodo"
+                                  },
+                                  {
+                                    "name": "mood",
+                                    "value": "knowing"
+                                  }
+                                ],
+                                "paramsSource": "pipes"
+                              },
+                              {
+                                "body": [
+                                  {
+                                    "children": [
+                                      {
+                                        "kind": "text",
+                                        "value": "You see further than you let on. Yes — and we have less\ntime than I had hoped."
+                                      }
+                                    ],
+                                    "kind": "paragraph"
+                                  }
+                                ],
+                                "closeStyle": "named",
+                                "inline": false,
+                                "kind": "nodeUse",
+                                "name": "say",
+                                "params": [
+                                  {
+                                    "name": "who",
+                                    "value": "Gandalf"
+                                  },
+                                  {
+                                    "name": "mood",
+                                    "value": "impressed"
+                                  }
+                                ],
+                                "paramsSource": "pipes"
+                              }
+                            ],
+                            "closeStyle": "named",
+                            "inline": false,
+                            "kind": "nodeUse",
+                            "name": "choice",
+                            "params": [],
+                            "paramsSource": "none"
+                          }
+                        ]
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": false,
+                    "kind": "nodeUse",
+                    "name": "choices",
+                    "params": [],
+                    "paramsSource": "none"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "choice",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "inline": false,
+                "kind": "comment",
+                "text": "only appears once the Enemy is on the trail"
+              },
+              {
+                "cond": {
+                  "kind": "comparisonCondition",
+                  "left": {
+                    "segments": [
+                      "world",
+                      "sauron_knows"
+                    ]
+                  },
+                  "op": "is",
+                  "right": {
+                    "kind": "stringValue",
+                    "value": "true"
+                  }
+                },
+                "kind": "ifStatement",
+                "then": [
+                  {
+                    "body": [
+                      {
+                        "body": [
+                          {
+                            "children": [
+                              {
+                                "kind": "text",
+                                "value": "He knows it's here. He knows the name Baggins."
+                              }
+                            ],
+                            "kind": "paragraph"
+                          }
+                        ],
+                        "closeStyle": "named",
+                        "inline": false,
+                        "kind": "nodeUse",
+                        "name": "say",
+                        "params": [
+                          {
+                            "name": "who",
+                            "value": "Frodo"
+                          },
+                          {
+                            "name": "mood",
+                            "value": "panicked"
+                          }
+                        ],
+                        "paramsSource": "pipes"
+                      },
+                      {
+                        "body": [
+                          {
+                            "children": [
+                              {
+                                "kind": "text",
+                                "value": "He does. You cannot stay — not for another night."
+                              }
+                            ],
+                            "kind": "paragraph"
+                          }
+                        ],
+                        "closeStyle": "named",
+                        "inline": false,
+                        "kind": "nodeUse",
+                        "name": "say",
+                        "params": [
+                          {
+                            "name": "who",
+                            "value": "Gandalf"
+                          },
+                          {
+                            "name": "mood",
+                            "value": "dark"
+                          }
+                        ],
+                        "paramsSource": "pipes"
+                      },
+                      {
+                        "children": [
+                          {
+                            "body": null,
+                            "closeStyle": "parens",
+                            "inline": false,
+                            "kind": "nodeUse",
+                            "name": "goto",
+                            "params": [
+                              {
+                                "name": "scene",
+                                "value": "flee-the-shire"
+                              }
+                            ],
+                            "paramsSource": "pipes"
+                          }
+                        ],
+                        "kind": "paragraph"
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": false,
+                    "kind": "nodeUse",
+                    "name": "choice",
+                    "params": [],
+                    "paramsSource": "none"
+                  }
+                ]
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "choices",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "scene",
+        "params": [
+          {
+            "name": "id",
+            "value": "bag-end-revelation"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,154 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "shared/schema.wit — vocabulary definitions for the book."
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": "author, title, year, publisher"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": " "
+          },
+          {
+            "kind": "interpolation",
+            "name": "author"
+          },
+          {
+            "kind": "text",
+            "value": " ("
+          },
+          {
+            "kind": "interpolation",
+            "name": "year"
+          },
+          {
+            "kind": "text",
+            "value": "). _"
+          },
+          {
+            "kind": "interpolation",
+            "name": "title"
+          },
+          {
+            "kind": "text",
+            "value": "_. "
+          },
+          {
+            "kind": "interpolation",
+            "name": "publisher"
+          },
+          {
+            "kind": "text",
+            "value": ". "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "cite",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "interpolation",
+                    "name": "number"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " — "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "title"
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapterheader",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "children": [
+              {
+                "kind": "bodySlot"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "number",
+          "title"
+        ],
+        "kind": "nodeDef",
+        "name": "chapter",
+        "shape": "block"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "bodySlot"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "— "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "source"
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "epigraphbody",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "captures": [
+          "source"
+        ],
+        "kind": "nodeDef",
+        "name": "epigraph",
+        "shape": "block"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

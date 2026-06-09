@@ -1,0 +1,532 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "academic article — citation schema, argument map, footnote, figure, theorem, bibliography."
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": "author, title, year, page"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": " "
+          },
+          {
+            "kind": "interpolation",
+            "name": "author"
+          },
+          {
+            "kind": "text",
+            "value": " ("
+          },
+          {
+            "kind": "interpolation",
+            "name": "year"
+          },
+          {
+            "kind": "text",
+            "value": ", p. "
+          },
+          {
+            "kind": "interpolation",
+            "name": "page"
+          },
+          {
+            "kind": "text",
+            "value": "). _"
+          },
+          {
+            "kind": "interpolation",
+            "name": "title"
+          },
+          {
+            "kind": "text",
+            "value": "_. "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "cite",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "Simone Weil, Gravity and Grace, 1952 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "weil",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "John Berger, Ways of Seeing, 1972 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "berger",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "Hannah Arendt, The Human Condition, 1958 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "arendt",
+        "shape": "single-line"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "argument map — name the idea, not the page"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "weil",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " p. 42 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "weil_attention",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "weil",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " p. 117 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "weil_generosity",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "berger",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " p. 9 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "berger_looking",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "arendt",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " p. 79 "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "arendt_labour",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "label"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " — "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "title"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "theoremheader",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "children": [
+              {
+                "kind": "bodySlot"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "label",
+          "title"
+        ],
+        "kind": "nodeDef",
+        "name": "theorem",
+        "shape": "block"
+      },
+      {
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "This paper argues that the act of looking is never neutral, and\nthat attention constitutes a form of ethical labour whose absence\ncarries measurable consequence."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "abstract",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " Introduction "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "h1",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Attention, as "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "weil_attention",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " argued, is the rarest form of\ngenerosity — not a cognitive habit but a moral orientation toward\nthe world. Berger complicates this "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "berger_looking",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " by insisting\nthat we never look at one thing alone."
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": "This is not merely epistemological. Berger is making an argument\nabout power — who looks, at what, and on whose terms."
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "note",
+                "params": [],
+                "paramsSource": "none"
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " Attention as labour "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "h1",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "If attention is a form of power, then its distribution is always\nalready political "
+                  },
+                  {
+                    "body": null,
+                    "closeStyle": "bare",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "arendt_labour",
+                    "params": [],
+                    "paramsSource": "none"
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "theorem",
+            "params": [
+              {
+                "name": "label",
+                "value": "Theorem 1"
+              },
+              {
+                "name": "title",
+                "value": "The Asymmetry of Attention"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Weil's corrective "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "weil_generosity",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " is to insist that genuine\nattention requires the suspension of the self."
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "body": [],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "figure",
+            "params": [
+              {
+                "name": "id",
+                "value": "fig-model"
+              },
+              {
+                "name": "caption",
+                "value": "The dual structure of attentive labour."
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "As "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "fig-model",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " shows, the structure holds across both accounts."
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " Conclusion "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "h1",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "The lamp burns only as long as someone tends it. Attention is not\nincidental to the moral life — it is the moral life."
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "bibliography",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "article",
+        "params": [
+          {
+            "name": "title",
+            "value": "On Attention and the Act of Looking"
+          },
+          {
+            "name": "author",
+            "value": "Aldous Vane"
+          },
+          {
+            "name": "institution",
+            "value": "University of the Coast"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -57,6 +57,10 @@ function finalizeNodeUse(
   paramsSource: NodeUse['paramsSource'],
   opts: NodeUseOptions,
 ): NodeUse {
+  // Access-path forms (`@x.y.z`) are always references, never bodied —
+  // even when a `name@` close exists later, that close belongs to a
+  // different (bodied) use of the same name, not to this data-access.
+  if (access !== undefined) return makeBare(open, access, params, paramsSource);
   const shape = detectShape(cursor, open.name, paramsSource, opts.inline);
   if (shape === 'self') return makeSelfClosing(open, access, params, paramsSource);
   if (shape === 'bare') return makeBare(open, access, params, paramsSource);
