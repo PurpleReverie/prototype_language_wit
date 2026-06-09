@@ -20,6 +20,12 @@ importers:
 
   packages/parser: {}
 
+  packages/runtime:
+    devDependencies:
+      '@wit/parser':
+        specifier: workspace:*
+        version: link:../parser
+
   tests/runner:
     dependencies:
       '@wit/parser':
