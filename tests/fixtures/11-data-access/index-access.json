@@ -5,8 +5,33 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ { claim - lamp lit }, { claim - logbook signed } ]"
+            "items": [
+              {
+                "fields": [
+                  {
+                    "key": "claim",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "lamp lit"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "claim",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "logbook signed"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

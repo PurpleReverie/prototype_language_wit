@@ -5,8 +5,17 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ Marlow, Singleton ]"
+            "items": [
+              {
+                "kind": "stringValue",
+                "value": "Marlow"
+              },
+              {
+                "kind": "stringValue",
+                "value": "Singleton"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],
@@ -18,8 +27,17 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ Wait, Donkin ]"
+            "items": [
+              {
+                "kind": "stringValue",
+                "value": "Wait"
+              },
+              {
+                "kind": "stringValue",
+                "value": "Donkin"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

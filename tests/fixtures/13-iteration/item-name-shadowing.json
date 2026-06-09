@@ -18,8 +18,21 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ first, second, third ]"
+            "items": [
+              {
+                "kind": "stringValue",
+                "value": "first"
+              },
+              {
+                "kind": "stringValue",
+                "value": "second"
+              },
+              {
+                "kind": "stringValue",
+                "value": "third"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

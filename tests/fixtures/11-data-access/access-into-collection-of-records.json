@@ -5,8 +5,33 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ { strength - faint }, { strength - steady } ]"
+            "items": [
+              {
+                "fields": [
+                  {
+                    "key": "strength",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "faint"
+                    }
+                  }
+                ],
+                "kind": "record"
+              },
+              {
+                "fields": [
+                  {
+                    "key": "strength",
+                    "value": {
+                      "kind": "stringValue",
+                      "value": "steady"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

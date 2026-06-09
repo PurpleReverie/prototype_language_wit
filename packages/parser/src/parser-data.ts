@@ -19,9 +19,11 @@
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
 import { ErrorCode } from './errors.js';
+import type { ErrorCodeName } from './errors.js';
 import { ParseError } from './parser-errors.js';
 import type {
   Block,
+  Collection as CollectionNode,
   DataValue,
   Inline,
   Record as RecordNode,
@@ -51,6 +53,12 @@ export interface RecordParseResult {
   endPos: number;
 }
 
+export interface CollectionParseResult {
+  collection: CollectionNode;
+  // Index in `src` one past the closing `]`.
+  endPos: number;
+}
+
 export function tryParseRecordFromText(
   src: string,
   base: Loc,
@@ -62,20 +70,46 @@ export function tryParseRecordFromText(
   return { record, endPos: scanner.pos };
 }
 
+export function tryParseCollectionFromText(
+  src: string,
+  base: Loc,
+): CollectionParseResult | null {
+  const startPos = skipWs(src, 0);
+  if (src.charAt(startPos) !== '[') return null;
+  const scanner: Scanner = { src, pos: startPos, base };
+  const collection = parseCollection(scanner);
+  return { collection, endPos: scanner.pos };
+}
+
 // Hook used by parser-defs: a single-line def body whose only child is a
-// Text node containing a `{ ... }` record literal collapses to `[Record]`.
-export function maybeAsRecord(
+// Text node containing a `{ ... }` or `[ ... ]` literal collapses to
+// `[Record]` or `[Collection]`.
+export function maybeAsDataValue(
   body: (Block | Inline)[],
-): (Block | Inline | RecordNode)[] {
+): (Block | Inline | RecordNode | CollectionNode)[] {
   if (body.length !== 1) return body;
   const only = body[0];
   if (only.kind !== 'text') return body;
   const text = (only as Text).value;
-  if (!/^\s*\{[\s\S]*\}\s*$/.test(text)) return body;
-  const result = tryParseRecordFromText(text, only.loc);
-  if (result === null) return body;
-  if (text.slice(result.endPos).trim().length > 0) return body;
-  return [result.record];
+  const rec = tryWrapRecord(text, only.loc);
+  if (rec !== null) return [rec];
+  const coll = tryWrapCollection(text, only.loc);
+  if (coll !== null) return [coll];
+  return body;
+}
+
+function tryWrapRecord(text: string, loc: Loc): RecordNode | null {
+  if (!/^\s*\{[\s\S]*\}\s*$/.test(text)) return null;
+  const r = tryParseRecordFromText(text, loc);
+  if (r === null || text.slice(r.endPos).trim().length !== 0) return null;
+  return r.record;
+}
+
+function tryWrapCollection(text: string, loc: Loc): CollectionNode | null {
+  if (!/^\s*\[[\s\S]*\]\s*$/.test(text)) return null;
+  const c = tryParseCollectionFromText(text, loc);
+  if (c === null || text.slice(c.endPos).trim().length !== 0) return null;
+  return c.collection;
 }
 
 // ---------------------------------------------------------------------------
@@ -84,15 +118,15 @@ export function maybeAsRecord(
 
 function parseRecord(s: Scanner): RecordNode {
   const openPos = s.pos;
-  expectChar(s, '{');
+  expectBracket(s, '{', ErrorCode.E_MALFORMED_RECORD);
   const fields: RecordNode['fields'] = [];
   skipWsAndNewlines(s);
   while (s.pos < s.src.length && s.src.charAt(s.pos) !== '}') {
     const field = parseField(s);
     if (field !== null) fields.push(field);
-    if (!consumeSeparator(s)) break;
+    if (!consumeSeparator(s, '}')) break;
   }
-  expectChar(s, '}');
+  expectBracket(s, '}', ErrorCode.E_MALFORMED_RECORD);
   return {
     kind: 'record',
     fields,
@@ -100,9 +134,9 @@ function parseRecord(s: Scanner): RecordNode {
   };
 }
 
-function consumeSeparator(s: Scanner): boolean {
-  // Consume any mix of `,` `\n` and inline ws between fields. Stop if we
-  // reach `}` (caller handles), or run out of input.
+function consumeSeparator(s: Scanner, closer: '}' | ']'): boolean {
+  // Consume any mix of `,` `\n` and inline ws between items/fields. Stop
+  // if we reach the closer (caller handles), or run out of input.
   let consumed = false;
   while (s.pos < s.src.length) {
     const c = s.src.charAt(s.pos);
@@ -110,7 +144,7 @@ function consumeSeparator(s: Scanner): boolean {
     if (c === ' ' || c === '\t') { s.pos += 1; continue; }
     break;
   }
-  return consumed || s.src.charAt(s.pos) === '}';
+  return consumed || s.src.charAt(s.pos) === closer;
 }
 
 // ---------------------------------------------------------------------------
@@ -142,8 +176,9 @@ interface KeyEnd {
 }
 
 function findFieldKeyEnd(s: Scanner): KeyEnd | null {
-  // Scan forward for ` - ` (hyphen value form) or ` {` / `{` (brace form).
-  // Stop at `,`, `\n`, `}` (these terminate the field before a value).
+  // Scan forward for ` - ` (hyphen value form) or ` {` / `{` / `[`
+  // (brace/bracket forms). Stop at `,`, `\n`, `}` (these terminate the
+  // field before a value).
   let i = s.pos;
   while (i < s.src.length) {
     const c = s.src.charAt(i);
@@ -151,7 +186,9 @@ function findFieldKeyEnd(s: Scanner): KeyEnd | null {
     if (isHyphenSeparatorAt(s.src, i)) {
       return { keyTextEnd: i, afterKey: i + 3, kind: 'hyphen' };
     }
-    if (c === '{') return { keyTextEnd: i, afterKey: i, kind: 'brace' };
+    if (c === '{' || c === '[') {
+      return { keyTextEnd: i, afterKey: i, kind: 'brace' };
+    }
     i += 1;
   }
   return null;
@@ -170,6 +207,7 @@ function isHyphenSeparatorAt(src: string, i: number): boolean {
 function parseFieldValue(s: Scanner, kind: 'hyphen' | 'brace'): DataValue {
   skipInlineWs(s);
   if (s.src.charAt(s.pos) === '{') return parseRecord(s);
+  if (s.src.charAt(s.pos) === '[') return parseCollection(s);
   if (kind === 'brace') {
     throw new ParseError(
       ErrorCode.E_MALFORMED_RECORD,
@@ -177,14 +215,14 @@ function parseFieldValue(s: Scanner, kind: 'hyphen' | 'brace'): DataValue {
       locAt(s, s.pos),
     );
   }
-  return parseStringValue(s);
+  return parseStringValue(s, '}');
 }
 
-function parseStringValue(s: Scanner): StringValue {
+function parseStringValue(s: Scanner, closer: '}' | ']'): StringValue {
   const start = s.pos;
   while (s.pos < s.src.length) {
     const c = s.src.charAt(s.pos);
-    if (c === ',' || c === '\n' || c === '}') break;
+    if (c === ',' || c === '\n' || c === closer) break;
     s.pos += 1;
   }
   const raw = s.src.slice(start, s.pos);
@@ -193,6 +231,37 @@ function parseStringValue(s: Scanner): StringValue {
     value: raw.trim(),
     loc: locOfRange(s, start, s.pos),
   };
+}
+
+// ---------------------------------------------------------------------------
+// Collection parser.
+// ---------------------------------------------------------------------------
+
+function parseCollection(s: Scanner): CollectionNode {
+  const openPos = s.pos;
+  expectBracket(s, '[', ErrorCode.E_UNCLOSED_COLLECTION);
+  const items: DataValue[] = [];
+  skipWsAndNewlines(s);
+  while (s.pos < s.src.length && s.src.charAt(s.pos) !== ']') {
+    const item = parseCollectionItem(s);
+    if (item !== null) items.push(item);
+    if (!consumeSeparator(s, ']')) break;
+  }
+  expectBracket(s, ']', ErrorCode.E_UNCLOSED_COLLECTION);
+  return {
+    kind: 'collection',
+    items,
+    loc: locOfRange(s, openPos, s.pos),
+  };
+}
+
+function parseCollectionItem(s: Scanner): DataValue | null {
+  skipWsAndNewlines(s);
+  const c = s.src.charAt(s.pos);
+  if (c === ']' || c === ',') return null;
+  if (c === '{') return parseRecord(s);
+  if (c === '[') return parseCollection(s);
+  return parseStringValue(s, ']');
 }
 
 // ---------------------------------------------------------------------------
@@ -225,13 +294,13 @@ function skipWsAndNewlines(s: Scanner): void {
 // Loc helpers.
 // ---------------------------------------------------------------------------
 
-function expectChar(s: Scanner, ch: string): void {
+function expectBracket(
+  s: Scanner,
+  ch: '{' | '}' | '[' | ']',
+  code: ErrorCodeName,
+): void {
   if (s.src.charAt(s.pos) !== ch) {
-    throw new ParseError(
-      ErrorCode.E_MALFORMED_RECORD,
-      `expected '${ch}' in record literal`,
-      locAt(s, s.pos),
-    );
+    throw new ParseError(code, `expected '${ch}'`, locAt(s, s.pos));
   }
   s.pos += 1;
 }

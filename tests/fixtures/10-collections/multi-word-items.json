@@ -5,8 +5,17 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ moral failure, attention ]"
+            "items": [
+              {
+                "kind": "stringValue",
+                "value": "moral failure"
+              },
+              {
+                "kind": "stringValue",
+                "value": "attention"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],

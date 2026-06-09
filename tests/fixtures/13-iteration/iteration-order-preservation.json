@@ -5,8 +5,41 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "[ one, two, three, four, five, six, seven, eight ]"
+            "items": [
+              {
+                "kind": "stringValue",
+                "value": "one"
+              },
+              {
+                "kind": "stringValue",
+                "value": "two"
+              },
+              {
+                "kind": "stringValue",
+                "value": "three"
+              },
+              {
+                "kind": "stringValue",
+                "value": "four"
+              },
+              {
+                "kind": "stringValue",
+                "value": "five"
+              },
+              {
+                "kind": "stringValue",
+                "value": "six"
+              },
+              {
+                "kind": "stringValue",
+                "value": "seven"
+              },
+              {
+                "kind": "stringValue",
+                "value": "eight"
+              }
+            ],
+            "kind": "collection"
           }
         ],
         "captures": [],
