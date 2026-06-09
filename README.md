@@ -20,6 +20,24 @@ node packages/cli/dist/bin.js build path/to/file.wit -o out.html
 The `wit` binary takes a single subcommand (`parse`, `check`, `build`)
 plus a path; pass `--help` for the usage string.
 
+### VS Code extension
+
+To install the editor extension locally from this repo (no marketplace
+required):
+
+```
+pnpm vscode:install
+```
+
+This builds the extension, packages it as a `.vsix`, installs it via
+the `code` CLI, and cleans up the artifact. Requires VS Code 1.94+
+and the `code` command on your PATH (one-time setup: in VS Code,
+Cmd-Shift-P → *Shell Command: Install 'code' command in PATH*). After
+install, reload your VS Code window to activate.
+
+For iterative extension development, F5 from `packages/vscode/` opens
+a child VS Code window with the extension live-loaded.
+
 ## Architecture
 
 The pipeline runs in five stages. Each stage owns one TypeScript

@@ -78,81 +78,87 @@ you need.
 ## 4. Current task brief
 
 ```
-TASK: M2.types — AST + token type definitions
-BRANCH: m2-types
-COMMIT: M2.types: AST + token type definitions
+TASK: M7.datadef-classify — Reclassify #name: {record}/[collection] as DataDef
+BRANCH: m7-datadef-classify
+COMMIT: M7.datadef-classify: single-line defs with pure record/collection bodies become DataDef
 
-SCOPE: Define the discriminated-union AST types in
-packages/parser/src/ast.ts and the token-stream types in
-packages/parser/src/tokens.ts. NO runtime code. NO functions. Just
-types and the source-location type. This is the foundation everything
-else builds on.
+SCOPE: Big structural fix. Currently `#x: { a - 1 }` parses as a
+NodeDef whose body is a Record literal. That makes `lh.data.x` empty
+and `@x.a` access fail to resolve. After this task:
 
-FILES TO CREATE / EDIT:
-- packages/parser/src/ast.ts — full AST node types (the file currently
-  exists as a stub; replace with real types).
-- packages/parser/src/tokens.ts — token type discriminated union.
-- packages/parser/src/loc.ts — `SourceLocation` type, `Loc` helper type
-  shared between ast.ts and tokens.ts.
-- packages/parser/src/index.ts — re-export from new files (already
-  re-exports ast.ts; extend to tokens and loc).
+1. Parser detects when a `#name:` single-line def's value is EXCLUSIVELY
+   a Record or Collection literal (no other content). When that's the
+   case, emit a DataDef AST node instead of a NodeDef.
+2. Resolver collects DataDef nodes into `resolver.dataDefs` (it already
+   has the map; it's just always empty today).
+3. Expander's access-path resolution looks in dataDefs first when
+   resolving `@x.field`-style references.
+4. lh.data exposes those dataDefs as a plain JS object proxy.
 
-REQUIRED AST NODE TYPES (discriminated by `kind` field, all carry `loc`):
-- Document { kind: 'document', children: Block[] }
-- Paragraph { kind: 'paragraph', children: Inline[] }
-- Text { kind: 'text', value: string }
-- Italic { kind: 'italic', children: Inline[] }
-- Bold { kind: 'bold', children: Inline[] }
-- Comment { kind: 'comment', text: string, inline: boolean }
-- NodeUse { kind: 'nodeUse', name: string, access?: string[],
-            params: Param[], paramsSource: 'parens' | 'pipes' | 'mixed' | 'none',
-            body: (Block | Inline)[] | null, inline: boolean,
-            closeStyle: 'named' | 'parens' | 'bare' }
-- NodeDef { kind: 'nodeDef', name: string, captures: string[],
-            shape: 'block' | 'single-line' | 'value-block',
-            body: (Block | Inline)[], additive: boolean }
-- DataDef { kind: 'dataDef', name: string, value: DataValue }
-- Record { kind: 'record', fields: { key: string, value: DataValue }[] }
-- Collection { kind: 'collection', items: DataValue[] }
-- ReferenceDirective { kind: 'reference', path: string }
-- IfStatement { kind: 'ifStatement', cond: Condition, then: Block[], else?: Block[] }
-- EachStatement { kind: 'eachStatement', collection: AccessPath, itemName: string, body: Block[] }
-- ScriptBlock { kind: 'scriptBlock', content: string, inline: boolean }
-- ScriptCall { kind: 'scriptCall', fnName: string, args: string[] }
-- Interpolation { kind: 'interpolation', name: string }
-- BodySlot { kind: 'bodySlot' }
-- Block, Inline as union types
+DETECTION RULE (parser-defs.ts):
+- During single-line def value capture, if the trimmed value starts
+  with `{` and the matching `}` ends the value (or starts with `[` and
+  the matching `]` ends), parse the value as a DataValue and emit a
+  DataDef.
+- If the value contains other content (text mixed with the literal),
+  keep it as NodeDef with body containing the Record/Collection AST.
+  E.g. `#cite: ::author:: (::year::) !!` stays NodeDef.
 
-REQUIRED TOKEN TYPES (Token = discriminated union of):
-- TextRun, ParagraphBreak, EmphasisOpen, EmphasisClose, LineComment,
-  BlockCommentOpen, BlockCommentClose, BlockCommentContent, NodeOpen,
-  NodeClose, Dot, ParenOpen, ParenClose, PipeOpen, PipeClose, Comma,
-  Hyphen-Separator, Bang, BangBang, DoubleBangSlash (~~/),
-  CaptureOpen (||), CaptureClose (||), InterpolationOpen (::),
-  InterpolationClose (::), BodySlotMarker (...),
-  ParenStatementOpen (`(`), Keyword (`if`/`else`/`end`/`each`/`as`/`is`/`equals`),
-  ScriptOpen (<%), ScriptClose (%>), HashOpen (#), HashClose (#),
-  AdditivePrefix (+), RecordOpen ({), RecordClose (}),
-  CollectionOpen ([), CollectionClose (]), ValueBlockTerminator (!!),
-  EOF.
+ALSO INCLUDE: the small emphasis-close-newline whitespace bug —
+`<em>x</em>\nword` should render as `<em>x</em> word` not
+`<em>x</em>word`. Same root cause as the @-ref / <% %> case, just
+applied to EmphasisClose.
 
-REQUIRED LOC TYPE:
-- SourceLocation { file: string, line: number, col: number, offset: number, length: number }
+REPRODUCER (do not commit):
+```
+#paper: { word target - 5000, status - draft } !!
 
-OUT OF SCOPE:
-- Lexer implementation (next task).
-- Parser implementation.
-- Error type — keep that for the lexer task.
+The target is @paper.word_target words.
+The status is @paper.status.
+
+<% lh.set('paper.word count', lh.prose().wordCount()) %>
+
+Count so far: @paper.word_count words.
+
+A note in _italic_
+should preserve the space.
+```
+
+Expected after fix:
+- "The target is 5000 words."
+- "The status is draft."
+- "Count so far: <N> words."
+- "A note in <em>italic</em> should preserve the space."
+
+FILES TO EDIT (likely):
+- packages/parser/src/parser-defs.ts (DataDef classification)
+- packages/runtime/src/resolver.ts (DataDef collection / access)
+- packages/runtime/src/expander-conditions.ts (resolveAccessPath)
+- packages/runtime/src/lh-bridge.ts (lh.data over dataDefs)
+- packages/parser/src/lexer-nodes.ts or similar (emphasis-close newline)
+- Snapshot regen via WIT_SNAPSHOT_UPDATE=1
+
+REGRESSION TESTS:
+- parser-defs.test.ts: `#x: { a - 1 } !!` → DataDef, not NodeDef.
+- parser-defs.test.ts: `#x: text !!` and `#x: ::y:: (text) !!` still
+  NodeDef (not all-record-value).
+- expander.test.ts or lh-bridge.test.ts: `lh.data.x.a === '1'` for a
+  DataDef-classified record.
+- expander.test.ts: `@x.field` resolves through dataDefs.
+- New emphasis-newline regression in lexer or expander tests.
+
+OUT OF SCOPE: collection iteration over a DataDef-classified
+collection (probably already works once dataDefs is populated, but
+don't expand scope to fix if it doesn't).
 
 PROCEDURE:
-1. git checkout -b m2-types
-2. Read packages/parser/src/index.ts (current stub) for shape.
-3. Write the three new files + replace ast.ts.
-4. pnpm typecheck must exit 0.
-5. pnpm test must exit 0 (no tests yet, --passWithNoTests).
-6. pnpm build must exit 0.
-7. Single commit on m2-types.
-8. Do NOT push, do NOT merge.
+1. git checkout -b m7-datadef-classify
+2. Detect + reclassify in parser.
+3. Wire resolver + expander to use dataDefs.
+4. Fix emphasis-newline polish.
+5. Regenerate snapshots with WIT_SNAPSHOT_UPDATE=1.
+6. pnpm typecheck/test/build exit 0.
+7. Single commit.
 ```
 
 ## 5. Return format contract

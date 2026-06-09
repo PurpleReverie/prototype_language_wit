@@ -7,7 +7,8 @@
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --build",
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "vscode:install": "pnpm --filter wit-vscode install:local"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
