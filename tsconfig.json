@@ -19,6 +19,7 @@
     { "path": "./packages/parser" },
     { "path": "./packages/runtime" },
     { "path": "./packages/render-html" },
+    { "path": "./packages/cli" },
     { "path": "./packages/vscode" },
     { "path": "./tests/runner" }
   ]
