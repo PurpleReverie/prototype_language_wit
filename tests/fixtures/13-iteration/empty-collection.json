@@ -15,57 +15,37 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "absent",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "children": [
+              {
+                "kind": "text",
+                "value": " The deck answered "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "item",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": ". "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " item"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " The deck answered "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "item",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ". "
-          }
-        ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "absent"
+          ]
+        },
+        "itemName": "item",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"

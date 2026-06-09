@@ -11,76 +11,56 @@
         "kind": "paragraph"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "hands",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " hand"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "access": [
-              "name"
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "access": [
+                  "name"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "hand",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " signed at "
+              },
+              {
+                "access": [
+                  "hour"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "hand",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": ". "
+              }
             ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "hand",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " signed at "
-          },
-          {
-            "access": [
-              "hour"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "hand",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ". "
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "hands"
+          ]
+        },
+        "itemName": "hand",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"

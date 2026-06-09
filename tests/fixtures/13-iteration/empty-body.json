@@ -28,44 +28,24 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "themes",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " item"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          }
-        ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "themes"
+          ]
+        },
+        "itemName": "item",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"
