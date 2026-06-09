@@ -20,6 +20,15 @@ importers:
 
   packages/parser: {}
 
+  packages/render-html:
+    devDependencies:
+      '@wit/parser':
+        specifier: workspace:*
+        version: link:../parser
+      '@wit/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+
   packages/runtime:
     devDependencies:
       '@wit/parser':
