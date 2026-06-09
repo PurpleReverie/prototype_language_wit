@@ -13,6 +13,9 @@
     "Programming Languages"
   ],
   "main": "./client/dist/extension.js",
+  "activationEvents": [
+    "onLanguage:wit"
+  ],
   "contributes": {
     "languages": [
       {
