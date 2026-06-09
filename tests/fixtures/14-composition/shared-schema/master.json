@@ -2,13 +2,12 @@
   "ast": {
     "children": [
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "reference ./chapters/one.wit\nreference ./chapters/two.wit"
-          }
-        ],
-        "kind": "paragraph"
+        "kind": "reference",
+        "path": "./chapters/one.wit"
+      },
+      {
+        "kind": "reference",
+        "path": "./chapters/two.wit"
       },
       {
         "children": [

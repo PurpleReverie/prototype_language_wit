@@ -24,13 +24,8 @@
         "kind": "paragraph"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "reference ./later.wit"
-          }
-        ],
-        "kind": "paragraph"
+        "kind": "reference",
+        "path": "./later.wit"
       }
     ],
     "kind": "document"

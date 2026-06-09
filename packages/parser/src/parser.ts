@@ -28,9 +28,10 @@ import type {
   Document,
   Inline,
   Paragraph,
+  ReferenceDirective,
 } from './ast.js';
 import type { Loc } from './loc.js';
-import type { Token, TokenKind } from './tokens.js';
+import type { ReferenceDirectiveToken, Token, TokenKind } from './tokens.js';
 
 export { ParseError };
 
@@ -70,6 +71,7 @@ function skipParagraphBreaks(cursor: TokenCursor): void {
 
 function parseBlock(cursor: TokenCursor): Block | null {
   const tok = cursor.current();
+  if (tok.kind === 'referenceDirective') return parseReferenceDirective(cursor);
   if (isDefStart(tok.kind)) return parseDefBlock(cursor);
   if (tok.kind === 'nodeOpen' && isBlockBodiedOpen(cursor)) {
     return parseUseBlock(cursor);
@@ -77,6 +79,15 @@ function parseBlock(cursor: TokenCursor): Block | null {
   if (isStatementStart(cursor)) return parseStatementBlock(cursor);
   if (isStandaloneComment(cursor)) return parseStandaloneComment(cursor);
   return parseParagraph(cursor);
+}
+
+function parseReferenceDirective(cursor: TokenCursor): ReferenceDirective {
+  const tok = cursor.advance() as ReferenceDirectiveToken;
+  return {
+    kind: 'reference',
+    path: tok.path,
+    loc: tok.loc,
+  };
 }
 
 function parseStatementBlock(cursor: TokenCursor): Block {
