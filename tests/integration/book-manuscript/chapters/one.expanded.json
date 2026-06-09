@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": "E_UNRESOLVED_REFERENCE",
+    "message": "Unresolved reference @tocrow"
+  },
+  "ok": false,
+  "stage": "resolve"
+}

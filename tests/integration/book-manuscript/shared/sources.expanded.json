@@ -1,0 +1,13 @@
+{
+  "expanded": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "shared/sources.wit — bibliography sources, defined once."
+      }
+    ],
+    "kind": "expanded-document"
+  },
+  "ok": true
+}

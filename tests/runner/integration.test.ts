@@ -1,6 +1,13 @@
 // Integration-fixture snapshot harness. Mirrors `fixtures.test.ts` but
 // walks `tests/integration/` where each `.wit` source is parsed
-// independently and snapshotted next to it.
+// independently and snapshotted next to it. In addition to the parse
+// snapshot, the harness pipes each fixture through resolve + expand
+// and writes a sidecar `<fixture>.expanded.json` so the full pipeline
+// has visible coverage too.
+//
+// Some integration fixtures still fail at parse, resolve, or expand
+// (open gaps documented in tests/integration/_notes.md). For those the
+// expanded sidecar carries `{ ok: false, stage, error }`.
 //
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
@@ -10,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { parse } from '@wit/parser';
+import { resolve as resolveDoc, expand } from '@wit/runtime';
 
 import {
   diffSnapshot,
@@ -37,26 +45,53 @@ describe('integration snapshot harness', () => {
 
   for (const entry of ENTRIES) {
     it(entry.label, () => runFixture(entry));
+    it(`${entry.label} (expanded)`, () => runExpanded(entry));
   }
 });
 
 function runFixture(entry: FixtureEntry): void {
   const source = readFileSync(entry.witPath, 'utf8');
-  const envelope = buildEnvelope(source, entry.label);
+  const envelope = buildParseEnvelope(source, entry.label);
   const actual = serializeAst(envelope, { withLoc: FLAGS.withLoc });
   if (FLAGS.update) {
     writeSnapshot(entry.snapshotPath, actual);
     return;
   }
-  assertSnapshotMatches(entry, actual);
+  assertSnapshotMatches(entry, entry.snapshotPath, actual);
 }
 
-function buildEnvelope(source: string, file: string): unknown {
+function runExpanded(entry: FixtureEntry): void {
+  const source = readFileSync(entry.witPath, 'utf8');
+  const envelope = buildExpandedEnvelope(source, entry.witPath);
+  const actual = serializeAst(envelope, { withLoc: FLAGS.withLoc });
+  const sidecarPath = entry.snapshotPath.replace(/\.json$/, '.expanded.json');
+  if (FLAGS.update) {
+    writeSnapshot(sidecarPath, actual);
+    return;
+  }
+  assertSnapshotMatches(entry, sidecarPath, actual);
+}
+
+function buildParseEnvelope(source: string, file: string): unknown {
   try {
     const ast = parse(source, file);
     return { ok: true, ast };
   } catch (err) {
     return { ok: false, error: serializeError(err) };
+  }
+}
+
+function buildExpandedEnvelope(source: string, rootPath: string): unknown {
+  let stage: 'parse' | 'resolve' | 'expand' = 'parse';
+  try {
+    const ast = parse(source, rootPath);
+    stage = 'resolve';
+    const resolved = resolveDoc(ast, { rootPath });
+    stage = 'expand';
+    const expanded = expand(resolved);
+    return { ok: true, expanded };
+  } catch (err) {
+    return { ok: false, stage, error: serializeError(err) };
   }
 }
 
@@ -73,19 +108,23 @@ function serializeError(err: unknown): unknown {
   return { message: String(err) };
 }
 
-function assertSnapshotMatches(entry: FixtureEntry, actual: string): void {
-  const diff = diffSnapshot(entry.snapshotPath, actual);
+function assertSnapshotMatches(
+  entry: FixtureEntry,
+  snapshotPath: string,
+  actual: string,
+): void {
+  const diff = diffSnapshot(snapshotPath, actual);
   if (diff.status === 'equal') return;
   if (diff.status === 'missing') {
     throw new Error(
       `snapshot missing for ${entry.label}\n` +
-        `expected at: ${entry.snapshotPath}\n` +
+        `expected at: ${snapshotPath}\n` +
         `run with WIT_SNAPSHOT_UPDATE=1 to generate.`
     );
   }
   throw new Error(
     `snapshot mismatch for ${entry.label}\n` +
-      `snapshot: ${entry.snapshotPath}\n` +
+      `snapshot: ${snapshotPath}\n` +
       `diff (truncated):\n${diff.preview ?? ''}\n` +
       `run with WIT_SNAPSHOT_UPDATE=1 to refresh.`
   );

@@ -263,3 +263,31 @@ through the same snapshot harness as `tests/fixtures/`, via a new
 `tests/integration/` (including all five `book-manuscript/` sub-files)
 is parsed independently and snapshotted as a sibling `.json`. Total
 new tests: 11 (10 fixtures + 1 discovery sanity).
+
+## Expanded sidecar snapshots (M4.integration-resolve)
+
+In addition to the `.json` parse snapshot, each integration fixture
+now produces a `<fixture>.expanded.json` sidecar showing the full
+parse → resolve → expand pipeline result. The shape is
+`{ ok: true, expanded }` on success or
+`{ ok: false, stage: 'parse'|'resolve'|'expand', error }` on failure.
+
+Most integration fixtures still fail before expand can complete:
+- **Parse-stage failures** (`report.wit`, `blog-post.wit`): the
+  fixtures rely on syntax shapes the parser doesn't fully accept yet
+  (e.g. `@metriccard` / `@tag` ownership patterns that surface as
+  E_UNCLOSED_NODE). These are tracked in this notes file already.
+- **Resolve-stage failures** (most others): bare `@x` references to
+  short-handle uses like `@theoremheader`, `@slugline`, `@line`,
+  `@chapterheader`, `@tocrow` — these are NodeUses with no matching
+  NodeDef. The fixtures were authored assuming an additive-or-template
+  expansion semantics that v1 doesn't (yet) provide. The expanded
+  sidecar captures the exact error code + location so any future
+  resolver/parser work targeting these gaps has a stable baseline.
+
+Only `book-manuscript/shared/sources.wit` currently makes it all the
+way through to a successful expanded snapshot — it's a data-only
+file with no NodeUses. The others land as `{ ok: false, ... }`
+sidecars by design. Closing those gaps is downstream of M4 and will
+flip the affected sidecars from `ok: false` to `ok: true` without
+needing harness changes.
