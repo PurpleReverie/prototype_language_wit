@@ -9,6 +9,7 @@ server/**/*.ts
 **/*.test.ts
 **/*.test.js
 **/*.map
+**/*.tsbuildinfo
 tsconfig.json
 .gitignore
 **/tsconfig.json
