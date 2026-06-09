@@ -19,10 +19,6 @@
           {
             "kind": "interpolation",
             "name": "work"
-          },
-          {
-            "kind": "text",
-            "value": " "
           }
         ],
         "captures": [

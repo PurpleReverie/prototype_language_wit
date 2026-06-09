@@ -69,6 +69,31 @@ describe('expander — inline NodeDef expansion', () => {
     expect(flat).toContain('payload');
   });
 
+  it('M7.fix-whitespace bug-2: preserves newline-as-space before inline @ref', () => {
+    // `at\n@place` previously rendered as `at` + `Dunmore Head` =
+    // `atDunmore Head`. The trailing newline before @place must
+    // survive as a space so the splice reads `at Dunmore Head`.
+    const src =
+      '#place: Dunmore Head !!\n\n' +
+      'The lamp at\n@place burned.\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('at ');
+    expect(flat).not.toContain('atDunmore');
+  });
+
+  it('M7.fix-whitespace bug-3: preserves newline-as-space after `<% %>` splice', () => {
+    // `<% 99 * 31 %>\nnights` previously rendered `3069nights`.
+    const src = 'roughly <% 99 * 31 %>\nnights without failure.\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).not.toContain('3069nights');
+  });
+
   it('expands transitively across nested def references', () => {
     const src =
       '#inner: world !!\n' +

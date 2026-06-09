@@ -26,7 +26,9 @@ import { tryScriptBlock } from './lexer-script.js';
 import { tryParenStatement } from './lexer-statements.js';
 import {
   advance,
+  bufHasAnyContent,
   flushTextRun,
+  flushTextRunBeforeInline,
   locFrom,
   LexerError,
   snapshot,
@@ -50,6 +52,7 @@ export function lex(source: string, file: string = '<anonymous>'): Token[] {
     cur: { line: 1, col: 1, offset: 0 },
     paragraphStart: 0,
     tokens: [],
+    afterInline: false,
   };
   while (state.cur.offset < state.src.length) {
     step(state);
@@ -112,6 +115,7 @@ function emitParagraphBreak(state: LexState, endOffset: number): void {
   };
   state.tokens.push(tok);
   state.paragraphStart = state.cur.offset;
+  state.afterInline = false;
 }
 
 function consumeParagraphContent(state: LexState): void {
@@ -167,7 +171,8 @@ function tryRecognizeEmphasisOpen(
 ): boolean {
   if (!isPrecedingBoundary(state)) return false;
   if (!isFollowingAlnum(state)) return false;
-  flushTextRun(state, buf);
+  if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   emitEmphasisOpen(state, marker);
   return true;
 }
@@ -179,8 +184,10 @@ function tryRecognizeEmphasisClose(
 ): boolean {
   if (!isPrecedingAlnum(state)) return false;
   if (!isFollowingBoundary(state)) return false;
-  flushTextRun(state, buf);
+  if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   emitEmphasisClose(state, marker);
+  if (state.src.charAt(state.cur.offset) !== '\n') state.afterInline = true;
   return true;
 }
 

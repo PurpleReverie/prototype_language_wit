@@ -13,7 +13,10 @@ import { isAsciiLetter, isHandleChar } from './char.js';
 import { lexParamState } from './lexer-params.js';
 import {
   advance,
+  bufHasAnyContent,
+  bufHasMidLineContent,
   flushTextRun,
+  flushTextRunBeforeInline,
   locFrom,
   snapshot,
 } from './lexer-internals.js';
@@ -35,11 +38,47 @@ export function tryNodeOpen(state: LexState, buf: RunBuf): boolean {
   const { src, cur } = state;
   if (src.charAt(cur.offset) !== '@') return false;
   if (!isAsciiLetter(src.charAt(cur.offset + 1))) return false;
-  flushTextRun(state, buf);
+  // Peek-ahead: the char immediately after the full @-construct tells
+  // us inline-form (prose follows) vs block-form (newline ⇒ body).
+  // Only inline-form preserves newlines as spaces around the splice.
+  const inline = inlineFormLookahead(src, cur.offset);
+  if (inline && bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   emitNodeOpen(state);
   consumeAccessPath(state);
   tryAttachParens(state);
+  if (inline) state.afterInline = true;
   return true;
+}
+
+function inlineFormLookahead(src: string, atOffset: number): boolean {
+  // Walk past `@name(.seg)*(...)?` without mutating state, then peek
+  // the next char. Returns true when that char is NOT a newline (or
+  // EOF) — i.e. prose continues on the same line.
+  let i = atOffset + 1; // past `@`
+  while (isHandleChar(src.charAt(i))) i += 1;
+  while (src.charAt(i) === '.' && isHandleChar(src.charAt(i + 1))) {
+    i += 1;
+    while (isHandleChar(src.charAt(i))) i += 1;
+  }
+  if (src.charAt(i) === '(') i = scanBalancedParen(src, i);
+  const next = src.charAt(i);
+  return next !== '\n' && next !== '';
+}
+
+function scanBalancedParen(src: string, openAt: number): number {
+  // Skip `(...)` with one level of nesting tolerance. Newlines exit
+  // (unclosed paren — parser diagnoses). Returns position past `)`.
+  let i = openAt + 1;
+  let depth = 1;
+  while (i < src.length && depth > 0) {
+    const c = src.charAt(i);
+    if (c === '\n') return i;
+    if (c === '(') depth += 1;
+    else if (c === ')') depth -= 1;
+    i += 1;
+  }
+  return i;
 }
 
 function emitNodeOpen(state: LexState): void {
@@ -108,7 +147,12 @@ export function tryNodeClose(state: LexState, buf: RunBuf): boolean {
   if (i === cur.offset) return false;
   if (src.charAt(i) !== '@') return false;
   if (!isAsciiLetter(src.charAt(cur.offset))) return false;
-  flushTextRun(state, buf);
+  // NodeClose is structural — strip surrounding newlines normally. Use
+  // BeforeInline only to absorb a trailing newline when the close sits
+  // mid-line right after prose on a prior line; otherwise plain strip
+  // suffices and avoids introducing trailing whitespace.
+  if (bufHasMidLineContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   emitNodeClose(state, i);
   return true;
 }
@@ -142,10 +186,29 @@ function emitNodeClose(state: LexState, atOffset: number): void {
 
 export function tryPipeOpen(state: LexState, buf: RunBuf): boolean {
   if (state.src.charAt(state.cur.offset) !== '|') return false;
-  flushTextRun(state, buf);
+  const inline = pipeInlineLookahead(state.src, state.cur.offset);
+  if (inline && bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   emitPipeOpen(state);
   lexParamState(state, '|');
+  if (inline) state.afterInline = true;
   return true;
+}
+
+function pipeInlineLookahead(src: string, atOffset: number): boolean {
+  // Pipe-slot is inline-form when prose follows the closing `|` on the
+  // same line. Scan past `|...|` (lex-params semantics: stop at `\n`
+  // or matching `|`, honoring `\|` escapes), then peek next char.
+  let i = atOffset + 1;
+  while (i < src.length) {
+    const c = src.charAt(i);
+    if (c === '\n') return false; // unclosed slot — treat as block
+    if (c === '\\' && i + 1 < src.length) { i += 2; continue; }
+    if (c === '|') break;
+    i += 1;
+  }
+  const next = src.charAt(i + 1);
+  return next !== '\n' && next !== '';
 }
 
 function emitPipeOpen(state: LexState): void {

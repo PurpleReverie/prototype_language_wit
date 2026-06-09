@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { parse } from './parser.js';
-import type { Interpolation, NodeDef, Paragraph } from './ast.js';
+import type { Interpolation, NodeDef, Paragraph, Text } from './ast.js';
 
 describe('parseNodeDef — block shape', () => {
   it('parses `#sidebar body sidebar#`', () => {
@@ -26,6 +26,23 @@ describe('parseNodeDef — single-line shape', () => {
     expect(def.name).toBe('year');
     expect(def.shape).toBe('single-line');
     expect(def.body).toHaveLength(1);
+  });
+
+  it('M7.fix-whitespace: trims trailing whitespace before !!', () => {
+    // Regression: `#year: 1923 !!` captured `1923 ` (trailing space)
+    // and `@year` spliced "1923 " mid-prose → `1923 ,` artefacts.
+    const doc = parse('#year: 1923 !!');
+    const def = doc.children[0] as NodeDef;
+    const text = def.body[0] as Text;
+    expect(text.kind).toBe('text');
+    expect(text.value).toBe('1923');
+  });
+
+  it('M7.fix-whitespace: trims trailing tabs/newlines too', () => {
+    const doc = parse('#x: alpha\t\n');
+    const def = doc.children[0] as NodeDef;
+    const text = def.body[0] as Text;
+    expect(text.value).toBe('alpha');
   });
 
   it('M2.fix bug-2: three back-to-back single-line defs each parse', () => {
