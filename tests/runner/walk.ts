@@ -39,6 +39,45 @@ export function walkFixtures(opts: WalkOptions): FixtureEntry[] {
   return out;
 }
 
+export interface IntegrationWalkOptions {
+  // Absolute path to `tests/integration/`.
+  integrationRoot: string;
+  // Absolute path used to compute labels (typically the repo root).
+  repoRoot: string;
+}
+
+// Walks `tests/integration/` collecting every `.wit` source file. Unlike
+// the unit fixtures, each integration `.wit` is parsed independently —
+// the master + sub-files of `book-manuscript/` are all separate entries
+// (resolver-stage composition is M4 work).
+export function walkIntegration(opts: IntegrationWalkOptions): FixtureEntry[] {
+  const out: FixtureEntry[] = [];
+  const walkOpts: WalkOptions = {
+    fixturesRoot: opts.integrationRoot,
+    repoRoot: opts.repoRoot,
+  };
+  collectWitTree(opts.integrationRoot, walkOpts, out);
+  out.sort((a, b) => a.witPath.localeCompare(b.witPath));
+  return out;
+}
+
+function collectWitTree(
+  dir: string,
+  opts: WalkOptions,
+  out: FixtureEntry[],
+): void {
+  for (const name of safeReaddir(dir)) {
+    if (name.startsWith('_')) continue;
+    const full = join(dir, name);
+    if (isDir(full)) {
+      collectWitTree(full, opts, out);
+      continue;
+    }
+    if (!name.endsWith('.wit')) continue;
+    out.push(makeEntry(full, opts));
+  }
+}
+
 function listCategoryDirs(fixturesRoot: string): string[] {
   const entries = safeReaddir(fixturesRoot);
   const dirs: string[] = [];

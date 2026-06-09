@@ -1,0 +1,329 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "film script — slug, action, cue, paren, transition. Screenplay vocabulary defined once,"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "then a scene written as it reads on the page."
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "location"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " — "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "time"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "slugline",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "children": [
+              {
+                "kind": "bodySlot"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "location",
+          "time"
+        ],
+        "kind": "nodeDef",
+        "name": "scene",
+        "shape": "block"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "kind": "interpolation",
+                    "name": "who"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "character",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "children": [
+              {
+                "kind": "bodySlot"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "who"
+        ],
+        "kind": "nodeDef",
+        "name": "cue",
+        "shape": "block"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "the scene"
+      },
+      {
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "Wind claws at the glass. ALDOUS VANE, fifties, weathered, trims\nthe wick of a great lamp. A KNOCK at the hatch below. He does\nnot turn."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "action",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": " not turning "
+                      }
+                    ],
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "paren",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "We're closed."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cue",
+            "params": [
+              {
+                "name": "who",
+                "value": "ALDOUS"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "The hatch opens anyway. A STRANGER hauls themselves up, soaked\nthrough, cradling a tin."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "action",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "I brought oil."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cue",
+            "params": [
+              {
+                "name": "who",
+                "value": "STRANGER"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "For the first time, Aldous turns."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "action",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "body": [
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": " quietly "
+                      }
+                    ],
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "paren",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "...You'd best come in, then."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cue",
+            "params": [
+              {
+                "name": "who",
+                "value": "ALDOUS"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " CUT TO: "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "transition",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "scene",
+        "params": [
+          {
+            "name": "location",
+            "value": "INT. LIGHTHOUSE — LANTERN ROOM"
+          },
+          {
+            "name": "time",
+            "value": "NIGHT"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

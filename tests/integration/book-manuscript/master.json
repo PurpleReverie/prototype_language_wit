@@ -1,0 +1,260 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "master.wit — composition script. references the parts; @toc and @bibliography"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "fill themselves via additive partials registered inside each chapter."
+      },
+      {
+        "kind": "reference",
+        "path": "./shared/schema.wit"
+      },
+      {
+        "kind": "reference",
+        "path": "./shared/sources.wit"
+      },
+      {
+        "kind": "reference",
+        "path": "./chapters/one.wit"
+      },
+      {
+        "kind": "reference",
+        "path": "./chapters/two.wit"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "fields": [
+              {
+                "key": "title",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "The Keeper"
+                }
+              },
+              {
+                "key": "subtitle",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Essays on attention and the moral life"
+                }
+              },
+              {
+                "key": "author",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Aldous Vane"
+                }
+              },
+              {
+                "key": "status",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "draft"
+                }
+              }
+            ],
+            "kind": "record"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "book",
+        "shape": "single-line"
+      },
+      {
+        "body": [
+          {
+            "cond": {
+              "kind": "comparisonCondition",
+              "left": {
+                "segments": [
+                  "book",
+                  "status"
+                ]
+              },
+              "op": "is",
+              "right": {
+                "kind": "stringValue",
+                "value": "draft"
+              }
+            },
+            "kind": "ifStatement",
+            "then": [
+              {
+                "body": [
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": " Draft — do not distribute "
+                      }
+                    ],
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "watermark",
+                "params": [],
+                "paramsSource": "none"
+              }
+            ]
+          },
+          {
+            "body": [
+              {
+                "access": [
+                  "title"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "book",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "access": [
+                  "subtitle"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "book",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "access": [
+                  "author"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "book",
+                "params": [],
+                "paramsSource": "none"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "titlepage",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "inline": false,
+            "kind": "comment",
+            "text": "the contents and bibliography fill themselves"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "toc",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapter_one",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapter_two",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "bibliography",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "book",
+        "params": [
+          {
+            "name": "title",
+            "value": "@book.title"
+          },
+          {
+            "name": "status",
+            "value": "@book.status"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

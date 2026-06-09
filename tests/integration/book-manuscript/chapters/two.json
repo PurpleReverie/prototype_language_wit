@@ -1,0 +1,152 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "chapters/two.wit — also registers itself; cites @berger."
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "tocrow",
+            "params": [
+              {
+                "name": "number",
+                "value": "II"
+              },
+              {
+                "name": "title",
+                "value": "The Voice"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "toc",
+        "shape": "single-line"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "berger",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " John Berger, Ways of Seeing, 1972, Penguin "
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "Attention, as "
+                  },
+                  {
+                    "body": null,
+                    "closeStyle": "bare",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "weil",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " argued, is the rarest form of generosity."
+                  }
+                ],
+                "kind": "paragraph"
+              },
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "The hatch opens anyway. A stranger hauls themselves up, soaked\nthrough, cradling a tin. Berger "
+                  },
+                  {
+                    "body": null,
+                    "closeStyle": "bare",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "berger",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " would have called this"
+                  },
+                  {
+                    "children": [
+                      {
+                        "kind": "text",
+                        "value": "looking"
+                      }
+                    ],
+                    "kind": "bold"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " — but Aldous, in the moment, only knew it as arrival."
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ],
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "chapter",
+            "params": [
+              {
+                "name": "number",
+                "value": "II"
+              },
+              {
+                "name": "title",
+                "value": "The Voice"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "chapter_two",
+        "shape": "block"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

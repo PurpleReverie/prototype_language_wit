@@ -48,6 +48,18 @@ describe('parseNodeUse — block-form', () => {
     expect(outer.name).toBe('x');
     expect(outer.body).not.toBeNull();
   });
+
+  it('access-path use never claims a later same-name close', () => {
+    // `@book.title` is a data lookup, not an opener. Even though a
+    // `book@` close exists later, it belongs to the outer `@book` body.
+    const src = '@book\n@book.title\nbook@';
+    const doc = parse(src);
+    expect(doc.children).toHaveLength(1);
+    const outer = doc.children[0] as NodeUse;
+    expect(outer.name).toBe('book');
+    expect(outer.access).toBeUndefined();
+    expect(outer.body).not.toBeNull();
+  });
 });
 
 describe('parseNodeUse — bare / inline-body', () => {
