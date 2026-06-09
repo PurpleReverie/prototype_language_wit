@@ -1,0 +1,19 @@
+{
+  "name": "@wit/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/bin.js",
+  "bin": {
+    "wit": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "devDependencies": {
+    "@wit/parser": "workspace:*",
+    "@wit/runtime": "workspace:*",
+    "@wit/render-html": "workspace:*"
+  }
+}

@@ -1,40 +1,72 @@
 # Wit
 
-A prose-first markup language for people who write — and the systems that consume what they write.
+Wit is a prose-first markup language for people who write — and the
+systems that consume what they write. Documents read like normal text;
+structure (nodes, data, conditionals, iteration, scripting) layers in
+only where the author needs it. This repository contains the v0.1.0
+reference implementation: a parser, a resolver/expander runtime, an
+HTML renderer, a CLI, and a VS Code language extension.
 
-This repo is the working space for designing the Wit language. The spec is the source of truth; the examples are how we pressure-test the syntax.
+## Quick start
 
-## What's here
+```
+pnpm install
+pnpm build
+node packages/cli/dist/bin.js parse path/to/file.wit
+node packages/cli/dist/bin.js check path/to/file.wit
+node packages/cli/dist/bin.js build path/to/file.wit -o out.html
+```
 
-- **`wit-spec.pdf`** — the current iteration of the language spec.
-- **`examples/`** — one small `.wit` file per feature, used to iterate on syntax decisions in isolation.
+The `wit` binary takes a single subcommand (`parse`, `check`, `build`)
+plus a path; pass `--help` for the usage string.
 
-## The examples
+## Architecture
 
-Each file is single-purpose. Edit one to test how a feature's syntax feels without disturbing the others.
+The pipeline runs in five stages. Each stage owns one TypeScript
+package and a stable typed output:
 
-| # | File | Feature |
-|---|---|---|
-| 01 | `01-prose.wit` | Prose-as-default, paragraphs |
-| 02 | `02-emphasis.wit` | `_italic_`, `*bold*` |
-| 03 | `03-comments.wit` | `~` line + `~~ … ~~/` inline |
-| 04 | `04-using-nodes.wit` | `@name … name@` block and inline |
-| 05 | `05-parameters.wit` | `\|value\|`, `\|key - value\|`, `\|flag\|`, last-one-wins |
-| 06 | `06-indentation.wit` | Indentation is cosmetic |
-| 07 | `07-defining-nodes.wit` | `#name`, `\|\|captures\|\|`, `::interp::`, `...` body slot |
-| 08 | `08-single-line-defs.wit` | `#name:` and `! … !` complex values |
-| 09 | `09-citations.wit` | Schema → sources → argument map → prose |
-| 10 | `10-records.wit` | `{ }` records, inline / multi-line / nested |
-| 11 | `11-collections.wit` | `[ ]` of values, of records |
-| 12 | `12-accessing-data.wit` | Dot notation, indices, fuzzy key matching |
-| 13 | `13-conditionals.wit` | `(if)`/`(else)`/`(end)` |
-| 14 | `14-iteration.wit` | `(each @coll as item)` |
-| 15 | `15-references/` | Multi-file: `reference ./path` composition |
-| 16 | `16-additive-partials/` | Multi-file: `+#name` self-registering chapters |
-| 17 | `17-scripting.wit` | `<% … %>` + the `lh` bridge |
+```
+   source.wit
+       |
+       v
+  +---------+    +-----------+    +----------+    +---------+    +--------+
+  |  lex    | -> |  parse    | -> | resolve  | -> | expand  | -> | render |
+  | (chars) |    | (tokens   |    | (binding |    | (inline |    |  HTML  |
+  |         |    |  -> AST)  |    |  + refs) |    |  + eval)|    |        |
+  +---------+    +-----------+    +----------+    +---------+    +--------+
+        @wit/parser                   @wit/runtime                @wit/render-html
+```
 
-The lighthouse / Aldous Vane thread from the spec runs through the examples on purpose — they read as one corpus rather than disconnected snippets.
+- **lex / parse** — `packages/parser` turns the source string into an
+  AST `Document`.
+- **resolve** — `packages/runtime` walks the AST, binding every
+  `@name` use to its `#name` definition (single-file or cross-file via
+  `reference ./other.wit`).
+- **expand** — same package, splices NodeDef bodies into use-sites,
+  evaluates `(if …)`, unrolls `(each …)`, runs `<% … %>` scripts.
+- **render** — `packages/render-html` walks the expanded AST and
+  emits semantic HTML.
+- **driver** — `packages/cli` chains them behind one binary; the
+  `packages/vscode` extension hosts an LSP that runs the same stages
+  inside the editor.
 
 ## Status
 
-Design phase. No parser, no renderer yet. The point of the examples is to find the rough edges in the syntax before any of that gets built.
+**v0.1.0-alpha.** First non-development cut. The full pipeline runs
+end-to-end on the example corpus, but the language surface is still
+finalising and edge cases are tracked as open items. Not yet published
+to npm or the VS Code marketplace.
+
+## Repository layout
+
+- `packages/parser` — lexer + parser, AST types, error codes.
+- `packages/runtime` — resolver, expander, `lh` script bridge.
+- `packages/render-html` — reference HTML renderer.
+- `packages/cli` — `wit` command-line driver.
+- `packages/vscode` — VS Code extension (LSP client + server,
+  TextMate grammar).
+- `examples/` — one short `.wit` file per language feature.
+- `tests/` — fixtures (categorised), error sidecars, integration
+  documents, shared test runner.
+- `PLAN.md`, `RULES.md` — design log and engineering constraints.
+- `wit-spec.pdf` — current iteration of the language spec.
