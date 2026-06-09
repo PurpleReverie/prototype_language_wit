@@ -2,56 +2,51 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "fields": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "Marlow"
-                    }
-                  },
-                  {
-                    "key": "awake",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "true"
-                    }
-                  }
-                ],
-                "kind": "record"
-              },
-              {
-                "fields": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "Singleton"
-                    }
-                  },
-                  {
-                    "key": "awake",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "false"
-                    }
-                  }
-                ],
-                "kind": "record"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "hands",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "Marlow"
+                  }
+                },
+                {
+                  "key": "awake",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "true"
+                  }
+                }
+              ],
+              "kind": "record"
+            },
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "Singleton"
+                  }
+                },
+                {
+                  "key": "awake",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "false"
+                  }
+                }
+              ],
+              "kind": "record"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "body": [

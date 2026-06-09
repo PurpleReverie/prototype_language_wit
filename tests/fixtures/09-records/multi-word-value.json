@@ -2,25 +2,20 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "name",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Aldous Vane"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "keeper",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "name",
+              "value": {
+                "kind": "stringValue",
+                "value": "Aldous Vane"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       }
     ],
     "kind": "document"

@@ -2,39 +2,34 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "name",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Aldous Vane"
-                }
-              },
-              {
-                "key": "years at post",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "31"
-                }
-              },
-              {
-                "key": "lamp lit",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "true"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "keeper",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "name",
+              "value": {
+                "kind": "stringValue",
+                "value": "Aldous Vane"
+              }
+            },
+            {
+              "key": "years at post",
+              "value": {
+                "kind": "stringValue",
+                "value": "31"
+              }
+            },
+            {
+              "key": "lamp lit",
+              "value": {
+                "kind": "stringValue",
+                "value": "true"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       }
     ],
     "kind": "document"

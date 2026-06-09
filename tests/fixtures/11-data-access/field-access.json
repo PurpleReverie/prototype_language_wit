@@ -2,32 +2,27 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "name",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Stephen"
-                }
-              },
-              {
-                "key": "post",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "Carrick Point"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "keeper",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "name",
+              "value": {
+                "kind": "stringValue",
+                "value": "Stephen"
+              }
+            },
+            {
+              "key": "post",
+              "value": {
+                "kind": "stringValue",
+                "value": "Carrick Point"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
         "children": [

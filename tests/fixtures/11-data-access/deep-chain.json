@@ -2,41 +2,36 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "y",
-                "value": {
-                  "fields": [
-                    {
-                      "key": "z",
-                      "value": {
-                        "fields": [
-                          {
-                            "key": "w",
-                            "value": {
-                              "kind": "stringValue",
-                              "value": "deep"
-                            }
-                          }
-                        ],
-                        "kind": "record"
-                      }
-                    }
-                  ],
-                  "kind": "record"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "x",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "y",
+              "value": {
+                "fields": [
+                  {
+                    "key": "z",
+                    "value": {
+                      "fields": [
+                        {
+                          "key": "w",
+                          "value": {
+                            "kind": "stringValue",
+                            "value": "deep"
+                          }
+                        }
+                      ],
+                      "kind": "record"
+                    }
+                  }
+                ],
+                "kind": "record"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
         "children": [

@@ -2,17 +2,12 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "absent",
-        "shape": "single-line"
+        "value": {
+          "items": [],
+          "kind": "collection"
+        }
       },
       {
         "body": [

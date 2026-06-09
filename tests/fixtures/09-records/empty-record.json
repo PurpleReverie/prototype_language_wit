@@ -2,17 +2,12 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "x",
-        "shape": "single-line"
+        "value": {
+          "fields": [],
+          "kind": "record"
+        }
       }
     ],
     "kind": "document"

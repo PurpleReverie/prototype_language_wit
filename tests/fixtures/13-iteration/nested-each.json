@@ -2,70 +2,65 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "fields": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "upper"
-                    }
-                  },
-                  {
-                    "key": "hands",
-                    "value": {
-                      "items": [
-                        {
-                          "kind": "stringValue",
-                          "value": "Marlow"
-                        },
-                        {
-                          "kind": "stringValue",
-                          "value": "Singleton"
-                        }
-                      ],
-                      "kind": "collection"
-                    }
-                  }
-                ],
-                "kind": "record"
-              },
-              {
-                "fields": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "kind": "stringValue",
-                      "value": "lower"
-                    }
-                  },
-                  {
-                    "key": "hands",
-                    "value": {
-                      "items": [
-                        {
-                          "kind": "stringValue",
-                          "value": "Wait"
-                        }
-                      ],
-                      "kind": "collection"
-                    }
-                  }
-                ],
-                "kind": "record"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "decks",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "upper"
+                  }
+                },
+                {
+                  "key": "hands",
+                  "value": {
+                    "items": [
+                      {
+                        "kind": "stringValue",
+                        "value": "Marlow"
+                      },
+                      {
+                        "kind": "stringValue",
+                        "value": "Singleton"
+                      }
+                    ],
+                    "kind": "collection"
+                  }
+                }
+              ],
+              "kind": "record"
+            },
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "lower"
+                  }
+                },
+                {
+                  "key": "hands",
+                  "value": {
+                    "items": [
+                      {
+                        "kind": "stringValue",
+                        "value": "Wait"
+                      }
+                    ],
+                    "kind": "collection"
+                  }
+                }
+              ],
+              "kind": "record"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "body": [

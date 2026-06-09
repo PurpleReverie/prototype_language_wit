@@ -15,30 +15,25 @@
         "shape": "single-line"
       },
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "first"
-              },
-              {
-                "kind": "stringValue",
-                "value": "second"
-              },
-              {
-                "kind": "stringValue",
-                "value": "third"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "items",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "first"
+            },
+            {
+              "kind": "stringValue",
+              "value": "second"
+            },
+            {
+              "kind": "stringValue",
+              "value": "third"
+            }
+          ],
+          "kind": "collection"
+        }
       },
       {
         "children": [

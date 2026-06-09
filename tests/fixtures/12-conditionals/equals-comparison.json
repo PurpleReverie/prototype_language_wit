@@ -2,25 +2,20 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "fields": [
-              {
-                "key": "status",
-                "value": {
-                  "kind": "stringValue",
-                  "value": "draft"
-                }
-              }
-            ],
-            "kind": "record"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "book",
-        "shape": "single-line"
+        "value": {
+          "fields": [
+            {
+              "key": "status",
+              "value": {
+                "kind": "stringValue",
+                "value": "draft"
+              }
+            }
+          ],
+          "kind": "record"
+        }
       },
       {
         "cond": {

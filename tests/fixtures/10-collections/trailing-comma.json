@@ -2,30 +2,25 @@
   "ast": {
     "children": [
       {
-        "additive": false,
-        "body": [
-          {
-            "items": [
-              {
-                "kind": "stringValue",
-                "value": "a"
-              },
-              {
-                "kind": "stringValue",
-                "value": "b"
-              },
-              {
-                "kind": "stringValue",
-                "value": "c"
-              }
-            ],
-            "kind": "collection"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
+        "kind": "dataDef",
         "name": "themes",
-        "shape": "single-line"
+        "value": {
+          "items": [
+            {
+              "kind": "stringValue",
+              "value": "a"
+            },
+            {
+              "kind": "stringValue",
+              "value": "b"
+            },
+            {
+              "kind": "stringValue",
+              "value": "c"
+            }
+          ],
+          "kind": "collection"
+        }
       }
     ],
     "kind": "document"

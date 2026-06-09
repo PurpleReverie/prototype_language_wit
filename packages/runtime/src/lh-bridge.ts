@@ -18,12 +18,31 @@
 // This is v1 / best-effort surface: scripts are trusted authoring input.
 // Real sandboxing and a polished surface are out of scope here.
 
-import type { Block, DataValue, Inline, NodeUse } from '@wit/parser';
+import type {
+  Block,
+  Collection as CollectionNode,
+  DataValue,
+  Inline,
+  NodeUse,
+  Record as RecordNode,
+} from '@wit/parser';
+import { canonicalizeKey } from './canonical-key.js';
 import type { ExpandedDocument } from './expanded-ast.js';
 import type { ResolvedDocument } from './resolved-ast.js';
 
+// lh.data exposes each DataDef as a plain JS value:
+//   - StringValue → string
+//   - NumberValue → number
+//   - BooleanValue → boolean
+//   - NullValue → null
+//   - Record → proxy with canonical-key field access (so `paper.word_target`
+//     reaches a field keyed `word target`).
+//   - Collection → array of the same shape.
+// Scripts read `lh.data.paper.word_target` and get a string back.
+export type LhData = unknown;
+
 export interface LhBridge {
-  readonly data: Record<string, DataValue | undefined>;
+  readonly data: Record<string, LhData | undefined>;
   readonly overlay: Map<string, unknown>;
   query(kindName: string): TreeNode[];
   node(id: string): TreeNode | undefined;
@@ -69,18 +88,46 @@ export function createLhBridge(deps: BridgeDeps): LhBridge {
 
 function buildDataProxy(
   resolved: ResolvedDocument,
-): Record<string, DataValue | undefined> {
-  const target: Record<string, DataValue | undefined> = {};
+): Record<string, LhData | undefined> {
+  const target: Record<string, LhData | undefined> = {};
   return new Proxy(target, {
     get: (_t, key) => {
       if (typeof key !== 'string') return undefined;
       const def = resolved.dataDefs.get(key);
-      return def?.value;
+      return def === undefined ? undefined : asLhValue(def.value);
     },
     has: (_t, key) => typeof key === 'string' && resolved.dataDefs.has(key),
     set: () => false,
     deleteProperty: () => false,
   });
+}
+
+function asLhValue(value: DataValue): LhData {
+  if (value.kind === 'stringValue') return value.value;
+  if (value.kind === 'numberValue') return value.value;
+  if (value.kind === 'booleanValue') return value.value;
+  if (value.kind === 'nullValue') return null;
+  if (value.kind === 'record') return recordProxy(value);
+  return collectionArray(value);
+}
+
+function recordProxy(record: RecordNode): Record<string, LhData> {
+  const index = new Map<string, DataValue>();
+  for (const f of record.fields) index.set(canonicalizeKey(f.key), f.value);
+  return new Proxy({} as Record<string, LhData>, {
+    get: (_t, key) => {
+      if (typeof key !== 'string') return undefined;
+      const hit = index.get(canonicalizeKey(key));
+      return hit === undefined ? undefined : asLhValue(hit);
+    },
+    has: (_t, key) => typeof key === 'string' && index.has(canonicalizeKey(key)),
+    ownKeys: () => record.fields.map((f) => f.key),
+    getOwnPropertyDescriptor: () => ({ enumerable: true, configurable: true }),
+  });
+}
+
+function collectionArray(coll: CollectionNode): LhData[] {
+  return coll.items.map((item) => asLhValue(item));
 }
 
 // ---------------------------------------------------------------------------
