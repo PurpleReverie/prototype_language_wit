@@ -40,6 +40,10 @@ import {
   type IterEnv,
   type IterFrame,
 } from './expander-iteration.js';
+import { createLhBridge } from './lh-bridge.js';
+import { runScripts } from './script-runner.js';
+import { parse } from '@wit/parser';
+import { resolve } from './resolver.js';
 
 const DEPTH_LIMIT = 256;
 
@@ -57,11 +61,22 @@ export function expand(resolved: ResolvedDocument): ExpandedDocument {
     iterEnv: createIterEnv(),
     depth: 0,
   };
-  return {
+  const expanded: ExpandedDocument = {
     kind: 'expanded-document',
     children: expandBlocks(resolved.children, ctx),
     loc: structuredClone(resolved.loc),
   };
+  const bridge = createLhBridge({
+    expanded,
+    resolved,
+    parseAndExpand: (src) => {
+      const sub = parse(src, '<inject>');
+      const subResolved = resolve(sub);
+      const subExpanded = expand(subResolved);
+      return subExpanded.children;
+    },
+  });
+  return runScripts(expanded, bridge);
 }
 
 function lookupsFromCtx(ctx: ExpandCtx): DataLookups {
