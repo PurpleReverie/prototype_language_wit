@@ -57,7 +57,16 @@
           },
           {
             "kind": "text",
-            "value": ".\n(each "
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "body": null,
@@ -70,7 +79,25 @@
           },
           {
             "kind": "text",
-            "value": " as item) The loop names "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " item"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " The loop names "
           },
           {
             "body": null,
@@ -83,7 +110,7 @@
           },
           {
             "kind": "text",
-            "value": ". (end)"
+            "value": ". "
           }
         ],
         "kind": "paragraph"

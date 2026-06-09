@@ -30,45 +30,64 @@
         "shape": "single-line"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "(if "
-          },
-          {
-            "access": [
+        "cond": {
+          "kind": "existenceCondition",
+          "path": {
+            "segments": [
+              "lamp",
               "lit"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "lamp",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ") (if "
-          },
-          {
-            "access": [
-              "oil"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "lamp",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " is full) The lamp will last the night. (end) (end)"
+            ]
           }
-        ],
-        "kind": "paragraph"
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "cond": {
+              "kind": "comparisonCondition",
+              "left": {
+                "segments": [
+                  "lamp",
+                  "oil"
+                ]
+              },
+              "op": "is",
+              "right": {
+                "kind": "stringValue",
+                "value": "full"
+              }
+            },
+            "kind": "ifStatement",
+            "then": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " The lamp will last the night. "
+                  }
+                ],
+                "kind": "paragraph"
+              }
+            ]
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
       }
     ],
     "kind": "document"

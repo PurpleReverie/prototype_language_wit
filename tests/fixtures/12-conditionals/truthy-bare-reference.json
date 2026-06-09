@@ -23,29 +23,27 @@
         "shape": "single-line"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "(if "
-          },
-          {
-            "access": [
+        "cond": {
+          "kind": "existenceCondition",
+          "path": {
+            "segments": [
+              "lamp",
               "flag"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "lamp",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ") The lamp burned through the watch. (end)"
+            ]
           }
-        ],
-        "kind": "paragraph"
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " The lamp burned through the watch. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
       }
     ],
     "kind": "document"

@@ -67,6 +67,7 @@ function isParagraphBoundary(tok: Token): boolean {
 
 function parseOneInline(cursor: TokenCursor): Inline | null {
   const tok = cursor.current();
+  if (isInlineStop(tok.kind)) return null;
   if (tok.kind === 'textRun') return takeText(cursor);
   if (tok.kind === 'emphasisOpen') return takeEmphasisOrLiteral(cursor);
   if (tok.kind === 'emphasisClose') return literalEmphasis(cursor);
@@ -75,14 +76,16 @@ function parseOneInline(cursor: TokenCursor): Inline | null {
   if (tok.kind === 'blockCommentContent') return contentAsText(cursor);
   if (tok.kind === 'blockCommentClose') return closerAsText(cursor);
   if (tok.kind === 'nodeOpen') return takeInlineNodeUse(cursor);
-  if (tok.kind === 'nodeClose') return null;
-  if (tok.kind === 'hashClose') return null;
-  if (tok.kind === 'bangBang') return null;
-  if (tok.kind === 'hashOpen') return null;
-  if (tok.kind === 'additivePrefix') return null;
   if (tok.kind === 'interpolationOpen') return takeInterpolation(cursor);
   if (tok.kind === 'bodySlotMarker') return takeBodySlot(cursor);
   return fallbackText(cursor);
+}
+
+function isInlineStop(kind: string): boolean {
+  return kind === 'nodeClose' || kind === 'hashClose' ||
+         kind === 'bangBang' || kind === 'hashOpen' ||
+         kind === 'additivePrefix' || kind === 'parenStatementOpen' ||
+         kind === 'parenClose' || kind === 'keyword';
 }
 
 function takeInlineNodeUse(cursor: TokenCursor): NodeUse {

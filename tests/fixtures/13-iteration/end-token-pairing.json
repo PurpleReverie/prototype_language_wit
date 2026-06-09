@@ -49,7 +49,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "(each "
+            "value": " "
           },
           {
             "body": null,
@@ -62,7 +62,25 @@
           },
           {
             "kind": "text",
-            "value": " as item) "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " item"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "body": null,
@@ -75,7 +93,25 @@
           },
           {
             "kind": "text",
-            "value": ", (end) (each "
+            "value": ", "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "body": null,
@@ -88,7 +124,25 @@
           },
           {
             "kind": "text",
-            "value": " as item) "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " item"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "body": null,
@@ -101,7 +155,16 @@
           },
           {
             "kind": "text",
-            "value": ", (end) and the deck was full."
+            "value": ", "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " and the deck was full."
           }
         ],
         "kind": "paragraph"

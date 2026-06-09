@@ -14,7 +14,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "(each "
+            "value": " "
           },
           {
             "body": null,
@@ -27,7 +27,25 @@
           },
           {
             "kind": "text",
-            "value": " as hand) "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " hand"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "access": [
@@ -59,7 +77,7 @@
           },
           {
             "kind": "text",
-            "value": ". (end)"
+            "value": ". "
           }
         ],
         "kind": "paragraph"

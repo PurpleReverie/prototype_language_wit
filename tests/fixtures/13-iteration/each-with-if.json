@@ -57,7 +57,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "(each "
+            "value": " "
           },
           {
             "body": null,
@@ -70,39 +70,78 @@
           },
           {
             "kind": "text",
-            "value": " as item) (if "
-          },
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
           {
-            "access": [
+            "kind": "text",
+            "value": " item"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "cond": {
+          "kind": "comparisonCondition",
+          "left": {
+            "segments": [
+              "item",
               "awake"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "item",
-            "params": [],
-            "paramsSource": "none"
+            ]
           },
+          "op": "is",
+          "right": {
+            "kind": "stringValue",
+            "value": "true"
+          }
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "access": [
+                  "name"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "item",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " kept the watch. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
+      },
+      {
+        "children": [
           {
             "kind": "text",
-            "value": " is true) "
-          },
-          {
-            "access": [
-              "name"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "item",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " kept the watch. (end) (end)"
+            "value": " "
           }
         ],
         "kind": "paragraph"

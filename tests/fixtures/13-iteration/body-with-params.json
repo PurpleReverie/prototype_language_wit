@@ -57,7 +57,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "(each "
+            "value": " "
           },
           {
             "body": null,
@@ -70,7 +70,25 @@
           },
           {
             "kind": "text",
-            "value": " as item) "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " item"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "body": [
@@ -93,7 +111,7 @@
           },
           {
             "kind": "text",
-            "value": " (end)"
+            "value": " "
           }
         ],
         "kind": "paragraph"

@@ -18,7 +18,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "(each "
+            "value": " "
           },
           {
             "body": null,
@@ -31,7 +31,25 @@
           },
           {
             "kind": "text",
-            "value": " as item) The deck answered "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " item"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " The deck answered "
           },
           {
             "body": null,
@@ -44,7 +62,7 @@
           },
           {
             "kind": "text",
-            "value": ". (end)"
+            "value": ". "
           }
         ],
         "kind": "paragraph"

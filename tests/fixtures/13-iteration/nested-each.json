@@ -71,7 +71,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "(each "
+            "value": " "
           },
           {
             "body": null,
@@ -84,7 +84,25 @@
           },
           {
             "kind": "text",
-            "value": " as deck) The "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " deck"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " The "
           },
           {
             "access": [
@@ -100,7 +118,16 @@
           },
           {
             "kind": "text",
-            "value": " deck held (each "
+            "value": " deck held "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "access": [
@@ -116,7 +143,25 @@
           },
           {
             "kind": "text",
-            "value": " as hand) "
+            "value": " "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " hand"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " "
           },
           {
             "body": null,
@@ -129,7 +174,16 @@
           },
           {
             "kind": "text",
-            "value": ", (end) and stood ready. (end)"
+            "value": ", "
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": " and stood ready. "
           }
         ],
         "kind": "paragraph"

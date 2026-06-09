@@ -23,29 +23,32 @@
         "shape": "single-line"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "(if "
-          },
-          {
-            "access": [
+        "cond": {
+          "kind": "comparisonCondition",
+          "left": {
+            "segments": [
+              "meter",
               "value"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "meter",
-            "params": [],
-            "paramsSource": "none"
+            ]
           },
-          {
-            "kind": "text",
-            "value": " is 99) The meter reads full. (end)"
+          "op": "is",
+          "right": {
+            "kind": "stringValue",
+            "value": "99"
           }
-        ],
-        "kind": "paragraph"
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " The meter reads full. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
       }
     ],
     "kind": "document"
