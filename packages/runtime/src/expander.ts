@@ -29,6 +29,7 @@ import type { ResolvedDocument } from './resolved-ast.js';
 import type { ExpandedDocument } from './expanded-ast.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
 import { expandNodeDef, expandDataRef, type Splice } from './expander-inline.js';
+import { evaluateCondition } from './expander-conditions.js';
 
 const DEPTH_LIMIT = 256;
 
@@ -69,7 +70,7 @@ function expandBlock(block: Block, ctx: ExpandCtx): Block[] {
   if (block.kind === 'reference') return [];
   if (block.kind === 'nodeUse') return spliceAsBlocks(expandUse(block, ctx));
   if (block.kind === 'paragraph') return [expandParagraph(block, ctx)];
-  if (block.kind === 'ifStatement') return [expandIf(block, ctx)];
+  if (block.kind === 'ifStatement') return expandIf(block, ctx);
   if (block.kind === 'eachStatement') return [expandEach(block, ctx)];
   return [structuredClone(block) as Block];
 }
@@ -97,15 +98,12 @@ function expandParagraph(p: Paragraph, ctx: ExpandCtx): Paragraph {
   };
 }
 
-function expandIf(block: IfStatement, ctx: ExpandCtx): IfStatement {
-  const next: IfStatement = {
-    kind: 'ifStatement',
-    cond: structuredClone(block.cond),
-    then: expandBlocks(block.then, ctx),
-    loc: structuredClone(block.loc),
-  };
-  if (block.else) next.else = expandBlocks(block.else, ctx);
-  return next;
+function expandIf(block: IfStatement, ctx: ExpandCtx): Block[] {
+  const lookups = { dataDefs: ctx.dataDefs, defs: ctx.defs };
+  const branch = evaluateCondition(block.cond, lookups)
+    ? block.then
+    : (block.else ?? []);
+  return expandBlocks(branch, ctx);
 }
 
 function expandEach(block: EachStatement, ctx: ExpandCtx): EachStatement {

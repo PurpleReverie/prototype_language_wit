@@ -112,6 +112,87 @@ describe('expander — loop guard', () => {
   });
 });
 
+describe('expander — IfStatement evaluation', () => {
+  it('emits then branch when comparison condition holds', () => {
+    const src =
+      '#x: { status - draft }\n\n' +
+      '(if @x.status is draft)\nHELLO\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('HELLO');
+    for (const child of expanded.children) {
+      expect(child.kind).not.toBe('ifStatement');
+    }
+  });
+
+  it('drops then branch when comparison fails (no else)', () => {
+    const src =
+      '#x: { status - final }\n\n' +
+      '(if @x.status is draft)\nHELLO\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).not.toContain('HELLO');
+  });
+
+  it('emits else branch when condition fails', () => {
+    const src =
+      '#x: { status - final }\n\n' +
+      '(if @x.status is draft)\nYES\n(else)\nNO\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('NO');
+    expect(flat).not.toContain('YES');
+  });
+
+  it('treats `is` and `equals` as synonyms', () => {
+    const src =
+      '#x: { status - draft }\n\n' +
+      '(if @x.status equals draft)\nOK\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    expect(collectText(expanded.children)).toContain('OK');
+  });
+
+  it('existence condition is truthy for non-empty value', () => {
+    const src =
+      '#x: { status - draft }\n\n' +
+      '(if @x.status)\nSEEN\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    expect(collectText(expanded.children)).toContain('SEEN');
+  });
+
+  it('existence condition is falsy for missing field', () => {
+    const src =
+      '#x: { status - draft }\n\n' +
+      '(if @x.nonexistent)\nSEEN\n(else)\nMISS\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('MISS');
+    expect(flat).not.toContain('SEEN');
+  });
+
+  it('nested ifs: inner evaluates within outer then branch', () => {
+    const src =
+      '#x: { a - yes, b - go }\n\n' +
+      '(if @x.a is yes)\n(if @x.b is go)\nNESTED\n(end)\n(end)\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    expect(collectText(expanded.children)).toContain('NESTED');
+  });
+});
+
 describe('expander — paragraph child preservation', () => {
   it('leaves a no-binding-needed paragraph intact', () => {
     const doc = parse('a paragraph here\n', '<inline>');
