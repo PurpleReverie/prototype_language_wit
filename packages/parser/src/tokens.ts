@@ -209,6 +209,16 @@ export interface ValueBlockTerminator extends HasLoc {
   kind: 'valueBlockTerminator';
 }
 
+export interface ReferenceDirectiveToken extends HasLoc {
+  // `reference ./path.wit` at line start. Soft keyword: mid-prose
+  // `reference` stays in a TextRun. Path runs to end-of-line, captured
+  // verbatim (no normalization at lex time). Suffixed `Token` to avoid
+  // collision with the AST `ReferenceDirective` interface at the
+  // package export boundary.
+  kind: 'referenceDirective';
+  path: string;
+}
+
 export interface EOF extends HasLoc {
   kind: 'eof';
 }
@@ -257,6 +267,7 @@ export type Token =
   | CollectionOpen
   | CollectionClose
   | ValueBlockTerminator
+  | ReferenceDirectiveToken
   | EOF;
 
 export type TokenKind = Token['kind'];

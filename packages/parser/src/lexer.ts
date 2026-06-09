@@ -19,6 +19,7 @@ import {
   tryHashOpen,
   tryInterpolation,
 } from './lexer-defs.js';
+import { tryReferenceDirective } from './lexer-directives.js';
 import { tryNodeClose, tryNodeOpen, tryPipeOpen } from './lexer-nodes.js';
 import { tryBlockComment, tryLineComment } from './lexer-recognizers.js';
 import { tryParenStatement } from './lexer-statements.js';
@@ -128,6 +129,7 @@ function consumeParagraphContent(state: LexState): void {
 function runRecognizers(state: LexState, buf: RunBuf): boolean {
   if (tryBlockComment(state, buf)) return true;
   if (tryLineComment(state, buf)) return true;
+  if (tryReferenceDirective(state, buf)) return true;
   if (tryParenStatement(state, buf)) return true;
   if (tryNodeOpen(state, buf)) return true;
   if (tryNodeClose(state, buf)) return true;
