@@ -132,7 +132,10 @@ export interface NodeDef extends HasLoc {
   name: string;
   captures: string[];
   shape: 'block' | 'single-line' | 'value-block';
-  body: (Block | Inline)[];
+  // Body is normally a list of Block/Inline children, but a single-line
+  // def whose entire value is a record literal collapses to `[Record]`
+  // (M3.records).
+  body: (Block | Inline | Record)[];
   additive: boolean;
 }
 

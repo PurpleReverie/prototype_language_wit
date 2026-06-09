@@ -5,8 +5,30 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{\n  title - Q3 Operations Review\n  quarter - 2024\n  final - true\n}"
+            "fields": [
+              {
+                "key": "title",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Q3 Operations Review"
+                }
+              },
+              {
+                "key": "quarter",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "2024"
+                }
+              },
+              {
+                "key": "final",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "true"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

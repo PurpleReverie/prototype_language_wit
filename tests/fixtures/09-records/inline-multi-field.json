@@ -5,8 +5,23 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ a - 1, b - 2 }"
+            "fields": [
+              {
+                "key": "a",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "1"
+                }
+              },
+              {
+                "key": "b",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "2"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

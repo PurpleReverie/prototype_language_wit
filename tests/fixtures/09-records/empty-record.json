@@ -5,8 +5,8 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ }"
+            "fields": [],
+            "kind": "record"
           }
         ],
         "captures": [],

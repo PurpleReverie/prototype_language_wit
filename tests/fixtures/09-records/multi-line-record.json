@@ -5,8 +5,30 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{\n  name - Aldous Vane\n  years at post - 31\n  lamp lit - true\n}"
+            "fields": [
+              {
+                "key": "name",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Aldous Vane"
+                }
+              },
+              {
+                "key": "years at post",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "31"
+                }
+              },
+              {
+                "key": "lamp lit",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "true"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

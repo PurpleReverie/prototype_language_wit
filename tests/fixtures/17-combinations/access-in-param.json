@@ -5,8 +5,16 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ lamp_path - /lights/fresnel-12.png }"
+            "fields": [
+              {
+                "key": "lamp_path",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "/lights/fresnel-12.png"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

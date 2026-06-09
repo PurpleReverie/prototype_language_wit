@@ -1,21 +1,7 @@
 {
-  "ast": {
-    "children": [
-      {
-        "additive": false,
-        "body": [
-          {
-            "kind": "text",
-            "value": "{ msg - hello, world }"
-          }
-        ],
-        "captures": [],
-        "kind": "nodeDef",
-        "name": "x",
-        "shape": "single-line"
-      }
-    ],
-    "kind": "document"
+  "error": {
+    "code": "E_MALFORMED_RECORD",
+    "message": "record field missing key"
   },
-  "ok": true
+  "ok": false
 }

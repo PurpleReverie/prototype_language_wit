@@ -5,8 +5,38 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ name - Stephen, history { years - 31, port - Carrick } }"
+            "fields": [
+              {
+                "key": "name",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Stephen"
+                }
+              },
+              {
+                "key": "history",
+                "value": {
+                  "fields": [
+                    {
+                      "key": "years",
+                      "value": {
+                        "kind": "stringValue",
+                        "value": "31"
+                      }
+                    },
+                    {
+                      "key": "port",
+                      "value": {
+                        "kind": "stringValue",
+                        "value": "Carrick"
+                      }
+                    }
+                  ],
+                  "kind": "record"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],
