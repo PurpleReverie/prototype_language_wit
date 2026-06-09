@@ -9,6 +9,14 @@
 // Resolution mode: the resolver throws on the FIRST unresolved reference
 // (ResolverError with code E_UNRESOLVED_REFERENCE). `unresolvedAt` is
 // reserved for a future non-throwing mode but is always empty today.
+//
+// Cross-file (M4.cross-file):
+// - `definitions` / `dataDefs` include entries merged in from referenced
+//   files, so `@x` in the current file can bind to `#x` defined elsewhere.
+// - `partials` collects additive (+#x) defs gathered from this file and
+//   any referenced file. Merging is M4.merge-partials.
+// - `resolvedFiles` caches each file's own ResolvedDocument by absolute
+//   path so a transitively shared file is parsed once.
 
 import type { Block, NodeDef, DataDef, NodeUse, Loc } from '@wit/parser';
 
@@ -21,6 +29,8 @@ export interface ResolvedDocument {
   dataDefs: Map<string, DataDef>;
   references: Set<string>;
   bindings: Map<NodeUse, Binding>;
+  partials: Map<string, NodeDef[]>;
+  resolvedFiles: Map<string, ResolvedDocument>;
   unresolvedAt: Loc[];
   loc: Loc;
 }

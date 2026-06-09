@@ -1,10 +1,11 @@
 // Resolver pass — turns a parsed Document into a ResolvedDocument.
 //
-// Two walks over the AST:
+// Three walks over the AST:
 //   1. Collect every NodeDef and DataDef into name-keyed maps. Duplicate
 //      non-additive NodeDef names throw E_DUPLICATE_DEFINITION. Additive
-//      defs (+#x) are skipped here — M4.merge-partials owns them.
-//   2. Walk every NodeUse. A bare `@x` binds to a NodeDef of the same
+//      defs (+#x) land in `partials` for M4.merge-partials.
+//   2. Merge in definitions from referenced files (cross-file pass).
+//   3. Walk every NodeUse. A bare `@x` binds to a NodeDef of the same
 //      name; a dotted `@x.y` binds to a DataDef of name `x`. Unresolved
 //      uses throw E_UNRESOLVED_REFERENCE at the first miss.
 
@@ -22,28 +23,85 @@ import type {
 } from '@wit/parser';
 import type { ResolvedDocument, Binding } from './resolved-ast.js';
 import { ResolverError, RuntimeErrorCode } from './errors.js';
+import {
+  collectReferences,
+  defaultFileReader,
+  mergeReferences,
+  type FileCtx,
+  type FileReader,
+  type MergeTargets,
+} from './resolver-files.js';
 
 export interface ResolveOptions {
-  // Reserved for future use (e.g. custom resolver hooks). Empty for now.
+  rootPath?: string;
+  fileReader?: FileReader;
 }
 
 export function resolve(
   doc: Document,
-  _options: ResolveOptions = {},
+  options: ResolveOptions = {},
 ): ResolvedDocument {
-  const definitions = new Map<string, NodeDef>();
-  const dataDefs = new Map<string, DataDef>();
+  const ctx: FileCtx = {
+    reader: options.fileReader ?? defaultFileReader,
+    resolving: new Set<string>(),
+    resolved: new Map<string, ResolvedDocument>(),
+    resolveDocument: resolveDocument,
+  };
+  const rootPath = options.rootPath;
+  guardReferences(doc, rootPath);
+  if (rootPath !== undefined) ctx.resolving.add(rootPath);
+  try {
+    return resolveDocument(doc, ctx, rootPath ?? '<inline>');
+  } finally {
+    if (rootPath !== undefined) ctx.resolving.delete(rootPath);
+  }
+}
+
+function guardReferences(doc: Document, rootPath: string | undefined): void {
+  if (rootPath !== undefined) return;
+  const refs = collectReferences(doc.children);
+  if (refs.length === 0) return;
+  throw new ResolverError(
+    RuntimeErrorCode.E_MISSING_REFERENCE_FILE,
+    'reference directive present but no rootPath option supplied',
+    refs[0]!.loc,
+  );
+}
+
+function resolveDocument(
+  doc: Document,
+  ctx: FileCtx,
+  rootPath: string,
+): ResolvedDocument {
+  const targets: MergeTargets = {
+    definitions: new Map<string, NodeDef>(),
+    dataDefs: new Map<string, DataDef>(),
+    partials: new Map<string, NodeDef[]>(),
+    resolvedFiles: new Map<string, ResolvedDocument>(),
+  };
+  collectDefs(doc.children, targets.definitions, targets.dataDefs, targets.partials);
+  mergeReferences(doc, rootPath, ctx, targets);
   const references = new Set<string>();
   const bindings = new Map<NodeUse, Binding>();
-  collectDefs(doc.children, definitions, dataDefs);
-  bindUses(doc.children, definitions, dataDefs, references, bindings);
+  bindUses(doc.children, targets.definitions, targets.dataDefs, references, bindings);
+  return buildResolved(doc, targets, references, bindings);
+}
+
+function buildResolved(
+  doc: Document,
+  targets: MergeTargets,
+  references: Set<string>,
+  bindings: Map<NodeUse, Binding>,
+): ResolvedDocument {
   return {
     kind: 'resolved-document',
     children: doc.children,
-    definitions,
-    dataDefs,
+    definitions: targets.definitions,
+    dataDefs: targets.dataDefs,
     references,
     bindings,
+    partials: targets.partials,
+    resolvedFiles: targets.resolvedFiles,
     unresolvedAt: [],
     loc: doc.loc,
   };
@@ -53,48 +111,56 @@ export function resolve(
 // Pass 1: collect definitions.
 // ---------------------------------------------------------------------------
 
+interface CollectCtx {
+  defs: Map<string, NodeDef>;
+  data: Map<string, DataDef>;
+  partials: Map<string, NodeDef[]>;
+}
+
 function collectDefs(
   blocks: readonly Block[],
   defs: Map<string, NodeDef>,
   data: Map<string, DataDef>,
+  partials: Map<string, NodeDef[]>,
 ): void {
-  for (const block of blocks) collectFromBlock(block, defs, data);
+  const ctx: CollectCtx = { defs, data, partials };
+  for (const block of blocks) collectFromBlock(block, ctx);
 }
 
-function collectFromBlock(
-  block: Block,
-  defs: Map<string, NodeDef>,
-  data: Map<string, DataDef>,
-): void {
+function collectFromBlock(block: Block, ctx: CollectCtx): void {
   if (block.kind === 'nodeDef') {
-    recordNodeDef(block, defs);
-    collectFromChildren(block.body, defs, data);
+    recordNodeDef(block, ctx);
+    collectFromChildren(block.body, ctx);
     return;
   }
   if (block.kind === 'dataDef') {
-    recordDataDef(block, data);
+    recordDataDef(block, ctx.data);
     return;
   }
-  if (block.kind === 'ifStatement') return collectFromIf(block, defs, data);
-  if (block.kind === 'eachStatement') return collectFromEach(block, defs, data);
+  if (block.kind === 'ifStatement') return collectFromIf(block, ctx);
+  if (block.kind === 'eachStatement') return collectFromEach(block, ctx);
   if (block.kind === 'nodeUse') {
-    if (block.body) collectFromChildren(block.body, defs, data);
+    if (block.body) collectFromChildren(block.body, ctx);
     return;
   }
-  if (block.kind === 'paragraph') collectFromInlines(block.children, defs, data);
+  if (block.kind === 'paragraph') collectFromInlines(block.children, ctx);
 }
 
-function recordNodeDef(def: NodeDef, defs: Map<string, NodeDef>): void {
-  if (def.additive) return;
-  const prior = defs.get(def.name);
-  if (prior !== undefined) {
+function recordNodeDef(def: NodeDef, ctx: CollectCtx): void {
+  if (def.additive) {
+    const acc = ctx.partials.get(def.name) ?? [];
+    acc.push(def);
+    ctx.partials.set(def.name, acc);
+    return;
+  }
+  if (ctx.defs.has(def.name)) {
     throw new ResolverError(
       RuntimeErrorCode.E_DUPLICATE_DEFINITION,
       `Duplicate definition #${def.name}`,
       def.loc,
     );
   }
-  defs.set(def.name, def);
+  ctx.defs.set(def.name, def);
 }
 
 function recordDataDef(def: DataDef, data: Map<string, DataDef>): void {
@@ -108,54 +174,43 @@ function recordDataDef(def: DataDef, data: Map<string, DataDef>): void {
   data.set(def.name, def);
 }
 
-function collectFromIf(
-  block: IfStatement,
-  defs: Map<string, NodeDef>,
-  data: Map<string, DataDef>,
-): void {
-  collectDefs(block.then, defs, data);
-  if (block.else) collectDefs(block.else, defs, data);
+function collectFromIf(block: IfStatement, ctx: CollectCtx): void {
+  for (const b of block.then) collectFromBlock(b, ctx);
+  if (block.else) for (const b of block.else) collectFromBlock(b, ctx);
 }
 
-function collectFromEach(
-  block: EachStatement,
-  defs: Map<string, NodeDef>,
-  data: Map<string, DataDef>,
-): void {
-  collectDefs(block.body, defs, data);
+function collectFromEach(block: EachStatement, ctx: CollectCtx): void {
+  for (const b of block.body) collectFromBlock(b, ctx);
 }
 
 function collectFromChildren(
   items: readonly (Block | Inline | RecordNode | Collection)[],
-  defs: Map<string, NodeDef>,
-  data: Map<string, DataDef>,
+  ctx: CollectCtx,
 ): void {
-  for (const item of items) collectFromChild(item, defs, data);
+  for (const item of items) collectFromChild(item, ctx);
 }
 
 function collectFromChild(
   item: Block | Inline | RecordNode | Collection,
-  defs: Map<string, NodeDef>,
-  data: Map<string, DataDef>,
+  ctx: CollectCtx,
 ): void {
   if (item.kind === 'record' || item.kind === 'collection') return;
   if (isBlockKind(item.kind)) {
-    collectFromBlock(item as Block, defs, data);
+    collectFromBlock(item as Block, ctx);
     return;
   }
   if (item.kind === 'nodeUse' && item.body) {
-    collectFromChildren(item.body, defs, data);
+    collectFromChildren(item.body, ctx);
   }
 }
 
 function collectFromInlines(
   items: readonly Inline[],
-  defs: Map<string, NodeDef>,
-  data: Map<string, DataDef>,
+  ctx: CollectCtx,
 ): void {
   for (const item of items) {
     if (item.kind === 'nodeUse' && item.body) {
-      collectFromChildren(item.body, defs, data);
+      collectFromChildren(item.body, ctx);
     }
   }
 }
