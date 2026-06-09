@@ -46,57 +46,37 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "watch",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "item",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": ", "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " item"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "item",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ", "
-          }
-        ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "watch"
+          ]
+        },
+        "itemName": "item",
+        "kind": "eachStatement"
       },
       {
         "children": [
@@ -108,57 +88,37 @@
         "kind": "paragraph"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "relief",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "item",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": ", "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " item"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "item",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ", "
-          }
-        ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "relief"
+          ]
+        },
+        "itemName": "item",
+        "kind": "eachStatement"
       },
       {
         "children": [

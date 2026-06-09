@@ -1,5 +1,6 @@
-// Paren-statement parsing: `(if cond) ... (end)` and
-// `(if cond) ... (else) ... (end)`.
+// Paren-statement parsing: `(if cond) ... (end)`,
+// `(if cond) ... (else) ... (end)`, and
+// `(each @collection as itemName) ... (end)`.
 //
 // Conditions:
 //   - `@x.y is value`      → ComparisonCondition { op: 'is', ... }
@@ -11,9 +12,14 @@
 //   nodeOpen('x'), dot, accessSegment('y'),
 //   [textRun?], keyword('is'), textRun(' value'), parenClose
 //
+// Token shape for `(each @x.y as item)`:
+//   parenStatementOpen, keyword('each'), [textRun?],
+//   nodeOpen('x'), dot, accessSegment('y'),
+//   [textRun?], keyword('as'), textRun(' item'), parenClose
+//
 // `(else)` and `(end)` are paren-statements with only a closer between
 // the keyword and `)`. The driver calls into this module when it sees
-// a parenStatementOpen + keyword('if') at block-level.
+// a parenStatementOpen + keyword('if'/'each') at block-level.
 //
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
@@ -22,6 +28,7 @@ import type {
   Block,
   ComparisonCondition,
   Condition,
+  EachStatement,
   ExistenceCondition,
   IfStatement,
   StringValue,
@@ -34,16 +41,33 @@ import type { Keyword, ParenStatementOpen, Token } from './tokens.js';
 // Public entry.
 // ---------------------------------------------------------------------------
 
-export interface IfStatementOptions {
+export interface StatementOptions {
   parseBlocks: (cursor: TokenCursor, stop: BlockStopFn) => Block[];
 }
+
+// Back-compat alias retained for any internal callers.
+export type IfStatementOptions = StatementOptions;
 
 export type BlockStopFn = (cursor: TokenCursor) => boolean;
 
 export function isIfStatementStart(cursor: TokenCursor): boolean {
-  if (cursor.current().kind !== 'parenStatementOpen') return false;
-  const next = cursor.peek(1);
-  return next.kind === 'keyword' && next.name === 'if';
+  return matchesParenKeyword(cursor, 'if');
+}
+
+export function isEachStatementStart(cursor: TokenCursor): boolean {
+  return matchesParenKeyword(cursor, 'each');
+}
+
+export function isStatementStart(cursor: TokenCursor): boolean {
+  return isIfStatementStart(cursor) || isEachStatementStart(cursor);
+}
+
+export function parseStatementAfterParen(
+  cursor: TokenCursor,
+  opts: StatementOptions,
+): IfStatement | EachStatement {
+  if (isEachStatementStart(cursor)) return parseEachStatement(cursor, opts);
+  return parseIfStatement(cursor, opts);
 }
 
 export function isElseHere(cursor: TokenCursor): boolean {
@@ -120,6 +144,63 @@ function buildIfStatement(
   };
   if (elseBlocks !== undefined) node.else = elseBlocks;
   return node;
+}
+
+// ---------------------------------------------------------------------------
+// Each statement.
+// ---------------------------------------------------------------------------
+
+export function parseEachStatement(
+  cursor: TokenCursor,
+  opts: StatementOptions,
+): EachStatement {
+  const open = cursor.advance() as ParenStatementOpen;
+  cursor.advance(); // keyword('each')
+  const collection = parseAccessPath(cursorAfterWs(cursor));
+  skipWhitespaceTokens(cursor);
+  expectKeyword(cursor, 'as');
+  const itemName = parseItemName(cursor);
+  expectParenClose(cursor);
+  const body = opts.parseBlocks(cursor, isEndHere);
+  const closeLoc = consumeEnd(cursor, open.loc);
+  return buildEachStatement(open, collection, itemName, body, closeLoc);
+}
+
+function cursorAfterWs(cursor: TokenCursor): TokenCursor {
+  skipWhitespaceTokens(cursor);
+  return cursor;
+}
+
+function expectKeyword(cursor: TokenCursor, name: 'as'): void {
+  const tok = cursor.current();
+  if (tok.kind === 'keyword' && tok.name === name) cursor.advance();
+}
+
+function parseItemName(cursor: TokenCursor): string {
+  skipWhitespaceTokens(cursor);
+  let name = '';
+  while (cursor.current().kind === 'textRun') {
+    const tok = cursor.current() as { kind: 'textRun'; value: string };
+    name += tok.value;
+    cursor.advance();
+  }
+  return name.trim();
+}
+
+function buildEachStatement(
+  open: ParenStatementOpen,
+  collection: AccessPath,
+  itemName: string,
+  body: Block[],
+  closeLoc: Loc,
+): EachStatement {
+  return {
+    kind: 'eachStatement',
+    collection,
+    itemName,
+    body,
+    loc: spanLoc(open.loc, closeLoc),
+  };
 }
 
 // ---------------------------------------------------------------------------

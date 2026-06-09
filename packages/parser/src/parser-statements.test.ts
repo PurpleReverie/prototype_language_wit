@@ -1,10 +1,11 @@
-// Unit tests for paren-statement parsing (M3.conditionals).
+// Unit tests for paren-statement parsing (M3.conditionals + M3.iteration).
 
 import { describe, expect, it } from 'vitest';
 
 import { parse } from './parser.js';
 import type {
   ComparisonCondition,
+  EachStatement,
   ExistenceCondition,
   IfStatement,
   Paragraph,
@@ -17,6 +18,13 @@ function firstIf(src: string): IfStatement {
   const found = doc.children.find((c) => c.kind === 'ifStatement');
   if (!found) throw new Error('no ifStatement in document');
   return found as IfStatement;
+}
+
+function firstEach(src: string): EachStatement {
+  const doc = parse(src);
+  const found = doc.children.find((c) => c.kind === 'eachStatement');
+  if (!found) throw new Error('no eachStatement in document');
+  return found as EachStatement;
 }
 
 describe('parseIfStatement', () => {
@@ -71,5 +79,47 @@ describe('parseIfStatement', () => {
     // Allow either no paragraphs or a whitespace-only paragraph; both are
     // valid per the empty-then lean (rule a — no diagnostic).
     expect(node.then.length).toBeLessThanOrEqual(1);
+  });
+});
+
+describe('parseEachStatement', () => {
+  it('parses (each @xs as item) body (end)', () => {
+    const node = firstEach('(each @xs as item) hi (end)');
+    expect(node.kind).toBe('eachStatement');
+    expect(node.collection.segments).toEqual(['xs']);
+    expect(node.itemName).toBe('item');
+    expect(node.body.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('parses dotted access path in collection', () => {
+    const node = firstEach('(each @deck.hands as hand) @hand, (end)');
+    expect(node.collection.segments).toEqual(['deck', 'hands']);
+    expect(node.itemName).toBe('hand');
+  });
+
+  it('handles nested each within body', () => {
+    const node = firstEach(
+      '(each @decks as deck) (each @deck.hands as hand) @hand (end) (end)',
+    );
+    const inner = node.body.find((c) => c.kind === 'eachStatement') as
+      EachStatement | undefined;
+    expect(inner).toBeDefined();
+    if (inner) {
+      expect(inner.collection.segments).toEqual(['deck', 'hands']);
+      expect(inner.itemName).toBe('hand');
+    }
+  });
+
+  it('allows (if ...) inside an (each ...) body', () => {
+    const node = firstEach(
+      '(each @hands as item) (if @item.awake is true) hi (end) (end)',
+    );
+    const inner = node.body.find((c) => c.kind === 'ifStatement');
+    expect(inner).toBeDefined();
+  });
+
+  it('emits empty body[] when iteration body is empty', () => {
+    const node = firstEach('(each @xs as item) (end)');
+    expect(node.body.length).toBeLessThanOrEqual(1);
   });
 });

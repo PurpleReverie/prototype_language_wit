@@ -63,57 +63,37 @@
         "kind": "paragraph"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "items",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "children": [
+              {
+                "kind": "text",
+                "value": " The loop names "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "item",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": ". "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " item"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " The loop names "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "item",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ". "
-          }
-        ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "items"
+          ]
+        },
+        "itemName": "item",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"

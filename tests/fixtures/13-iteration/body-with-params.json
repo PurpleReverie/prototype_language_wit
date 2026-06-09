@@ -54,67 +54,47 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "hands",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " item"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": [
+            "children": [
               {
                 "kind": "text",
-                "value": " The bell struck twice. "
-              }
-            ],
-            "closeStyle": "named",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "watch",
-            "params": [
+                "value": " "
+              },
               {
-                "name": "keeper",
-                "value": "@item.name, station @item.post"
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": " The bell struck twice. "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "watch",
+                "params": [
+                  {
+                    "name": "keeper",
+                    "value": "@item.name, station @item.post"
+                  }
+                ],
+                "paramsSource": "pipes"
+              },
+              {
+                "kind": "text",
+                "value": " "
               }
             ],
-            "paramsSource": "pipes"
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "hands"
+          ]
+        },
+        "itemName": "item",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"

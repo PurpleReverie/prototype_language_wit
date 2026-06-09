@@ -73,97 +73,77 @@
         "shape": "single-line"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "hands",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " hand"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "cond": {
-          "kind": "comparisonCondition",
-          "left": {
-            "segments": [
-              "hand",
-              "awake"
-            ]
-          },
-          "op": "is",
-          "right": {
-            "kind": "stringValue",
-            "value": "true"
-          }
-        },
-        "kind": "ifStatement",
-        "then": [
+        "body": [
           {
             "children": [
               {
                 "kind": "text",
                 "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          },
+          {
+            "cond": {
+              "kind": "comparisonCondition",
+              "left": {
+                "segments": [
+                  "hand",
+                  "awake"
+                ]
               },
+              "op": "is",
+              "right": {
+                "kind": "stringValue",
+                "value": "true"
+              }
+            },
+            "kind": "ifStatement",
+            "then": [
               {
-                "access": [
-                  "name"
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "access": [
+                      "name"
+                    ],
+                    "body": null,
+                    "closeStyle": "bare",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "hand",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": " kept the watch. "
+                  }
                 ],
-                "body": null,
-                "closeStyle": "bare",
-                "inline": true,
-                "kind": "nodeUse",
-                "name": "hand",
-                "params": [],
-                "paramsSource": "none"
-              },
+                "kind": "paragraph"
+              }
+            ]
+          },
+          {
+            "children": [
               {
                 "kind": "text",
-                "value": " kept the watch. "
+                "value": " "
               }
             ],
             "kind": "paragraph"
           }
-        ]
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          }
         ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "hands"
+          ]
+        },
+        "itemName": "hand",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"

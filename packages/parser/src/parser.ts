@@ -18,8 +18,8 @@ import { TokenCursor } from './parser-cursor.js';
 import { parseInline, parseInlineComment } from './parser-inline.js';
 import { parseNodeUse } from './parser-nodes.js';
 import {
-  isIfStatementStart,
-  parseIfStatement,
+  isStatementStart,
+  parseStatementAfterParen,
   type BlockStopFn,
 } from './parser-statements.js';
 import type {
@@ -74,13 +74,13 @@ function parseBlock(cursor: TokenCursor): Block | null {
   if (tok.kind === 'nodeOpen' && isBlockBodiedOpen(cursor)) {
     return parseUseBlock(cursor);
   }
-  if (isIfStatementStart(cursor)) return parseIfBlock(cursor);
+  if (isStatementStart(cursor)) return parseStatementBlock(cursor);
   if (isStandaloneComment(cursor)) return parseStandaloneComment(cursor);
   return parseParagraph(cursor);
 }
 
-function parseIfBlock(cursor: TokenCursor): Block {
-  return parseIfStatement(cursor, { parseBlocks: collectBlocksUntil });
+function parseStatementBlock(cursor: TokenCursor): Block {
+  return parseStatementAfterParen(cursor, { parseBlocks: collectBlocksUntil });
 }
 
 function collectBlocksUntil(

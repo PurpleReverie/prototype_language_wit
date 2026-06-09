@@ -68,125 +68,83 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "body": [
           {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "decks",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": " "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " deck"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " The "
-          },
-          {
-            "access": [
-              "name"
+            "children": [
+              {
+                "kind": "text",
+                "value": " The "
+              },
+              {
+                "access": [
+                  "name"
+                ],
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "deck",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " deck held "
+              }
             ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "deck",
-            "params": [],
-            "paramsSource": "none"
+            "kind": "paragraph"
           },
           {
-            "kind": "text",
-            "value": " deck held "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "access": [
-              "hands"
+            "body": [
+              {
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": " "
+                  },
+                  {
+                    "body": null,
+                    "closeStyle": "bare",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "hand",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": ", "
+                  }
+                ],
+                "kind": "paragraph"
+              }
             ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "deck",
-            "params": [],
-            "paramsSource": "none"
+            "collection": {
+              "segments": [
+                "deck",
+                "hands"
+              ]
+            },
+            "itemName": "hand",
+            "kind": "eachStatement"
           },
           {
-            "kind": "text",
-            "value": " "
+            "children": [
+              {
+                "kind": "text",
+                "value": " and stood ready. "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " hand"
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " "
-          },
-          {
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "hand",
-            "params": [],
-            "paramsSource": "none"
-          },
-          {
-            "kind": "text",
-            "value": ", "
-          }
-        ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": " and stood ready. "
-          }
-        ],
-        "kind": "paragraph"
+        "collection": {
+          "segments": [
+            "decks"
+          ]
+        },
+        "itemName": "deck",
+        "kind": "eachStatement"
       }
     ],
     "kind": "document"
