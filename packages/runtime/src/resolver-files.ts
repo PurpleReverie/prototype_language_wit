@@ -140,28 +140,51 @@ function mergeInto(
   targets: MergeTargets,
   directive: ReferenceDirective,
 ): void {
-  mergeNodeDefs(refDoc.definitions, targets.definitions, directive);
+  mergeNodeDefs(refDoc.definitions, targets, directive);
   mergeDataDefs(refDoc.dataDefs, targets.dataDefs, directive);
   mergePartials(refDoc.partials, targets.partials);
 }
 
 function mergeNodeDefs(
   src: Map<string, NodeDef>,
-  dst: Map<string, NodeDef>,
+  targets: MergeTargets,
   directive: ReferenceDirective,
 ): void {
   for (const [name, def] of src) {
-    const prior = dst.get(name);
+    const prior = targets.definitions.get(name);
     if (prior === def) continue; // diamond: same shared file, skip.
-    if (prior !== undefined) {
-      throw new ResolverError(
-        RuntimeErrorCode.E_DUPLICATE_DEFINITION,
-        `Duplicate definition #${name} (merged from ${directive.path})`,
-        directive.loc,
-      );
+    if (def.additive) {
+      pushPartial(targets.partials, name, def);
+      continue;
     }
-    dst.set(name, def);
+    rejectIfDuplicate(prior, name, directive);
+    targets.definitions.set(name, def);
   }
+}
+
+// Additive defs from a child file flow into the parent's partial list;
+// the parent re-merges them via mergePartials after collectDefs runs.
+function pushPartial(
+  partials: Map<string, NodeDef[]>,
+  name: string,
+  def: NodeDef,
+): void {
+  const acc = partials.get(name) ?? [];
+  if (!acc.includes(def)) acc.push(def);
+  partials.set(name, acc);
+}
+
+function rejectIfDuplicate(
+  prior: NodeDef | undefined,
+  name: string,
+  directive: ReferenceDirective,
+): void {
+  if (prior === undefined || prior.additive) return;
+  throw new ResolverError(
+    RuntimeErrorCode.E_DUPLICATE_DEFINITION,
+    `Duplicate definition #${name} (merged from ${directive.path})`,
+    directive.loc,
+  );
 }
 
 function mergeDataDefs(

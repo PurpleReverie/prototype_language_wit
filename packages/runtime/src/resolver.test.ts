@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { parse } from '@wit/parser';
 import type { NodeDef, DataDef, NodeUse } from '@wit/parser';
 import { resolve } from './resolver.js';
+import type { MergedNodeDef } from './resolved-ast.js';
 import { ResolverError } from './errors.js';
 
 function firstUse(blocks: readonly unknown[]): NodeUse {
@@ -82,12 +83,13 @@ describe('resolver — bind refs', () => {
     expect(resolved.references.has('person')).toBe(true);
   });
 
-  it('skips additive +#x defs during collection', () => {
+  it('folds additive +#x into the base definition', () => {
     const doc = parse('#x: one\n\n+#x: more\n\ntext with @x here.\n', '<inline>');
     const resolved = resolve(doc);
     expect(resolved.definitions.size).toBe(1);
-    expect(resolved.definitions.get('x')?.additive).toBe(false);
-    expect(resolved.partials.get('x')?.length).toBe(1);
+    expect(resolved.definitions.get('x')?.additive).toBe(true);
+    // Once folded, the partials side-table is emptied.
+    expect(resolved.partials.size).toBe(0);
   });
 });
 
@@ -211,7 +213,7 @@ describe('resolver — cross-file', () => {
     expect((caught as ResolverError).code).toBe('E_DUPLICATE_DEFINITION');
   });
 
-  it('collects +#x partials from a referenced file', () => {
+  it('folds +#x partials from a referenced file into the base def', () => {
     const main = 'reference ./one.wit\n\n#k: base !!\n\n@k.\n';
     const one = '+#k: extra !!\n';
     const doc = parse(main, '/p/main.wit');
@@ -219,7 +221,72 @@ describe('resolver — cross-file', () => {
       rootPath: '/p/main.wit',
       fileReader: makeReader({ '/p/one.wit': one }),
     });
-    expect(resolved.partials.get('k')?.length).toBe(1);
-    expect(resolved.definitions.has('k')).toBe(true);
+    expect(resolved.partials.size).toBe(0);
+    const merged = resolved.definitions.get('k');
+    expect(merged?.additive).toBe(true);
+  });
+});
+
+describe('resolver — merge partials', () => {
+  function bodyKinds(def: NodeDef | undefined): string[] {
+    return (def?.body ?? []).map((b) => (b as { kind: string }).kind);
+  }
+
+  it('merges a base #x with two additives in document order', () => {
+    const src =
+      '#x: alpha !!\n\n+#x: beta !!\n\n+#x: gamma !!\n\nuse @x.\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const merged = resolved.definitions.get('x') as MergedNodeDef | undefined;
+    expect(merged).toBeDefined();
+    expect(merged?.additive).toBe(true);
+    // body concatenation produced three paragraph-ish children.
+    expect(bodyKinds(merged).length).toBeGreaterThanOrEqual(3);
+    expect(merged?.partialSources.length).toBe(2);
+  });
+
+  it('merges +#x-only (no base) using first additive shape', () => {
+    const src = '+#x: one !!\n\n+#x: two !!\n\n@x here.\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const merged = resolved.definitions.get('x') as MergedNodeDef | undefined;
+    expect(merged?.additive).toBe(true);
+    expect(merged?.partialSources.length).toBe(2);
+    expect(bodyKinds(merged).length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('throws E_PARTIAL_SHAPE_MISMATCH when shapes disagree', () => {
+    // First partial is single-line, second is block.
+    const src = '+#x: one !!\n\n+#x:\n  Block body\n!!\n\n@x.\n';
+    const doc = parse(src, '<inline>');
+    let caught: unknown;
+    try {
+      resolve(doc);
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(ResolverError);
+    expect((caught as ResolverError).code).toBe('E_PARTIAL_SHAPE_MISMATCH');
+  });
+
+  it('merges additives across two referenced files in DFS order', () => {
+    const main =
+      'reference ./a.wit\nreference ./b.wit\n\n#x: base !!\n\n@x here.\n';
+    const a = '+#x: from-a !!\n';
+    const b = '+#x: from-b !!\n';
+    const reader = (p: string): string => {
+      const map: Record<string, string> = { '/p/a.wit': a, '/p/b.wit': b };
+      const got = map[p];
+      if (got === undefined) throw new Error(`miss ${p}`);
+      return got;
+    };
+    const doc = parse(main, '/p/main.wit');
+    const resolved = resolve(doc, { rootPath: '/p/main.wit', fileReader: reader });
+    const merged = resolved.definitions.get('x') as MergedNodeDef | undefined;
+    expect(merged?.additive).toBe(true);
+    // Two additive partial sources, one per referenced file.
+    expect(merged?.partialSources.length).toBe(2);
+    // Body has the base content first, then a, then b (DFS document order).
+    expect(bodyKinds(merged).length).toBeGreaterThanOrEqual(3);
   });
 });
