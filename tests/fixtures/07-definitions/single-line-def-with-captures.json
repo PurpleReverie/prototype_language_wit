@@ -23,10 +23,6 @@
           {
             "kind": "interpolation",
             "name": "author"
-          },
-          {
-            "kind": "text",
-            "value": " "
           }
         ],
         "captures": [],

@@ -1,17 +1,7 @@
-// NodeDef parsing.
-//
-// Three shapes:
-//   1. `#name body name#`                                  → 'block'
-//   2. `#name: value !!`     (single line, no newline)     → 'single-line'
-//   3. `#name: \n value \n !!` (value spans lines)         → 'value-block'
-//   4. `+#name ...`          (additive prefix)             → additive: true
-//
-// Optional capture list `||a, b, c||` follows the hash-open. Body
-// content is parsed as a sequence of blocks/inlines using the
-// caller-provided helpers (we accept callbacks to avoid a parser.ts
-// import cycle).
-//
-// Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
+// NodeDef parsing. Shapes: 'block' (`#x body x#`), 'single-line'
+// (`#x: value !!`), 'value-block' (`#x:\n...\n!!`); `+#x` is additive.
+// Optional capture list `||a, b, c||` follows the hash-open. Body is
+// parsed via caller-provided helpers to avoid a parser.ts import cycle.
 
 import { ErrorCode } from './errors.js';
 import { maybeAsDataValue } from './parser-data.js';
@@ -111,11 +101,8 @@ function splitCaptureNames(text: string): string[] {
 type DefShape = 'block' | 'single-line' | 'value-block';
 
 function detectDefShape(cursor: TokenCursor, name: string): DefShape {
-  // Scan forward: if a matching `name#` appears before any `!!`, this
-  // is a block-form def. Value-block requires BOTH a `!!` terminator
-  // AND a line-spanning value (paragraphBreak or internal `\n` reached
-  // before the `!!`). Otherwise (no `!!` at all, or `!!` on the same
-  // line) it's single-line — rule (b) lets EOL terminate.
+  // `name#` before `!!` ⇒ block. Otherwise `!!` over a line break ⇒
+  // value-block; same-line or absent `!!` ⇒ single-line (rule (b)).
   const terminator = lookaheadTerminator(cursor, name);
   if (terminator === 'hashClose') return 'block';
   if (terminator === 'bangBang' && scansAcrossBreak(cursor)) return 'value-block';
@@ -126,8 +113,7 @@ function lookaheadTerminator(
   cursor: TokenCursor,
   name: string,
 ): 'hashClose' | 'bangBang' | 'eof' {
-  // A subsequent def-start (`#x`, `+#x`) acts as a hard boundary: any
-  // `!!` past that point belongs to a different def, not this one.
+  // Subsequent def-start (`#x`, `+#x`) is a hard boundary.
   let i = 0;
   while (true) {
     const tok = cursor.peek(i);
@@ -142,8 +128,7 @@ function lookaheadTerminator(
 }
 
 function scansAcrossBreak(cursor: TokenCursor): boolean {
-  // Lookahead: is there a paragraph break OR a multi-line text run
-  // before the next BangBang? Stops at the next def-start.
+  // Paragraph break OR multi-line text before next BangBang? Stops at next def.
   let i = 0;
   while (true) {
     const tok = cursor.peek(i);
@@ -184,13 +169,30 @@ function parseBangBangDef(
   stripLeadingColon(cursor);
   const raw = shape === 'single-line'
     ? collectSingleLineValue(cursor, opts) : collectValueBlock(cursor, opts);
+  const trimmed = shape === 'single-line' ? trimTrailingTextWs(raw) : raw;
   const body: (Block | Inline | RecordNode | CollectionNode)[] =
-    shape === 'single-line' ? maybeAsDataValue(raw) : raw;
+    shape === 'single-line' ? maybeAsDataValue(trimmed) : trimmed;
   const closeLoc = expectBangBang(cursor, open);
   return {
     kind: 'nodeDef', name: open.name, captures, shape, body, additive,
     loc: spanLoc(open.loc, closeLoc),
   };
+}
+
+// Single-line def values capture the trailing whitespace between the
+// value and the closing `!!` (or EOL). Trim it so `#year: 1923 !!` defs
+// `1923` not `1923 ` — otherwise `@year` splices "1923 " and prose
+// reads `1923 ,` with a stray space.
+function trimTrailingTextWs(body: (Block | Inline)[]): (Block | Inline)[] {
+  if (body.length === 0) return body;
+  const last = body[body.length - 1];
+  if (last === undefined || last.kind !== 'text') return body;
+  const trimmed = last.value.replace(/[ \t\n]+$/, '');
+  if (trimmed === last.value) return body;
+  if (trimmed.length === 0) return body.slice(0, -1);
+  const newLast = { ...last, value: trimmed,
+    loc: { ...last.loc, length: last.loc.length - (last.value.length - trimmed.length) } };
+  return [...body.slice(0, -1), newLast];
 }
 
 function stripLeadingColon(cursor: TokenCursor): void {

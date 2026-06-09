@@ -12,7 +12,9 @@
 import { isAsciiLetter, isHandleChar } from './char.js';
 import {
   advance,
+  bufHasAnyContent,
   flushTextRun,
+  flushTextRunBeforeInline,
   locFrom,
   snapshot,
 } from './lexer-internals.js';
@@ -232,8 +234,11 @@ export function tryInterpolation(state: LexState, buf: RunBuf): boolean {
   const nameEnd = scanInterpolationName(state, cur.offset + 2);
   if (src.charAt(nameEnd) !== ':') return false;
   if (src.charAt(nameEnd + 1) !== ':') return false;
-  flushTextRun(state, buf);
+  // `::name::` is always value-bearing inline.
+  if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   emitInterpolation(state, nameEnd);
+  if (state.src.charAt(state.cur.offset) !== '\n') state.afterInline = true;
   return true;
 }
 
@@ -295,6 +300,8 @@ export function tryBodySlot(state: LexState, buf: RunBuf): boolean {
   if (!isAtHandleBoundary(state)) return false;
   if (isHandleChar(src.charAt(cur.offset + 3))) return false;
   if (src.charAt(cur.offset + 3) === '.') return false;
+  // `...` body-slot marker is structurally a placeholder; rarely
+  // mid-prose. Use plain flush and skip the afterInline flag.
   flushTextRun(state, buf);
   emitBodySlotMarker(state);
   return true;

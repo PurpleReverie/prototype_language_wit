@@ -17,7 +17,9 @@
 import { ErrorCode } from './errors.js';
 import {
   advance,
+  bufHasAnyContent,
   flushTextRun,
+  flushTextRunBeforeInline,
   LexerError,
   locFrom,
   snapshot,
@@ -33,7 +35,11 @@ export function tryScriptBlock(state: LexState, buf: RunBuf): boolean {
   const { src, cur } = state;
   if (src.charAt(cur.offset) !== '<') return false;
   if (src.charAt(cur.offset + 1) !== '%') return false;
-  flushTextRun(state, buf);
+  // <% %> is always value-bearing (no body concept). Trailing newline
+  // in the buf and after the close both become spaces when prose is
+  // adjacent.
+  if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
+  else flushTextRun(state, buf);
   const openStart = snapshot(cur);
   emitScriptOpen(state, openStart);
   const contentStart = snapshot(state.cur);
@@ -41,6 +47,7 @@ export function tryScriptBlock(state: LexState, buf: RunBuf): boolean {
   if (closeAt === -1) throwUnclosed(state, openStart);
   emitContent(state, contentStart, closeAt);
   emitScriptClose(state);
+  state.afterInline = true;
   return true;
 }
 
