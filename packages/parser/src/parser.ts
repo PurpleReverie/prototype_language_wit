@@ -17,6 +17,11 @@ import { ParseError } from './parser-errors.js';
 import { TokenCursor } from './parser-cursor.js';
 import { parseInline, parseInlineComment } from './parser-inline.js';
 import { parseNodeUse } from './parser-nodes.js';
+import {
+  isIfStatementStart,
+  parseIfStatement,
+  type BlockStopFn,
+} from './parser-statements.js';
 import type {
   Block,
   Comment,
@@ -69,8 +74,29 @@ function parseBlock(cursor: TokenCursor): Block | null {
   if (tok.kind === 'nodeOpen' && isBlockBodiedOpen(cursor)) {
     return parseUseBlock(cursor);
   }
+  if (isIfStatementStart(cursor)) return parseIfBlock(cursor);
   if (isStandaloneComment(cursor)) return parseStandaloneComment(cursor);
   return parseParagraph(cursor);
+}
+
+function parseIfBlock(cursor: TokenCursor): Block {
+  return parseIfStatement(cursor, { parseBlocks: collectBlocksUntil });
+}
+
+function collectBlocksUntil(
+  cursor: TokenCursor,
+  stop: BlockStopFn,
+): Block[] {
+  const out: Block[] = [];
+  while (!cursor.isAtEnd() && !stop(cursor)) {
+    skipParagraphBreaks(cursor);
+    if (cursor.isAtEnd() || stop(cursor)) break;
+    const before = cursor.position();
+    const block = parseBlock(cursor);
+    if (block !== null) out.push(block);
+    if (cursor.position() === before) break;
+  }
+  return out;
 }
 
 function isBlockBodiedOpen(cursor: TokenCursor): boolean {

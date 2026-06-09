@@ -23,29 +23,38 @@
         "shape": "single-line"
       },
       {
-        "children": [
-          {
-            "kind": "text",
-            "value": "(if "
-          },
-          {
-            "access": [
+        "cond": {
+          "kind": "existenceCondition",
+          "path": {
+            "segments": [
+              "lamp",
               "flag"
-            ],
-            "body": null,
-            "closeStyle": "bare",
-            "inline": true,
-            "kind": "nodeUse",
-            "name": "lamp",
-            "params": [],
-            "paramsSource": "none"
-          },
+            ]
+          }
+        },
+        "else": [
           {
-            "kind": "text",
-            "value": ") The lamp burned. (else) (end)"
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
           }
         ],
-        "kind": "paragraph"
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " The lamp burned. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
       }
     ],
     "kind": "document"
