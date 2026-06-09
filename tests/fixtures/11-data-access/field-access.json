@@ -5,8 +5,23 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ name - Stephen, post - Carrick Point }"
+            "fields": [
+              {
+                "key": "name",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Stephen"
+                }
+              },
+              {
+                "key": "post",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Carrick Point"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

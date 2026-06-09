@@ -5,8 +5,23 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ author - Simone Weil, work - Gravity and Grace }"
+            "fields": [
+              {
+                "key": "author",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Simone Weil"
+                }
+              },
+              {
+                "key": "work",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Gravity and Grace"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

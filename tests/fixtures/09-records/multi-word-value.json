@@ -5,8 +5,16 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ name - Aldous Vane }"
+            "fields": [
+              {
+                "key": "name",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "Aldous Vane"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

@@ -5,8 +5,32 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ y { z { w - deep } } }"
+            "fields": [
+              {
+                "key": "y",
+                "value": {
+                  "fields": [
+                    {
+                      "key": "z",
+                      "value": {
+                        "fields": [
+                          {
+                            "key": "w",
+                            "value": {
+                              "kind": "stringValue",
+                              "value": "deep"
+                            }
+                          }
+                        ],
+                        "kind": "record"
+                      }
+                    }
+                  ],
+                  "kind": "record"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

@@ -5,8 +5,23 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ lit - true, oil - full }"
+            "fields": [
+              {
+                "key": "lit",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "true"
+                }
+              },
+              {
+                "key": "oil",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "full"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],

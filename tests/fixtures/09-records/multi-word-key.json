@@ -5,8 +5,16 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": "{ years at post - 31 }"
+            "fields": [
+              {
+                "key": "years at post",
+                "value": {
+                  "kind": "stringValue",
+                  "value": "31"
+                }
+              }
+            ],
+            "kind": "record"
           }
         ],
         "captures": [],
