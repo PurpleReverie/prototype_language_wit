@@ -17,6 +17,7 @@ export const RuntimeErrorCode = {
   E_EXPANSION_DEPTH_LIMIT: 'E_EXPANSION_DEPTH_LIMIT',
   E_NOT_ITERABLE: 'E_NOT_ITERABLE',
   E_AMBIGUOUS_RECORD_KEY: 'E_AMBIGUOUS_RECORD_KEY',
+  E_SCRIPT_ERROR: 'E_SCRIPT_ERROR',
 } as const;
 
 export type RuntimeErrorCodeName =
