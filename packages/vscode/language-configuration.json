@@ -1,6 +1,7 @@
 {
   "comments": {
-    "lineComment": "~"
+    "lineComment": "~",
+    "blockComment": ["~~", "~~/"]
   },
   "brackets": [
     ["{", "}"],
@@ -10,11 +11,17 @@
   "autoClosingPairs": [
     { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
-    { "open": "(", "close": ")" }
+    { "open": "(", "close": ")" },
+    { "open": "<%", "close": "%>" },
+    { "open": "~~", "close": "~~/" }
   ],
   "surroundingPairs": [
     ["{", "}"],
     ["[", "]"],
-    ["(", ")"]
-  ]
+    ["(", ")"],
+    ["_", "_"],
+    ["*", "*"]
+  ],
+  "indentationRules": {},
+  "wordPattern": "[A-Za-z0-9_-]+"
 }

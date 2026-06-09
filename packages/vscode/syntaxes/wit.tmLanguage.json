@@ -2,6 +2,80 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "Wit",
   "scopeName": "source.wit",
-  "patterns": [],
-  "repository": {}
+  "fileTypes": ["wit"],
+  "patterns": [
+    { "include": "#block-comment" },
+    { "include": "#line-comment" },
+    { "include": "#script-block" },
+    { "include": "#paren-statement" },
+    { "include": "#value-block-terminator" },
+    { "include": "#additive-def" },
+    { "include": "#node-def-open" },
+    { "include": "#node-def-close" },
+    { "include": "#node-open" },
+    { "include": "#node-close" },
+    { "include": "#bold" },
+    { "include": "#italic" }
+  ],
+  "repository": {
+    "line-comment": {
+      "match": "^\\s*~ .*$",
+      "name": "comment.line.tilde.wit"
+    },
+    "block-comment": {
+      "begin": "~~",
+      "end": "~~/",
+      "name": "comment.block.wit"
+    },
+    "script-block": {
+      "begin": "<%",
+      "end": "%>",
+      "name": "meta.embedded.javascript.wit",
+      "patterns": [
+        { "include": "source.js" }
+      ]
+    },
+    "value-block-terminator": {
+      "match": "!!",
+      "name": "punctuation.terminator.value-block.wit"
+    },
+    "additive-def": {
+      "match": "\\+#[A-Za-z0-9_-]+",
+      "name": "entity.name.function.partial.wit"
+    },
+    "node-def-open": {
+      "match": "#[A-Za-z0-9_-]+",
+      "name": "entity.name.function.wit"
+    },
+    "node-def-close": {
+      "match": "[A-Za-z0-9_-]+#",
+      "name": "entity.name.function.wit"
+    },
+    "node-open": {
+      "match": "@[A-Za-z0-9_-]+",
+      "name": "entity.name.tag.wit"
+    },
+    "node-close": {
+      "match": "[A-Za-z0-9_-]+@",
+      "name": "entity.name.tag.wit"
+    },
+    "paren-statement": {
+      "begin": "\\(",
+      "end": "\\)",
+      "patterns": [
+        {
+          "match": "\\b(if|else|end|each|as|is|equals)\\b",
+          "name": "keyword.control.wit"
+        }
+      ]
+    },
+    "italic": {
+      "match": "_[^_\\n]+_",
+      "name": "markup.italic.wit"
+    },
+    "bold": {
+      "match": "\\*[^*\\n]+\\*",
+      "name": "markup.bold.wit"
+    }
+  }
 }
