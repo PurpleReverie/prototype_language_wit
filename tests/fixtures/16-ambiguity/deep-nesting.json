@@ -218,15 +218,6 @@
         "name": "outer",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

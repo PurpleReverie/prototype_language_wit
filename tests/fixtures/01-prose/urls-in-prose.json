@@ -9,17 +9,13 @@
             "text": "URLs and mailto-shaped strings sitting inside ordinary prose. No link syntax."
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "note: the mailto contains an intentional @ — see _notes.md."
           },
           {
             "kind": "text",
-            "value": "\nHe left a note pointing to https://example.com/x?y=1 and a second line reading mailto:"
+            "value": "He left a note pointing to https://example.com/x?y=1 and a second line reading mailto:"
           }
         ],
         "kind": "paragraph"
@@ -28,7 +24,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "example.org, neither of which the storm would let him send.\n"
+            "value": "example.org, neither of which the storm would let him send."
           }
         ],
         "kind": "paragraph"

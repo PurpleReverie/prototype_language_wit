@@ -14,7 +14,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "Even 2*3*4*5 stays inline arithmetic, not nested emphasis.\n"
+            "value": "Even 2*3*4*5 stays inline arithmetic, not nested emphasis."
           }
         ],
         "kind": "paragraph"

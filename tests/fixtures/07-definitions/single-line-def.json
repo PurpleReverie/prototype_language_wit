@@ -15,38 +15,30 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "additive": false,
+        "body": [
           {
             "kind": "text",
-            "value": "\n"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": ": Dunmore Head "
+            "value": "Dunmore Head "
           }
         ],
-        "kind": "paragraph"
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "place",
+        "shape": "single-line"
       },
       {
-        "children": [
+        "additive": false,
+        "body": [
           {
             "kind": "text",
-            "value": "\n"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": ": Aldous Vane "
+            "value": "Aldous Vane "
           }
         ],
-        "kind": "paragraph"
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "keeper",
+        "shape": "single-line"
       },
       {
         "children": [
@@ -91,7 +83,7 @@
           },
           {
             "kind": "text",
-            "value": ".\n"
+            "value": "."
           }
         ],
         "kind": "paragraph"

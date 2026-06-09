@@ -9,17 +9,13 @@
             "text": "both orderings of nested marks: bold outside italic, then italic outside bold"
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "each token is one word so the inner mark closes before the outer"
           },
           {
             "kind": "text",
-            "value": "\nHe read the inscription _*aloud"
+            "value": "He read the inscription _*aloud"
           },
           {
             "kind": "text",
@@ -40,7 +36,7 @@
           },
           {
             "kind": "text",
-            "value": "*.\n"
+            "value": "*."
           }
         ],
         "kind": "paragraph"

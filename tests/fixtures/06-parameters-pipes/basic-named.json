@@ -7,7 +7,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nThe harbour was still.\n"
+                "value": "The harbour was still."
               }
             ],
             "kind": "paragraph"
@@ -24,15 +24,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

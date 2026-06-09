@@ -9,17 +9,13 @@
             "text": "a blank line mid-paragraph MUST split the prose into two paragraphs."
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "Companion to soft-line-break.wit: same words, different newline count between them."
           },
           {
             "kind": "text",
-            "value": "\nThe keeper had not spoken aloud in eleven days,"
+            "value": "The keeper had not spoken aloud in eleven days,"
           }
         ],
         "kind": "paragraph"
@@ -28,7 +24,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "and his silence had begun to feel less like an absence than a furnishing.\n"
+            "value": "and his silence had begun to feel less like an absence than a furnishing."
           }
         ],
         "kind": "paragraph"

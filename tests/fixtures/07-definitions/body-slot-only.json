@@ -5,38 +5,22 @@
         "additive": false,
         "body": [
           {
-            "children": [
+            "body": [
               {
-                "kind": "text",
-                "value": "\n"
-              },
-              {
-                "body": [
-                  {
-                    "kind": "text",
-                    "value": "\n"
-                  },
+                "children": [
                   {
                     "kind": "bodySlot"
-                  },
-                  {
-                    "kind": "text",
-                    "value": "\n"
                   }
                 ],
-                "closeStyle": "named",
-                "inline": true,
-                "kind": "nodeUse",
-                "name": "panel",
-                "params": [],
-                "paramsSource": "none"
-              },
-              {
-                "kind": "text",
-                "value": "\n"
+                "kind": "paragraph"
               }
             ],
-            "kind": "paragraph"
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "panel",
+            "params": [],
+            "paramsSource": "none"
           }
         ],
         "captures": [],
@@ -50,7 +34,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nFirst paragraph of contributed body."
+                "value": "First paragraph of contributed body."
               }
             ],
             "kind": "paragraph"
@@ -59,7 +43,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "Second paragraph of contributed body.\n"
+                "value": "Second paragraph of contributed body."
               }
             ],
             "kind": "paragraph"
@@ -71,15 +55,6 @@
         "name": "wrapper",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

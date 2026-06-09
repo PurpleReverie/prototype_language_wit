@@ -2,32 +2,13 @@
   "ast": {
     "children": [
       {
-        "body": [
-          {
-            "children": [
-              {
-                "kind": "text",
-                "value": "\n"
-              }
-            ],
-            "kind": "paragraph"
-          }
-        ],
+        "body": [],
         "closeStyle": "named",
         "inline": false,
         "kind": "nodeUse",
         "name": "x",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

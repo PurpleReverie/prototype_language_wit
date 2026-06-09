@@ -1,7 +1,21 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #report: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "{\n  title - Q3 Operations Review\n  quarter - 2024\n  final - true\n}"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "report",
+        "shape": "single-line"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

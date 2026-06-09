@@ -20,10 +20,6 @@
               }
             ],
             "paramsSource": "parens"
-          },
-          {
-            "kind": "text",
-            "value": "\n"
           }
         ],
         "kind": "paragraph"

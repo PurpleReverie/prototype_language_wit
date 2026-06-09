@@ -24,15 +24,6 @@
           }
         ],
         "paramsSource": "parens"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

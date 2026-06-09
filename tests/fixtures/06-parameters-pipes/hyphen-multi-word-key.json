@@ -7,7 +7,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nThe lantern room was unlit.\n"
+                "value": "The lantern room was unlit."
               }
             ],
             "kind": "paragraph"
@@ -24,15 +24,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

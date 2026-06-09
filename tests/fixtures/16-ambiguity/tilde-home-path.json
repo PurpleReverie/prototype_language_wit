@@ -14,7 +14,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "Configs live in ~/.config and caches in ~/.cache on most systems.\n"
+            "value": "Configs live in ~/.config and caches in ~/.cache on most systems."
           }
         ],
         "kind": "paragraph"

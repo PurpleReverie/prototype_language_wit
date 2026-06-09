@@ -50,30 +50,17 @@
         "shape": "single-line"
       },
       {
-        "children": [
+        "additive": false,
+        "body": [
           {
             "kind": "text",
-            "value": "\n"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": ": Aldous Vane "
+            "value": "Aldous Vane "
           }
         ],
-        "kind": "paragraph"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "keeper",
+        "shape": "single-line"
       }
     ],
     "kind": "document"

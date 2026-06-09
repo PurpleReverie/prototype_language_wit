@@ -1,7 +1,21 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #themes: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "[ a b c ]"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "themes",
+        "shape": "single-line"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

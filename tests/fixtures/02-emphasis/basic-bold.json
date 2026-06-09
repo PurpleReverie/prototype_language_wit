@@ -10,7 +10,7 @@
           },
           {
             "kind": "text",
-            "value": "\nThe keeper called it a "
+            "value": "The keeper called it a "
           },
           {
             "children": [
@@ -23,7 +23,7 @@
           },
           {
             "kind": "text",
-            "value": " and went back to polishing the lens.\n"
+            "value": " and went back to polishing the lens."
           }
         ],
         "kind": "paragraph"

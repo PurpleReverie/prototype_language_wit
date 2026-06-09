@@ -10,7 +10,7 @@
           },
           {
             "kind": "text",
-            "value": "\n\tTab-indented prose line.\n    Space-indented prose line.\n \t Mixed leading whitespace prose line.\n"
+            "value": "\tTab-indented prose line.\n    Space-indented prose line.\n \t Mixed leading whitespace prose line."
           }
         ],
         "kind": "paragraph"

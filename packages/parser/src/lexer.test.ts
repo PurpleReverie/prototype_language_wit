@@ -145,10 +145,11 @@ describe('lex — prose runs', () => {
     expect((toks[0] as TextRun).value).toBe('alpha\nbeta');
   });
 
-  it('single trailing newline stays in the textRun (no phantom break)', () => {
-    const toks = lex('hello\n');
-    expect(kinds(toks)).toEqual(['textRun', 'eof']);
-    expect((toks[0] as TextRun).value).toBe('hello\n');
+  it('flanking newlines are stripped, internal preserved (bug-1)', () => {
+    // Bug-1: TextRun.value never starts/ends with \n; internal \n stays.
+    expect((lex('hello\n')[0] as TextRun).value).toBe('hello');
+    expect((lex('~ note\nWit')[1] as TextRun).value).toBe('Wit');
+    expect((lex('alpha\nbeta')[0] as TextRun).value).toBe('alpha\nbeta');
   });
 
   it('trailing blank lines emit one paragraphBreak then eof', () => {

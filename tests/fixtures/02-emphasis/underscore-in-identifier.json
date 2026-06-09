@@ -9,17 +9,13 @@
             "text": "intra-word underscores in snake_case identifiers do not open italic"
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "the run remains a single plain-text token across all three underscores"
           },
           {
             "kind": "text",
-            "value": "\nThe variable snake_case_word appeared three times in the listing.\n"
+            "value": "The variable snake_case_word appeared three times in the listing."
           }
         ],
         "kind": "paragraph"

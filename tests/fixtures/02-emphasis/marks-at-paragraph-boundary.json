@@ -9,17 +9,9 @@
             "text": "emphasis as the first and last token of a paragraph"
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "also: asterisks adjacent to blank lines (paragraph boundaries)"
-          },
-          {
-            "kind": "text",
-            "value": "\n"
           },
           {
             "children": [
@@ -72,7 +64,7 @@
           },
           {
             "kind": "text",
-            "value": " arrived, and the silence broke.\n"
+            "value": " arrived, and the silence broke."
           }
         ],
         "kind": "paragraph"

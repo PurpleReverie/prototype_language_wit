@@ -112,36 +112,47 @@ type DefShape = 'block' | 'single-line' | 'value-block';
 
 function detectDefShape(cursor: TokenCursor, name: string): DefShape {
   // Scan forward: if a matching `name#` appears before any `!!`, this
-  // is a block-form def. Otherwise it's bang-bang-terminated and we
-  // distinguish single-line vs value-block by line-spanning.
+  // is a block-form def. Value-block requires BOTH a `!!` terminator
+  // AND a line-spanning value (paragraphBreak or internal `\n` reached
+  // before the `!!`). Otherwise (no `!!` at all, or `!!` on the same
+  // line) it's single-line — rule (b) lets EOL terminate.
   const terminator = lookaheadTerminator(cursor, name);
   if (terminator === 'hashClose') return 'block';
-  return scansAcrossBreak(cursor) ? 'value-block' : 'single-line';
+  if (terminator === 'bangBang' && scansAcrossBreak(cursor)) return 'value-block';
+  return 'single-line';
 }
 
 function lookaheadTerminator(
   cursor: TokenCursor,
   name: string,
 ): 'hashClose' | 'bangBang' | 'eof' {
+  // A subsequent def-start (`#x`, `+#x`) acts as a hard boundary: any
+  // `!!` past that point belongs to a different def, not this one.
   let i = 0;
   while (true) {
     const tok = cursor.peek(i);
     if (tok.kind === 'eof') return 'eof';
     if (tok.kind === 'hashClose' && tok.name === name) return 'hashClose';
     if (tok.kind === 'bangBang') return 'bangBang';
+    if (i > 0 && (tok.kind === 'hashOpen' || tok.kind === 'additivePrefix')) {
+      return 'eof';
+    }
     i += 1;
   }
 }
 
 function scansAcrossBreak(cursor: TokenCursor): boolean {
   // Lookahead: is there a paragraph break OR a multi-line text run
-  // before the next BangBang?
+  // before the next BangBang? Stops at the next def-start.
   let i = 0;
   while (true) {
     const tok = cursor.peek(i);
     if (tok.kind === 'bangBang') return false;
     if (tok.kind === 'paragraphBreak') return true;
     if (tok.kind === 'eof') return false;
+    if (i > 0 && (tok.kind === 'hashOpen' || tok.kind === 'additivePrefix')) {
+      return false;
+    }
     if (tok.kind === 'textRun' && tok.value.includes('\n')) return true;
     i += 1;
   }
@@ -152,43 +163,31 @@ function scansAcrossBreak(cursor: TokenCursor): boolean {
 // ---------------------------------------------------------------------------
 
 function parseSingleLineDef(
-  cursor: TokenCursor,
-  open: HashOpen,
-  captures: string[],
-  additive: boolean,
-  opts: NodeDefOptions,
+  cursor: TokenCursor, open: HashOpen, captures: string[],
+  additive: boolean, opts: NodeDefOptions,
 ): NodeDef {
-  stripLeadingColon(cursor);
-  const body = collectUntilBangBang(cursor, opts);
-  const closeLoc = expectBangBang(cursor, open);
-  return {
-    kind: 'nodeDef',
-    name: open.name,
-    captures,
-    shape: 'single-line',
-    body,
-    additive,
-    loc: spanLoc(open.loc, closeLoc),
-  };
+  return parseBangBangDef(cursor, open, captures, additive, opts, 'single-line');
 }
 
 function parseValueBlockDef(
-  cursor: TokenCursor,
-  open: HashOpen,
-  captures: string[],
-  additive: boolean,
-  opts: NodeDefOptions,
+  cursor: TokenCursor, open: HashOpen, captures: string[],
+  additive: boolean, opts: NodeDefOptions,
+): NodeDef {
+  return parseBangBangDef(cursor, open, captures, additive, opts, 'value-block');
+}
+
+function parseBangBangDef(
+  cursor: TokenCursor, open: HashOpen, captures: string[],
+  additive: boolean, opts: NodeDefOptions,
+  shape: 'single-line' | 'value-block',
 ): NodeDef {
   stripLeadingColon(cursor);
-  const body = collectUntilBangBang(cursor, opts);
+  const body = shape === 'single-line'
+    ? collectSingleLineValue(cursor, opts)
+    : collectValueBlock(cursor, opts);
   const closeLoc = expectBangBang(cursor, open);
   return {
-    kind: 'nodeDef',
-    name: open.name,
-    captures,
-    shape: 'value-block',
-    body,
-    additive,
+    kind: 'nodeDef', name: open.name, captures, shape, body, additive,
     loc: spanLoc(open.loc, closeLoc),
   };
 }
@@ -233,29 +232,62 @@ function cursorTokens(cursor: TokenCursor): Token[] {
   return (cursor as unknown as { tokens: Token[] }).tokens;
 }
 
-function collectUntilBangBang(
-  cursor: TokenCursor,
-  opts: NodeDefOptions,
+function collectSingleLineValue(
+  cursor: TokenCursor, opts: NodeDefOptions,
+): (Block | Inline)[] {
+  // Terminated by `!!`, next def start, paragraph break, or EOF.
+  return collectDefValue(cursor, opts, true);
+}
+
+function collectValueBlock(
+  cursor: TokenCursor, opts: NodeDefOptions,
+): (Block | Inline)[] {
+  // Spans paragraph breaks; ends only at `!!`, next def start, or EOF.
+  return collectDefValue(cursor, opts, false);
+}
+
+function collectDefValue(
+  cursor: TokenCursor, opts: NodeDefOptions, stopAtParaBreak: boolean,
 ): (Block | Inline)[] {
   const out: (Block | Inline)[] = [];
-  while (!cursor.isAtEnd() && cursor.current().kind !== 'bangBang') {
-    if (cursor.current().kind === 'paragraphBreak') { cursor.advance(); continue; }
+  while (!cursor.isAtEnd() && !isDefValueTerminator(cursor, stopAtParaBreak)) {
+    if (!stopAtParaBreak && cursor.current().kind === 'paragraphBreak') {
+      cursor.advance(); continue;
+    }
+    const before = cursor.position();
     for (const child of opts.parseInline(cursor)) out.push(child);
+    if (cursor.position() === before) break; // forward-progress safety.
   }
   return out;
 }
 
+function isDefValueTerminator(
+  cursor: TokenCursor, stopAtParaBreak: boolean,
+): boolean {
+  const k = cursor.current().kind;
+  if (k === 'bangBang' || k === 'hashOpen' || k === 'additivePrefix') return true;
+  return stopAtParaBreak && k === 'paragraphBreak';
+}
+
 function expectBangBang(cursor: TokenCursor, open: HashOpen): Loc {
   const tok = cursor.current();
-  if (tok.kind !== 'bangBang') {
-    throw new ParseError(
-      ErrorCode.E_UNCLOSED_DEFINITION,
-      `unclosed #${open.name}: missing !!`,
-      open.loc,
-    );
+  if (tok.kind === 'bangBang') {
+    cursor.advance();
+    return tok.loc;
   }
-  cursor.advance();
-  return tok.loc;
+  if (isImplicitDefTerminator(tok.kind)) return open.loc;
+  throw new ParseError(
+    ErrorCode.E_UNCLOSED_DEFINITION,
+    `unclosed #${open.name}: missing !!`,
+    open.loc,
+  );
+}
+
+function isImplicitDefTerminator(kind: string): boolean {
+  return kind === 'hashOpen' ||
+         kind === 'additivePrefix' ||
+         kind === 'eof' ||
+         kind === 'paragraphBreak';
 }
 
 // ---------------------------------------------------------------------------

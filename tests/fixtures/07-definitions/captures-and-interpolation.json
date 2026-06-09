@@ -8,7 +8,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nChapter "
+                "value": "Chapter "
               },
               {
                 "kind": "interpolation",
@@ -21,10 +21,6 @@
               {
                 "kind": "interpolation",
                 "name": "title"
-              },
-              {
-                "kind": "text",
-                "value": "\n"
               }
             ],
             "kind": "paragraph"
@@ -39,17 +35,7 @@
         "shape": "block"
       },
       {
-        "body": [
-          {
-            "children": [
-              {
-                "kind": "text",
-                "value": "\n"
-              }
-            ],
-            "kind": "paragraph"
-          }
-        ],
+        "body": [],
         "closeStyle": "named",
         "inline": false,
         "kind": "nodeUse",
@@ -65,15 +51,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

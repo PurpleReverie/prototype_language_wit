@@ -7,7 +7,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nThe harbour was still.\n"
+                "value": "The harbour was still."
               },
               {
                 "kind": "text",
@@ -23,7 +23,7 @@
               },
               {
                 "kind": "text",
-                "value": "\nThen the bell began to ring.\n"
+                "value": "Then the bell began to ring."
               },
               {
                 "kind": "text",
@@ -36,10 +36,6 @@
               {
                 "kind": "text",
                 "value": ""
-              },
-              {
-                "kind": "text",
-                "value": "\n"
               }
             ],
             "kind": "paragraph"
@@ -56,15 +52,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

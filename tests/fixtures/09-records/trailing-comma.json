@@ -1,7 +1,21 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #x: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "{ a - 1, }"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "x",
+        "shape": "single-line"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

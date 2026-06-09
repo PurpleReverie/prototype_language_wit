@@ -9,17 +9,13 @@
             "text": "lines that LOOK like markdown block syntax must parse as plain prose."
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "Wit has no blockquote, no bullet list, no ordered list."
           },
           {
             "kind": "text",
-            "value": "\n> she said, and the word hung in the air like a held breath."
+            "value": "> she said, and the word hung in the air like a held breath."
           }
         ],
         "kind": "paragraph"
@@ -46,7 +42,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "1. The first time he wrote a number followed by a period, nothing happened.\n"
+            "value": "1. The first time he wrote a number followed by a period, nothing happened."
           }
         ],
         "kind": "paragraph"

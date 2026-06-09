@@ -9,17 +9,13 @@
             "text": "digit-flanked asterisks must not open or close emphasis"
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "the whole run stays a single plain-text token"
           },
           {
             "kind": "text",
-            "value": "\nHe multiplied 5*6*7 in his head and the 6 stayed plain.\n"
+            "value": "He multiplied 5*6*7 in his head and the 6 stayed plain."
           }
         ],
         "kind": "paragraph"

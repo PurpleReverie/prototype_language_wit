@@ -23,7 +23,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "A range like 1995 — 2010 is prose; a flag like build - release is not.\n"
+            "value": "A range like 1995 — 2010 is prose; a flag like build - release is not."
           }
         ],
         "kind": "paragraph"
