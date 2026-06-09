@@ -5,7 +5,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "The lighthouse was commissioned in 1847.\n"
+            "value": "The lighthouse was commissioned in 1847."
           },
           {
             "inline": true,
@@ -14,7 +14,7 @@
           },
           {
             "kind": "text",
-            "value": "\nHe served thirty-one years.\n"
+            "value": "He served thirty-one years."
           }
         ],
         "kind": "paragraph"

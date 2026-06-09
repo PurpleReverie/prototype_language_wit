@@ -7,13 +7,13 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nouter body before\n"
+                "value": "outer body before"
               },
               {
                 "body": [
                   {
                     "kind": "text",
-                    "value": "\ninner body\n"
+                    "value": "inner body"
                   }
                 ],
                 "closeStyle": "named",
@@ -25,7 +25,7 @@
               },
               {
                 "kind": "text",
-                "value": "\nouter body after\n"
+                "value": "outer body after"
               }
             ],
             "kind": "paragraph"
@@ -37,15 +37,6 @@
         "name": "x",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

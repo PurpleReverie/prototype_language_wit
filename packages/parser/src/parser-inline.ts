@@ -78,6 +78,8 @@ function parseOneInline(cursor: TokenCursor): Inline | null {
   if (tok.kind === 'nodeClose') return null;
   if (tok.kind === 'hashClose') return null;
   if (tok.kind === 'bangBang') return null;
+  if (tok.kind === 'hashOpen') return null;
+  if (tok.kind === 'additivePrefix') return null;
   if (tok.kind === 'interpolationOpen') return takeInterpolation(cursor);
   if (tok.kind === 'bodySlotMarker') return takeBodySlot(cursor);
   return fallbackText(cursor);

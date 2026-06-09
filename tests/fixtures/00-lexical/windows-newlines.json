@@ -10,7 +10,7 @@
           },
           {
             "kind": "text",
-            "value": "\nFirst paragraph."
+            "value": "First paragraph."
           }
         ],
         "kind": "paragraph"
@@ -19,7 +19,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "Second paragraph.\n"
+            "value": "Second paragraph."
           }
         ],
         "kind": "paragraph"

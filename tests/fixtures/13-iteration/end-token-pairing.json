@@ -1,7 +1,95 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #watch: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "[ Marlow, Singleton ]"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "watch",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "[ Wait, Donkin ]"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "relief",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "(each "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "watch",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " as item) "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "item",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": ", (end) (each "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "relief",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " as item) "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "item",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": ", (end) and the deck was full."
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

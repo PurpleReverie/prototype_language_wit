@@ -2,17 +2,7 @@
   "ast": {
     "children": [
       {
-        "body": [
-          {
-            "children": [
-              {
-                "kind": "text",
-                "value": "\n"
-              }
-            ],
-            "kind": "paragraph"
-          }
-        ],
+        "body": [],
         "closeStyle": "named",
         "inline": false,
         "kind": "nodeUse",
@@ -24,15 +14,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

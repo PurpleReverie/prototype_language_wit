@@ -14,7 +14,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "> Another such line. Wit does not reserve > as a blockquote leader.\n"
+            "value": "> Another such line. Wit does not reserve > as a blockquote leader."
           }
         ],
         "kind": "paragraph"

@@ -1,7 +1,56 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #absent: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "[ ]"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "absent",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "(each "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "absent",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " as item) The deck answered "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "item",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": ". (end)"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

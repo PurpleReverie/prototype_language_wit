@@ -1,7 +1,46 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #keeper: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "{ name - Stephen }"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "keeper",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Looked up "
+          },
+          {
+            "access": [
+              "nonexistent"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "keeper",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " and found nothing."
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

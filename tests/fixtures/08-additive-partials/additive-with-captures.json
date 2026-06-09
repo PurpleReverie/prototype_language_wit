@@ -52,10 +52,6 @@
               }
             ],
             "paramsSource": "pipes"
-          },
-          {
-            "kind": "text",
-            "value": "\n"
           }
         ],
         "kind": "paragraph"

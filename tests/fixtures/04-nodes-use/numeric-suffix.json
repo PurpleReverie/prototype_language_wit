@@ -7,7 +7,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nThe Lamp\n"
+                "value": "The Lamp"
               }
             ],
             "kind": "paragraph"
@@ -26,7 +26,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nThe Keeper\n"
+                "value": "The Keeper"
               }
             ],
             "kind": "paragraph"
@@ -38,15 +38,6 @@
         "name": "h2",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

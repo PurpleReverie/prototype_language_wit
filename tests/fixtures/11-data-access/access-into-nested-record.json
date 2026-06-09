@@ -1,7 +1,47 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #keeper: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "{ name - Stephen, history { years - 31, port - Carrick } }"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "keeper",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "He logged "
+          },
+          {
+            "access": [
+              "history",
+              "years"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "keeper",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " years in post."
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

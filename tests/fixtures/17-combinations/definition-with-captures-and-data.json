@@ -7,15 +7,16 @@
           {
             "kind": "text",
             "value": "{ author - Simone Weil, work - Gravity and Grace }"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": ": "
-          },
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "weil",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
           {
             "kind": "text",
             "value": ""
@@ -51,8 +52,8 @@
         ],
         "captures": [],
         "kind": "nodeDef",
-        "name": "weil",
-        "shape": "value-block"
+        "name": "cite",
+        "shape": "single-line"
       },
       {
         "children": [
@@ -73,10 +74,6 @@
               }
             ],
             "paramsSource": "pipes"
-          },
-          {
-            "kind": "text",
-            "value": "\n"
           }
         ],
         "kind": "paragraph"

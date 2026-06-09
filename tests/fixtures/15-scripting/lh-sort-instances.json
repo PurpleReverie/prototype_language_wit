@@ -22,10 +22,6 @@
             "paramsSource": "parens"
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "body": null,
             "closeStyle": "parens",
             "inline": false,
@@ -42,10 +38,6 @@
               }
             ],
             "paramsSource": "parens"
-          },
-          {
-            "kind": "text",
-            "value": "\n"
           },
           {
             "body": null,
@@ -72,7 +64,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "<%\nlh.sort('finding', (a, b) => b.weight - a.weight);\n%>\n"
+            "value": "<%\nlh.sort('finding', (a, b) => b.weight - a.weight);\n%>"
           }
         ],
         "kind": "paragraph"

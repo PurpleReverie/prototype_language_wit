@@ -76,16 +76,16 @@ function parseBlock(cursor: TokenCursor): Block | null {
 function isBlockBodiedOpen(cursor: TokenCursor): boolean {
   // A NodeOpen at the start of a block is a block-level NodeUse if
   // either a matching `name@` close exists later in the stream, or the
-  // open sits alone on its line (next is paragraphBreak/EOF or a
-  // textRun whose first byte is `\n`). The "alone-on-line" case still
-  // becomes a block NodeUse here — parseNodeUse then throws
-  // E_UNCLOSED_NODE when no close is found.
+  // open sits alone on its line (next is paragraphBreak/EOF or starts
+  // on a later line). The "alone-on-line" case still becomes a block
+  // NodeUse here — parseNodeUse then throws E_UNCLOSED_NODE when no
+  // close is found.
   const tok = cursor.current();
   if (tok.kind !== 'nodeOpen') return false;
   if (hasMatchingNodeClose(cursor, tok.name)) return true;
   const next = cursor.peek(1);
   if (next.kind === 'paragraphBreak' || next.kind === 'eof') return true;
-  if (next.kind === 'textRun' && next.value.startsWith('\n')) return true;
+  if (next.loc.line > tok.loc.line) return true;
   return false;
 }
 

@@ -27,7 +27,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "reference ./later.wit\n"
+            "value": "reference ./later.wit"
           }
         ],
         "kind": "paragraph"

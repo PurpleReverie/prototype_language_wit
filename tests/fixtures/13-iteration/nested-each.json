@@ -1,7 +1,88 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #decks: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "[ { name - upper, hands - [ Marlow, Singleton ] }, { name - lower, hands - [ Wait ] } ]"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "decks",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "(each "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "decks",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " as deck) The "
+          },
+          {
+            "access": [
+              "name"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "deck",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " deck held (each "
+          },
+          {
+            "access": [
+              "hands"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "deck",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " as hand) "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "hand",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": ", (end) and stood ready. (end)"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

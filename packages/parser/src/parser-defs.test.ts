@@ -27,6 +27,47 @@ describe('parseNodeDef — single-line shape', () => {
     expect(def.shape).toBe('single-line');
     expect(def.body).toHaveLength(1);
   });
+
+  it('M2.fix bug-2: three back-to-back single-line defs each parse', () => {
+    // Regression: previously only the first def was recognized; the
+    // newline+next-`#` was absorbed into a stray Paragraph.
+    const src = '#year: 1923 !!\n#place: Dunmore Head !!\n#keeper: Vane !!';
+    const doc = parse(src);
+    expect(doc.children).toHaveLength(3);
+    expect((doc.children[0] as NodeDef).name).toBe('year');
+    expect((doc.children[1] as NodeDef).name).toBe('place');
+    expect((doc.children[2] as NodeDef).name).toBe('keeper');
+    for (const def of doc.children) {
+      expect((def as NodeDef).shape).toBe('single-line');
+    }
+  });
+
+  it('M2.fix bug-2 rule (b): `#x: value` without !! terminates at EOL+#', () => {
+    // No `!!` on either line; the newline+`#y` terminates `#x`.
+    const doc = parse('#x: alpha\n#y: beta\n');
+    expect(doc.children).toHaveLength(2);
+    const x = doc.children[0] as NodeDef;
+    const y = doc.children[1] as NodeDef;
+    expect(x.shape).toBe('single-line');
+    expect(y.shape).toBe('single-line');
+    expect(x.name).toBe('x');
+    expect(y.name).toBe('y');
+  });
+
+  it('M2.fix bug-2 rule (b): `#x: value` without !! terminates at EOF', () => {
+    const doc = parse('#x: lone value');
+    expect(doc.children).toHaveLength(1);
+    const x = doc.children[0] as NodeDef;
+    expect(x.shape).toBe('single-line');
+    expect(x.name).toBe('x');
+  });
+
+  it('M2.fix bug-2 rule (b): `#x: value` terminates at paragraph break', () => {
+    const doc = parse('#x: value-here\n\nA following paragraph.');
+    expect(doc.children).toHaveLength(2);
+    const x = doc.children[0] as NodeDef;
+    expect(x.shape).toBe('single-line');
+  });
 });
 
 describe('parseNodeDef — value-block shape', () => {

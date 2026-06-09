@@ -5,19 +5,11 @@
         "additive": false,
         "body": [
           {
-            "children": [
-              {
-                "kind": "text",
-                "value": "\n"
-              },
+            "body": [
               {
                 "body": [
                   {
-                    "kind": "text",
-                    "value": "\n"
-                  },
-                  {
-                    "body": [
+                    "children": [
                       {
                         "kind": "text",
                         "value": " "
@@ -31,19 +23,20 @@
                         "value": " "
                       }
                     ],
-                    "closeStyle": "named",
-                    "inline": true,
-                    "kind": "nodeUse",
-                    "name": "metriclabel",
-                    "params": [],
-                    "paramsSource": "none"
-                  },
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "metriclabel",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "body": [
                   {
-                    "kind": "text",
-                    "value": "\n"
-                  },
-                  {
-                    "body": [
+                    "children": [
                       {
                         "kind": "text",
                         "value": " "
@@ -57,19 +50,20 @@
                         "value": " "
                       }
                     ],
-                    "closeStyle": "named",
-                    "inline": true,
-                    "kind": "nodeUse",
-                    "name": "metricvalue",
-                    "params": [],
-                    "paramsSource": "none"
-                  },
+                    "kind": "paragraph"
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "metricvalue",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "body": [
                   {
-                    "kind": "text",
-                    "value": "\n"
-                  },
-                  {
-                    "body": [
+                    "children": [
                       {
                         "kind": "text",
                         "value": " "
@@ -83,31 +77,23 @@
                         "value": " "
                       }
                     ],
-                    "closeStyle": "named",
-                    "inline": true,
-                    "kind": "nodeUse",
-                    "name": "metrictarget",
-                    "params": [],
-                    "paramsSource": "none"
-                  },
-                  {
-                    "kind": "text",
-                    "value": "\n"
+                    "kind": "paragraph"
                   }
                 ],
                 "closeStyle": "named",
-                "inline": true,
+                "inline": false,
                 "kind": "nodeUse",
-                "name": "metriccard",
+                "name": "metrictarget",
                 "params": [],
                 "paramsSource": "none"
-              },
-              {
-                "kind": "text",
-                "value": "\n"
               }
             ],
-            "kind": "paragraph"
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "metriccard",
+            "params": [],
+            "paramsSource": "none"
           }
         ],
         "captures": [
@@ -150,15 +136,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

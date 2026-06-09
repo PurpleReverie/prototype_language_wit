@@ -7,7 +7,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nThe signal flag read red "
+                "value": "The signal flag read red "
               },
               {
                 "kind": "text",
@@ -23,7 +23,7 @@
               },
               {
                 "kind": "text",
-                "value": " red across the channel.\n"
+                "value": " red across the channel."
               }
             ],
             "kind": "paragraph"
@@ -35,15 +35,6 @@
         "name": "scene",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

@@ -9,17 +9,13 @@
             "text": "numeric shapes that resemble syntax in other languages must remain prose."
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "Notably \"1970. It was\" looks ordered-list-ish; \"5*6*7\" looks bold-ish; \"3.14\" is a literal."
           },
           {
             "kind": "text",
-            "value": "\nIt was 1970. It was the year the keeper bought his lamp, paid 5*6*7 shillings for the wick, and read the same 3.14-page pamphlet every evening until winter.\n"
+            "value": "It was 1970. It was the year the keeper bought his lamp, paid 5*6*7 shillings for the wick, and read the same 3.14-page pamphlet every evening until winter."
           }
         ],
         "kind": "paragraph"

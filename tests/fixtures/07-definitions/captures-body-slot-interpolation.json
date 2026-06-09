@@ -5,19 +5,11 @@
         "additive": false,
         "body": [
           {
-            "children": [
-              {
-                "kind": "text",
-                "value": "\n"
-              },
+            "body": [
               {
                 "body": [
                   {
-                    "kind": "text",
-                    "value": "\n"
-                  },
-                  {
-                    "body": [
+                    "children": [
                       {
                         "kind": "text",
                         "value": " "
@@ -31,38 +23,31 @@
                         "value": " "
                       }
                     ],
-                    "closeStyle": "named",
-                    "inline": true,
-                    "kind": "nodeUse",
-                    "name": "header",
-                    "params": [],
-                    "paramsSource": "none"
-                  },
-                  {
-                    "kind": "text",
-                    "value": "\n"
-                  },
-                  {
-                    "kind": "bodySlot"
-                  },
-                  {
-                    "kind": "text",
-                    "value": "\n"
+                    "kind": "paragraph"
                   }
                 ],
                 "closeStyle": "named",
-                "inline": true,
+                "inline": false,
                 "kind": "nodeUse",
-                "name": "panel",
+                "name": "header",
                 "params": [],
                 "paramsSource": "none"
               },
               {
-                "kind": "text",
-                "value": "\n"
+                "children": [
+                  {
+                    "kind": "bodySlot"
+                  }
+                ],
+                "kind": "paragraph"
               }
             ],
-            "kind": "paragraph"
+            "closeStyle": "named",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "panel",
+            "params": [],
+            "paramsSource": "none"
           }
         ],
         "captures": [
@@ -78,7 +63,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nFor eleven days the lamp had burned untended.\n"
+                "value": "For eleven days the lamp had burned untended."
               }
             ],
             "kind": "paragraph"
@@ -95,15 +80,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

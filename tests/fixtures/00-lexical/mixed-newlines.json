@@ -10,7 +10,7 @@
           },
           {
             "kind": "text",
-            "value": "\nLF-terminated line.\nCRLF-terminated line.\nCR-terminated line.\n"
+            "value": "LF-terminated line.\nCRLF-terminated line.\nCR-terminated line."
           }
         ],
         "kind": "paragraph"

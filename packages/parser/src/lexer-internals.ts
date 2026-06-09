@@ -61,10 +61,51 @@ export function locFrom(file: string, start: Cursor, end: Cursor): Loc {
 
 export function flushTextRun(state: LexState, buf: RunBuf): void {
   if (buf.value.length === 0) return;
+  const stripped = stripFlankingNewlines(buf.value);
+  if (stripped.value.length === 0) return;
   const tok: TextRun = {
     kind: 'textRun',
-    value: buf.value,
-    loc: locFrom(state.file, buf.start, state.cur),
+    value: stripped.value,
+    loc: shiftedLoc(state, buf.start, stripped.leading, stripped.trailing),
   };
   state.tokens.push(tok);
+}
+
+interface StrippedRun {
+  value: string;
+  leading: number;
+  trailing: number;
+}
+
+function stripFlankingNewlines(value: string): StrippedRun {
+  let leading = 0;
+  while (leading < value.length && value.charAt(leading) === '\n') leading += 1;
+  if (leading === value.length) {
+    return { value: '', leading, trailing: 0 };
+  }
+  let trailing = 0;
+  while (
+    trailing < value.length - leading &&
+    value.charAt(value.length - 1 - trailing) === '\n'
+  ) trailing += 1;
+  return { value: value.slice(leading, value.length - trailing), leading, trailing };
+}
+
+function shiftedLoc(
+  state: LexState,
+  start: Cursor,
+  leading: number,
+  trailing: number,
+): Loc {
+  const shiftedStart: Cursor = leading === 0
+    ? start
+    : { line: start.line + leading, col: 1, offset: start.offset + leading };
+  const baseLength = state.cur.offset - shiftedStart.offset;
+  return {
+    file: state.file,
+    line: shiftedStart.line,
+    col: shiftedStart.col,
+    offset: shiftedStart.offset,
+    length: baseLength - trailing,
+  };
 }

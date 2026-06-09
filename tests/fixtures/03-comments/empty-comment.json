@@ -2,18 +2,9 @@
   "ast": {
     "children": [
       {
-        "children": [
-          {
-            "inline": true,
-            "kind": "comment",
-            "text": " "
-          },
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
+        "inline": false,
+        "kind": "comment",
+        "text": " "
       }
     ],
     "kind": "document"

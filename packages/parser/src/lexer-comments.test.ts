@@ -19,7 +19,8 @@ describe('lex — line comments', () => {
     expect((toks[0] as LineComment).text).toBe('remember to verify');
     expect(toks[0]?.loc.line).toBe(1);
     expect(toks[0]?.loc.col).toBe(1);
-    expect((toks[1] as TextRun).value).toBe('\nThe lighthouse stood.');
+    // TextRun's leading \n is stripped (bug-1 fix).
+    expect((toks[1] as TextRun).value).toBe('The lighthouse stood.');
   });
 
   it('line comment mid-file between prose lines', () => {
@@ -27,11 +28,13 @@ describe('lex — line comments', () => {
       'The lighthouse was commissioned in 1847.\n~ verify date\nHe served thirty-one years.',
     );
     expect(kinds(toks)).toEqual(['textRun', 'lineComment', 'textRun', 'eof']);
+    // Trailing \n stripped (bug-1 fix).
     expect((toks[0] as TextRun).value).toBe(
-      'The lighthouse was commissioned in 1847.\n',
+      'The lighthouse was commissioned in 1847.',
     );
     expect((toks[1] as LineComment).text).toBe('verify date');
-    expect((toks[2] as TextRun).value).toBe('\nHe served thirty-one years.');
+    // Leading \n stripped (bug-1 fix).
+    expect((toks[2] as TextRun).value).toBe('He served thirty-one years.');
   });
 
   it('line comment after only leading whitespace counts as line-start', () => {
@@ -63,10 +66,11 @@ describe('lex — line comments', () => {
 
   it('line comment value excludes the terminating newline', () => {
     const toks = lex('~ note\n');
-    expect(kinds(toks)).toEqual(['lineComment', 'textRun', 'eof']);
+    // Bare \n after a comment becomes flanking-only and is stripped
+    // by the TextRun emitter (bug-1 fix). No phantom Text node.
+    expect(kinds(toks)).toEqual(['lineComment', 'eof']);
     expect((toks[0] as LineComment).text).toBe('note');
     expect(toks[0]?.loc.length).toBe('~ note'.length);
-    expect((toks[1] as TextRun).value).toBe('\n');
   });
 
   it('line comment runs to EOF without a trailing newline', () => {

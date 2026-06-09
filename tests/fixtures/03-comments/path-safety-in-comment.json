@@ -2,18 +2,9 @@
   "ast": {
     "children": [
       {
-        "children": [
-          {
-            "inline": true,
-            "kind": "comment",
-            "text": " TODO: save the file to ~/Documents/notes and ~/.bashrc "
-          },
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
+        "inline": false,
+        "kind": "comment",
+        "text": " TODO: save the file to ~/Documents/notes and ~/.bashrc "
       }
     ],
     "kind": "document"

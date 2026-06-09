@@ -2,18 +2,9 @@
   "ast": {
     "children": [
       {
-        "children": [
-          {
-            "inline": true,
-            "kind": "comment",
-            "text": " TODO ~~ also fix the typo on page 3 ~~ and verify the footnote "
-          },
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
+        "inline": false,
+        "kind": "comment",
+        "text": " TODO ~~ also fix the typo on page 3 ~~ and verify the footnote "
       }
     ],
     "kind": "document"

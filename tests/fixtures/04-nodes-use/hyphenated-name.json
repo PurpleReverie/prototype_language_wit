@@ -7,7 +7,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nTwelve drafts, four reviewers, one accepted.\n"
+                "value": "Twelve drafts, four reviewers, one accepted."
               }
             ],
             "kind": "paragraph"
@@ -19,15 +19,6 @@
         "name": "paper-stats",
         "params": [],
         "paramsSource": "none"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

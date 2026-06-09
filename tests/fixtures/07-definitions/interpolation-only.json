@@ -8,7 +8,7 @@
             "children": [
               {
                 "kind": "text",
-                "value": "\nHello, "
+                "value": "Hello, "
               },
               {
                 "kind": "interpolation",
@@ -16,7 +16,7 @@
               },
               {
                 "kind": "text",
-                "value": ".\n"
+                "value": "."
               }
             ],
             "kind": "paragraph"
@@ -52,15 +52,6 @@
           }
         ],
         "paramsSource": "pipes"
-      },
-      {
-        "children": [
-          {
-            "kind": "text",
-            "value": "\n"
-          }
-        ],
-        "kind": "paragraph"
       }
     ],
     "kind": "document"

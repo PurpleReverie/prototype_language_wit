@@ -1,7 +1,66 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_DEFINITION",
-    "message": "unclosed #hands: missing !!"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "[ { name - Marlow, post - bridge }, { name - Singleton, post - foredeck } ]"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "hands",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "(each "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "hands",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " as item) "
+          },
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " The bell struck twice. "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "watch",
+            "params": [
+              {
+                "name": "keeper",
+                "value": "@item.name, station @item.post"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "kind": "text",
+            "value": " (end)"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

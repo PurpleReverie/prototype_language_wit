@@ -9,17 +9,13 @@
             "text": "\"blank\" separator line contains only spaces and a tab. open question:"
           },
           {
-            "kind": "text",
-            "value": "\n"
-          },
-          {
             "inline": true,
             "kind": "comment",
             "text": "does this still count as a paragraph separator?"
           },
           {
             "kind": "text",
-            "value": "\nFirst paragraph here."
+            "value": "First paragraph here."
           }
         ],
         "kind": "paragraph"
@@ -28,7 +24,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "Second paragraph here.\n"
+            "value": "Second paragraph here."
           }
         ],
         "kind": "paragraph"

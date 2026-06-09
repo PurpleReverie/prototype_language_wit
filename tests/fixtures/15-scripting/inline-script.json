@@ -5,7 +5,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "The paper has <% lh.data.paper.wordCount %> words total.\n"
+            "value": "The paper has <% lh.data.paper.wordCount %> words total."
           }
         ],
         "kind": "paragraph"

@@ -10,7 +10,7 @@
           },
           {
             "kind": "text",
-            "value": "\nThe "
+            "value": "The "
           },
           {
             "children": [
@@ -23,7 +23,7 @@
           },
           {
             "kind": "text",
-            "value": "'s lamp had not gone out in eleven days.\n"
+            "value": "'s lamp had not gone out in eleven days."
           }
         ],
         "kind": "paragraph"

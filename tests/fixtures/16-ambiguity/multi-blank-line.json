@@ -23,7 +23,7 @@
         "children": [
           {
             "kind": "text",
-            "value": "Third paragraph after four blank lines.\n"
+            "value": "Third paragraph after four blank lines."
           }
         ],
         "kind": "paragraph"
