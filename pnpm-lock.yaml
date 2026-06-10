@@ -67,6 +67,9 @@ importers:
       '@wit/parser':
         specifier: workspace:*
         version: link:../parser
+      '@wit/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       typescript:
         specifier: ^5.5.4
         version: 5.9.3

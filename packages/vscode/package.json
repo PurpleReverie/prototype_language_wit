@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@wit/parser": "workspace:*",
+    "@wit/runtime": "workspace:*",
     "@types/vscode": "^1.80.0",
     "typescript": "^5.5.4",
     "vsce": "^2.15.0",

@@ -6,3 +6,4 @@ export * from './expander.js';
 export * from './lh-bridge.js';
 export * from './script-runner.js';
 export * from './core-vocab.js';
+export type { FileReader } from './resolver-files.js';

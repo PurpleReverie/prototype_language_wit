@@ -1,6 +1,6 @@
 // Wit language server entry point.
-// Implements: text-document sync (incremental), diagnostics, semantic tokens.
-// Started as a child process from the client extension (extension.ts).
+// Wires LSP capabilities: textDocumentSync, semantic tokens, diagnostics,
+// hover, definition, references, document symbols, completion.
 
 import {
   createConnection,
@@ -8,81 +8,187 @@ import {
   TextDocuments,
   TextDocumentSyncKind,
   SemanticTokensBuilder,
+  CompletionItemKind,
+  SymbolKind,
   type InitializeParams,
   type InitializeResult,
   type SemanticTokensParams,
   type SemanticTokens,
+  type Hover,
+  type Location,
+  type DocumentSymbol,
+  type CompletionList,
+  type CompletionItem as LspCompletionItem,
 } from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
-import { parseAndDiagnose } from './diagnostics.js';
+
+import { diagnosticsFromState } from './diagnostics.js';
 import {
   collectSemanticTokens,
   encodeTokens,
   SEMANTIC_TOKEN_TYPES,
 } from './semantic-tokens.js';
+import { DocumentCache } from './document-cache.js';
+import { DependentIndex, fsPathFromUri } from './cross-file.js';
+import { buildHover } from './hover.js';
+import { buildDefinition, type LocationLike } from './definition.js';
+import { buildReferences } from './references.js';
+import { buildDocumentSymbols, type SymbolEntry } from './document-symbols.js';
+import {
+  buildCompletion,
+  type CompletionItem,
+  type CompletionItemKindName,
+} from './completion.js';
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
+const cache = new DocumentCache();
+const deps = new DependentIndex();
 
 connection.onInitialize((_params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       semanticTokensProvider: {
-        legend: {
-          tokenTypes: [...SEMANTIC_TOKEN_TYPES],
-          tokenModifiers: [],
-        },
-        full: true,
-        range: false,
+        legend: { tokenTypes: [...SEMANTIC_TOKEN_TYPES], tokenModifiers: [] },
+        full: true, range: false,
       },
-      diagnosticProvider: {
-        interFileDependencies: false,
-        workspaceDiagnostics: false,
-      },
+      hoverProvider: true,
+      definitionProvider: true,
+      referencesProvider: true,
+      documentSymbolProvider: true,
+      completionProvider: { triggerCharacters: ['@', '#', ':', '.'] },
+      diagnosticProvider: { interFileDependencies: true, workspaceDiagnostics: false },
     },
   };
 });
 
-documents.onDidChangeContent((change) => {
-  publishDiagnostics(change.document);
+documents.onDidChangeContent((change) => refresh(change.document));
+documents.onDidOpen((event) => refresh(event.document));
+documents.onDidClose((event) => {
+  cache.removeOverlay(event.document.uri);
 });
 
-documents.onDidOpen((event) => {
-  publishDiagnostics(event.document);
-});
-
-function publishDiagnostics(doc: TextDocument): void {
-  const { diagnostics } = parseAndDiagnose(doc.getText(), doc.uri);
-  void connection.sendDiagnostics({ uri: doc.uri, diagnostics });
+function refresh(doc: TextDocument): void {
+  cache.setOverlay(doc.uri, doc.getText());
+  const state = cache.update(doc.uri, doc.getText());
+  void connection.sendDiagnostics({ uri: doc.uri, diagnostics: diagnosticsFromState(state) });
+  const fsPath = fsPathFromUri(doc.uri);
+  if (!fsPath) return;
+  deps.update(fsPath, state.referencedPaths);
+  for (const depPath of deps.transitiveDependents(fsPath)) refreshDependent(depPath);
 }
+
+function refreshDependent(absPath: string): void {
+  const depDoc = findOpenDocByPath(absPath);
+  if (!depDoc) return;
+  const s = cache.update(depDoc.uri, depDoc.getText());
+  void connection.sendDiagnostics({ uri: depDoc.uri, diagnostics: diagnosticsFromState(s) });
+}
+
+function findOpenDocByPath(absPath: string): TextDocument | null {
+  for (const d of documents.all()) {
+    if (fsPathFromUri(d.uri) === absPath) return d;
+  }
+  return null;
+}
+
+// --- Semantic tokens --------------------------------------------------------
 
 connection.languages.semanticTokens.on(
-  (params: SemanticTokensParams): SemanticTokens => buildSemanticTokens(params),
+  (params: SemanticTokensParams): SemanticTokens => semanticTokens(params),
 );
 
-function buildSemanticTokens(params: SemanticTokensParams): SemanticTokens {
-  const doc = documents.get(params.textDocument.uri);
-  if (!doc) return { data: [] };
-  const { ast } = parseAndDiagnose(doc.getText(), doc.uri);
-  if (!ast) return { data: [] };
-  const raw = collectSemanticTokens(ast);
-  return buildFromRaw(raw);
-}
-
-function buildFromRaw(raw: ReturnType<typeof collectSemanticTokens>): SemanticTokens {
-  // Use SemanticTokensBuilder for correct delta-encoding; equivalent to
-  // encodeTokens() but uses the LSP-provided helper for safety.
+function semanticTokens(params: SemanticTokensParams): SemanticTokens {
+  const state = cache.get(params.textDocument.uri);
+  if (!state?.parsed) return { data: [] };
+  const raw = collectSemanticTokens(state.parsed);
   const builder = new SemanticTokensBuilder();
   const typeIndex = new Map(SEMANTIC_TOKEN_TYPES.map((n, i) => [n, i]));
   for (const t of raw) {
-    const idx = typeIndex.get(t.tokenType) ?? 0;
-    builder.push(t.line, t.startChar, t.length, idx, t.modifiers);
+    builder.push(t.line, t.startChar, t.length, typeIndex.get(t.tokenType) ?? 0, t.modifiers);
   }
-  // Reference encodeTokens here so the unused-import lint stays clean if
-  // SemanticTokensBuilder is swapped out in future revisions.
   void encodeTokens;
   return builder.build();
+}
+
+// --- Hover ------------------------------------------------------------------
+
+connection.onHover((params): Hover | null => {
+  const state = cache.get(params.textDocument.uri);
+  if (!state) return null;
+  const res = buildHover(state, params.position.line + 1, params.position.character + 1);
+  if (!res) return null;
+  return { contents: { kind: 'markdown', value: res.contents } };
+});
+
+// --- Go-to-definition -------------------------------------------------------
+
+connection.onDefinition((params): Location[] => {
+  const state = cache.get(params.textDocument.uri);
+  if (!state) return [];
+  return buildDefinition(state, params.position.line + 1, params.position.character + 1)
+    .map(toLspLocation);
+});
+
+// --- References ------------------------------------------------------------
+
+connection.onReferences((params): Location[] => {
+  const state = cache.get(params.textDocument.uri);
+  if (!state) return [];
+  return buildReferences(state, params.position.line + 1, params.position.character + 1)
+    .map(toLspLocation);
+});
+
+// --- Document symbols ------------------------------------------------------
+
+connection.onDocumentSymbol((params): DocumentSymbol[] => {
+  const state = cache.get(params.textDocument.uri);
+  if (!state) return [];
+  return buildDocumentSymbols(state).map(toLspSymbol);
+});
+
+// --- Completion ------------------------------------------------------------
+
+connection.onCompletion((params): CompletionList => {
+  const state = cache.get(params.textDocument.uri);
+  if (!state) return { isIncomplete: false, items: [] };
+  const items = buildCompletion(state, params.position.line + 1, params.position.character + 1);
+  return { isIncomplete: false, items: items.map(toLspCompletionItem) };
+});
+
+// --- Mapping helpers --------------------------------------------------------
+
+function toLspLocation(l: LocationLike): Location {
+  return { uri: l.uri, range: l.range };
+}
+
+function toLspSymbol(s: SymbolEntry): DocumentSymbol {
+  return {
+    name: s.name,
+    kind: s.kind === 'function' ? SymbolKind.Function : SymbolKind.Variable,
+    range: s.range,
+    selectionRange: s.selectionRange,
+  };
+}
+
+function toLspCompletionItem(c: CompletionItem): LspCompletionItem {
+  const item: LspCompletionItem = { label: c.label, kind: kindOf(c.kind) };
+  if (c.detail) item.detail = c.detail;
+  if (c.documentation) item.documentation = c.documentation;
+  if (c.insertText) item.insertText = c.insertText;
+  return item;
+}
+
+function kindOf(name: CompletionItemKindName): CompletionItemKind {
+  switch (name) {
+    case 'Keyword': return CompletionItemKind.Keyword;
+    case 'Function': return CompletionItemKind.Function;
+    case 'Variable': return CompletionItemKind.Variable;
+    case 'Module': return CompletionItemKind.Module;
+    case 'Field': return CompletionItemKind.Field;
+    case 'Snippet': return CompletionItemKind.Snippet;
+  }
 }
 
 documents.listen(connection);

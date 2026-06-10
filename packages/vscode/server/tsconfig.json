@@ -12,7 +12,8 @@
     "types": ["node"]
   },
   "references": [
-    { "path": "../../parser" }
+    { "path": "../../parser" },
+    { "path": "../../runtime" }
   ],
   "include": ["**/*.ts"],
   "exclude": ["**/*.test.ts", "dist"]
