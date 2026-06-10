@@ -16,5 +16,7 @@ tsconfig*.json
 **/tsconfig.json
 client/dist/*
 server/dist/*
-!client/dist/extension.cjs
-!server/dist/server.cjs
+!client/dist/extension.js
+!server/dist/server.js
+!client/dist/package.json
+!server/dist/package.json
