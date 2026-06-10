@@ -1,0 +1,50 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "interpolation",
+                "name": "description"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "description"
+        ],
+        "kind": "nodeDef",
+        "name": "entry",
+        "shape": "block"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "entry",
+        "params": [
+          {
+            "name": "description",
+            "value": "  year: 1942 (the lamp went dim).\n  keeper: A. Vane."
+          }
+        ],
+        "paramsSource": "form-fill"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

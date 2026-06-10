@@ -1,0 +1,8 @@
+#post ||body|| ::body:: post#
+
+@post
+  body:
+    First paragraph.
+
+    Second paragraph.
+post@

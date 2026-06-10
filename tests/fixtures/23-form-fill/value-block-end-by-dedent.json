@@ -1,0 +1,63 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "interpolation",
+                "name": "a"
+              },
+              {
+                "kind": "text",
+                "value": "/"
+              },
+              {
+                "kind": "interpolation",
+                "name": "other"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "a",
+          "other"
+        ],
+        "kind": "nodeDef",
+        "name": "post",
+        "shape": "block"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "post",
+        "params": [
+          {
+            "name": "a",
+            "value": "  indented"
+          },
+          {
+            "name": "other",
+            "value": "tail"
+          }
+        ],
+        "paramsSource": "form-fill"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

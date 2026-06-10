@@ -1,0 +1,6 @@
+#post ||title, body|| ::title:: ::body:: post#
+
+@post
+  title:
+  body: hello
+post@

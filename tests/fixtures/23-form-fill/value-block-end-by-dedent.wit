@@ -1,0 +1,7 @@
+#post ||a, other|| ::a::/::other:: post#
+
+@post
+  a:
+    indented
+  other: tail
+post@

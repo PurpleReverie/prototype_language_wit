@@ -46,6 +46,29 @@ nothing is lifted.
   emphasis markers and end-of-line italic survive as literal characters
   (M15.form-fill-fix regression: previously inline parsing ate them).
 
+## M16.multi-line-param-values fixtures
+
+A `key:` with empty same-line value followed by deeper-indented lines
+treats the indented block as the value. "Strictly deeper" means each
+continuation line's leading whitespace **starts with** the key's
+leading whitespace AND has at least one additional space/tab. The
+outer-indent prefix is stripped from each line; the inner indent
+beyond that prefix is preserved verbatim. Blank lines inside the
+block are kept. Trailing blank lines on the whole value are stripped.
+
+- `value-multi-line.wit` — `body:` followed by two indented content
+  lines becomes a single multi-line value (E1).
+- `value-multi-paragraph.wit` — indented block contains a blank line;
+  the blank line is preserved in the value (E1 + paragraph break).
+- `value-empty-then-next-field.wit` — `title:` followed by `body: ...`
+  at the same indent → empty value, next field begins (E2).
+- `value-indented-key-shape-is-content.wit` — `description:` followed
+  by indented `year: 1942 ...` and `keeper: ...`. The indented `year:`
+  reads as content, NOT a field (E4 — continuation wins).
+- `value-block-end-by-dedent.wit` — `a:` followed by one indented line
+  then a key at the original indent → dedent ends the value (E7 mixed
+  indented-block + single-line fields in same body).
+
 ## Error fixtures
 
 - `tests/errors/form-fill-malformed-line.wit` — a line that isn't a

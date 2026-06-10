@@ -101,14 +101,20 @@ function collectText(node: Block | Inline, parts: string[]): void {
 // `<id>:<value>` shape. Operates on raw source text (M15 fix): bodies
 // reaching form-fill bypass the inline parser so emphasis markers such as
 // `_journal_` and `*term*` survive as literal characters in field values.
+//
+// M16: a `key:` with empty same-line value followed by deeper-indented
+// lines consumes the indented block as the value (see takeIndentedBlock).
 export function parseFormFillFields(
   rawText: string,
   loc: Loc,
 ): { key: string; value: string }[] {
   const fields: { key: string; value: string }[] = [];
-  for (const line of rawText.split('\n')) {
-    if (isBlankOrComment(line)) continue;
-    const m = /^\s*([A-Za-z][A-Za-z0-9_-]*)\s*:(.*)$/.exec(line);
+  const lines = rawText.split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i]!;
+    if (isBlankOrComment(line)) { i += 1; continue; }
+    const m = /^(\s*)([A-Za-z][A-Za-z0-9_-]*)\s*:(.*)$/.exec(line);
     if (m === null) {
       throw new ParseError(
         ErrorCode.E_MALFORMED_FORM_FIELD,
@@ -116,9 +122,66 @@ export function parseFormFillFields(
         loc,
       );
     }
-    fields.push({ key: m[1], value: parseFieldValueText(m[2]) });
+    const indent = m[1]!;
+    const rest = m[3]!;
+    if (rest.trim().length > 0) {
+      fields.push({ key: m[2]!, value: parseFieldValueText(rest) });
+      i += 1; continue;
+    }
+    const block = takeIndentedBlock(lines, i + 1, indent, () => false);
+    fields.push({ key: m[2]!, value: block.value });
+    i = block.nextIndex;
   }
   return fields;
+}
+
+// M16.multi-line-param-values: indented-continuation helper.
+//
+// Given the line array, the index of the first candidate continuation
+// line, and the key line's leading whitespace prefix, consume lines whose
+// leading whitespace starts with the prefix AND has at least one
+// additional character. Stop at a line at ≤ key indent OR when the
+// optional `stop` predicate returns true on a content line. Each kept
+// line has the outer prefix stripped; inner indent is preserved. Blank
+// lines inside the block are kept verbatim; trailing blank lines on the
+// joined value are stripped.
+export function takeIndentedBlock(
+  lines: string[],
+  startIndex: number,
+  keyIndent: string,
+  stop: (line: string) => boolean,
+): { value: string; nextIndex: number } {
+  // Find the first non-blank candidate; it sets whether a block exists.
+  let scan = startIndex;
+  while (scan < lines.length && /^\s*$/.test(lines[scan]!)) scan += 1;
+  if (scan >= lines.length) return { value: '', nextIndex: startIndex };
+  const first = lines[scan]!;
+  if (!isStrictlyDeeperIndent(first, keyIndent)) {
+    return { value: '', nextIndex: startIndex };
+  }
+  if (stop(first)) return { value: '', nextIndex: startIndex };
+  // Found a deeper-indented continuation — include any leading blank
+  // lines between the key line and this point as part of the value.
+  const collected: string[] = [];
+  let i = startIndex;
+  while (i < lines.length) {
+    const ln = lines[i]!;
+    if (/^\s*$/.test(ln)) { collected.push(''); i += 1; continue; }
+    if (!isStrictlyDeeperIndent(ln, keyIndent)) break;
+    if (stop(ln)) break;
+    collected.push(ln.slice(keyIndent.length).replace(/[ \t]+$/, ''));
+    i += 1;
+  }
+  while (collected.length > 0 && collected[collected.length - 1] === '') {
+    collected.pop();
+  }
+  return { value: collected.join('\n'), nextIndex: i };
+}
+
+function isStrictlyDeeperIndent(line: string, keyIndent: string): boolean {
+  if (!line.startsWith(keyIndent)) return false;
+  const next = line.charAt(keyIndent.length);
+  return next === ' ' || next === '\t';
 }
 
 function parseFieldValueText(raw: string): string {

@@ -1,0 +1,27 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "x",
+            "params": [
+              {
+                "name": null,
+                "value": "key: value\n  key2: value2\n)"
+              }
+            ],
+            "paramsSource": "parens"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

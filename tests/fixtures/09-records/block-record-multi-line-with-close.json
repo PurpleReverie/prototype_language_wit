@@ -1,0 +1,24 @@
+{
+  "ast": {
+    "children": [
+      {
+        "kind": "dataDef",
+        "name": "x",
+        "value": {
+          "fields": [
+            {
+              "key": "a",
+              "value": {
+                "kind": "stringValue",
+                "value": "  multi\n  line\n  here"
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,63 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "interpolation",
+                "name": "title"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "interpolation",
+                "name": "body"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "title",
+          "body"
+        ],
+        "kind": "nodeDef",
+        "name": "post",
+        "shape": "block"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "post",
+        "params": [
+          {
+            "name": "title",
+            "value": ""
+          },
+          {
+            "name": "body",
+            "value": "hello"
+          }
+        ],
+        "paramsSource": "form-fill"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

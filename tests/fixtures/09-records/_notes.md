@@ -15,6 +15,19 @@ Narration discipline: per `tests/fixtures/README.md`, narration
 Every fixture in this directory was authored with NO narration
 line. All explanatory text lives in this file.
 
+M16.multi-line-param-values fixtures (block-form record indented
+continuation — see notes after the inventory):
+
+- `block-record-multi-line-value.wit` — `{ a:\n  multi\n  line\n  here\n, b - 2 }`
+  with `a`'s value spanning several lines, terminated by the top-level
+  `,` (E1 + E8).
+- `block-record-multi-line-with-comma-terminator.wit` — `a:`'s indented
+  block ends mid-line at the top-level `,` (E8).
+- `block-record-multi-line-with-close.wit` — `a:`'s indented block ends
+  at the matching `}` on a continuation line (E5).
+- `quoted-string-multi-line.wit` — pins existing behaviour: `"..."`
+  inside a record value spans newlines unchanged.
+
 Fixture inventory:
 
 - `inline-single-field.wit` — `#x: { a - 1 }`, the smallest

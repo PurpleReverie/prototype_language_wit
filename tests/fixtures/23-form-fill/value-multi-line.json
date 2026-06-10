@@ -1,0 +1,50 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "interpolation",
+                "name": "body"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "body"
+        ],
+        "kind": "nodeDef",
+        "name": "post",
+        "shape": "block"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "post",
+        "params": [
+          {
+            "name": "body",
+            "value": "  First line.\n  Second line."
+          }
+        ],
+        "paramsSource": "form-fill"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

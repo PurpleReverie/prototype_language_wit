@@ -1,0 +1,7 @@
+#entry ||description|| ::description:: entry#
+
+@entry
+  description:
+    year: 1942 (the lamp went dim).
+    keeper: A. Vane.
+entry@

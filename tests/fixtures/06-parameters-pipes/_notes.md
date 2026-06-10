@@ -420,3 +420,12 @@ Cross-refs: PLAN.md DS-5, 5.U.1, 5.U.2,
     to W6.6 / DS-10;
   - whitespace-only slot `| |` — not probed; cross-cuts the
     empty-pipe rule.
+
+## M16 known-bug pin: pipes break on newlines
+
+- `multi-line-value.wit` pins the current behaviour: a `|` slot
+  containing a `\n` does not span to the next line. The lexer's
+  param state (`lexParamState`) breaks on `\n` and the outer parser
+  diagnoses `E_UNCLOSED_NODE`. M16 brief notes this as a known bug —
+  the fixture's snapshot captures the diagnostic. Fixing the lexer
+  to allow newlines inside pipes is deferred to a later milestone.

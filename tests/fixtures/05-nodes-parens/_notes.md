@@ -400,3 +400,13 @@ examples/05-parameters.wit.
   - parens with access-path key (`@x(@scope.field something)`)
     — not probed; access-path semantics inside parens are
     deferred to W6.6 / DS-10.
+
+## M16 known-bug pin: parens break on newlines
+
+- `multi-line-call.wit` pins the current behaviour: a `(...)` call
+  whose contents span a `\n` does not consume past the newline. The
+  lexer's param state (`lexParamState`) breaks on `\n` — the rest of
+  the call (including the closing `)`) ends up in the surrounding
+  text run. M16 brief notes this as a known bug; the fixture's
+  snapshot captures the (surprising) current output. Fixing the
+  lexer to allow newlines inside parens is deferred.

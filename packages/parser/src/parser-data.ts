@@ -224,7 +224,116 @@ function parseFieldValue(s: Scanner, kind: 'hyphen' | 'brace'): DataValue {
       locAt(s, s.pos),
     );
   }
+  // M16.multi-line-param-values: empty same-line value followed by a
+  // strictly-deeper-indented line consumes the indented block as the
+  // value. Top-level `,` or `}` still terminates as usual.
+  if (s.src.charAt(s.pos) === '\n') {
+    const block = tryConsumeIndentedBlock(s);
+    if (block !== null) return block;
+  }
   return parseStringValue(s, '}');
+}
+
+// Consume an indented continuation block starting at `s.pos` (which is
+// at a `\n`). Uses the key line's leading whitespace as the outer-indent
+// prefix. Returns null when no deeper-indented continuation follows.
+//
+// Top-level `,` or `}` inside a kept line terminates the value (the
+// indented block ends there); the comma/closer stays for the outer
+// parseField loop to consume.
+function tryConsumeIndentedBlock(s: Scanner): StringValue | null {
+  const start = s.pos;
+  const keyIndent = keyLineIndent(s.src, start);
+  const collected: string[] = [];
+  let i = start; // at `\n`
+  let lastConsumedEnd = start;
+  let foundContent = false;
+  let terminated = false;
+  while (i < s.src.length && !terminated) {
+    if (s.src.charAt(i) !== '\n') break;
+    const lineStart = i + 1;
+    const lineEnd = findLineEnd(s.src, lineStart);
+    const line = s.src.slice(lineStart, lineEnd);
+    if (/^\s*$/.test(line)) { collected.push(''); i = lineEnd; continue; }
+    if (!isDeeper(line, keyIndent)) break;
+    const stripped = line.slice(keyIndent.length);
+    const stop = findTopLevelTerminator(stripped);
+    foundContent = true;
+    if (stop !== -1) {
+      collected.push(stripped.slice(0, stop).replace(/[ \t]+$/, ''));
+      lastConsumedEnd = lineStart + keyIndent.length + stop;
+      terminated = true;
+      break;
+    }
+    collected.push(stripped.replace(/[ \t]+$/, ''));
+    lastConsumedEnd = lineEnd;
+    i = lineEnd;
+  }
+  if (!foundContent) return null;
+  while (collected.length > 0 && collected[collected.length - 1] === '') {
+    collected.pop();
+  }
+  s.pos = lastConsumedEnd;
+  return {
+    kind: 'stringValue',
+    value: collected.join('\n'),
+    loc: locOfRange(s, start, lastConsumedEnd),
+  };
+}
+
+// Scan a line (after outer-indent stripped) for the first top-level `,`
+// or `}` — honouring escapes, quoted strings, and nested brace/bracket
+// depth. Returns the index in the line, or -1 if none found.
+function findTopLevelTerminator(line: string): number {
+  let depth = 0;
+  let i = 0;
+  while (i < line.length) {
+    const c = line.charAt(i);
+    if (c === '\\' && i + 1 < line.length) { i += 2; continue; }
+    if (c === '"') { i = skipQuoted(line, i + 1); continue; }
+    if (c === '{' || c === '[') { depth += 1; i += 1; continue; }
+    if (c === '}' && depth > 0) { depth -= 1; i += 1; continue; }
+    if (c === ']' && depth > 0) { depth -= 1; i += 1; continue; }
+    if (depth === 0 && (c === ',' || c === '}')) return i;
+    i += 1;
+  }
+  return -1;
+}
+
+function skipQuoted(line: string, from: number): number {
+  let i = from;
+  while (i < line.length) {
+    const c = line.charAt(i);
+    if (c === '\\' && i + 1 < line.length) { i += 2; continue; }
+    if (c === '"') return i + 1;
+    i += 1;
+  }
+  return i;
+}
+
+function keyLineIndent(src: string, posAtNewline: number): string {
+  // Find the leading whitespace of the line whose newline is at posAtNewline.
+  let lineStart = posAtNewline;
+  while (lineStart > 0 && src.charAt(lineStart - 1) !== '\n') lineStart -= 1;
+  let i = lineStart;
+  while (i < src.length) {
+    const c = src.charAt(i);
+    if (c !== ' ' && c !== '\t') break;
+    i += 1;
+  }
+  return src.slice(lineStart, i);
+}
+
+function findLineEnd(src: string, from: number): number {
+  let i = from;
+  while (i < src.length && src.charAt(i) !== '\n') i += 1;
+  return i;
+}
+
+function isDeeper(line: string, keyIndent: string): boolean {
+  if (!line.startsWith(keyIndent)) return false;
+  const next = line.charAt(keyIndent.length);
+  return next === ' ' || next === '\t';
 }
 
 function parseQuotedString(s: Scanner): StringValue {
