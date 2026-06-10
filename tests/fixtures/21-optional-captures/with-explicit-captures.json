@@ -5,28 +5,25 @@
         "additive": false,
         "body": [
           {
-            "kind": "text",
-            "value": ""
+            "kind": "interpolation",
+            "name": "author"
           },
           {
             "kind": "text",
-            "value": "author"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": " "
+            "value": " ("
           },
           {
             "kind": "interpolation",
-            "name": "author"
+            "name": "year"
+          },
+          {
+            "kind": "text",
+            "value": ")"
           }
         ],
         "captures": [
-          "author"
+          "author",
+          "year"
         ],
         "kind": "nodeDef",
         "name": "cite",
@@ -52,6 +49,10 @@
           {
             "name": "author",
             "value": "Simone Weil"
+          },
+          {
+            "name": "year",
+            "value": "1947"
           }
         ],
         "paramsSource": "pipes"

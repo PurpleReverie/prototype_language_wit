@@ -32,6 +32,7 @@ import {
   type MergeTargets,
 } from './resolver-files.js';
 import { mergePartials } from './resolver-partials.js';
+import { isReservedNodeName } from './core-vocab.js';
 
 export interface ResolveOptions {
   rootPath?: string;
@@ -271,12 +272,18 @@ function bindNodeUse(use: NodeUse, ctx: BindCtx): void {
     if (use.body) bindChildren(use.body, ctx);
     return;
   }
+  // Core vocab + @node pass through without a binding (M10.core-vocab).
+  // Access paths (e.g., @table.rows) still hit data-def lookup.
+  const hasAccess = use.access !== undefined && use.access.length > 0;
+  if (isReservedNodeName(use.name) && !hasAccess) {
+    if (use.body) bindChildren(use.body, ctx);
+    return;
+  }
   const binding = lookupBinding(use, ctx);
   if (binding === undefined) {
     throw new ResolverError(
       RuntimeErrorCode.E_UNRESOLVED_REFERENCE,
-      `Unresolved reference @${use.name}`,
-      use.loc,
+      `Unresolved reference @${use.name}`, use.loc,
     );
   }
   ctx.bindings.set(use, binding);

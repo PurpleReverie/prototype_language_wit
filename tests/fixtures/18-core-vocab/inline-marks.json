@@ -1,0 +1,71 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "A paragraph with "
+          },
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " emphasis "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "em",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " marks.\nA line with "
+          },
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " strong text "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "strong",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " marks.\nA line with "
+          },
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " lh.foo() "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "code",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " inline."
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

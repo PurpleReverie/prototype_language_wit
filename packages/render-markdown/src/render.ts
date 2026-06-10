@@ -21,7 +21,9 @@ import type {
   DataValue,
 } from '@wit/parser';
 import type { ExpandedDocument } from '@wit/runtime';
-import { renderInlines, renderInline, renderUnresolvedAccess } from './render-inline.js';
+import {
+  renderInlines, renderInline, renderUnresolvedAccess, setBlockDispatcher,
+} from './render-inline.js';
 import {
   renderNodeUseBlock,
   setBlockRecursor,
@@ -30,6 +32,7 @@ import {
 
 export function renderMarkdown(doc: ExpandedDocument): string {
   setBlockRecursor(renderBlock);
+  setBlockDispatcher(renderNodeUseBlock);
   const parts = collectBlockChunks(doc.children);
   return joinBlocks(parts);
 }

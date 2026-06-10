@@ -1,0 +1,3 @@
+A paragraph with @em emphasis em@ marks.
+A line with @strong strong text strong@ marks.
+A line with @code lh.foo() code@ inline.

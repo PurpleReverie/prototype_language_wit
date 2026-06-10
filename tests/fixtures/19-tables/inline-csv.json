@@ -1,0 +1,31 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "table",
+            "params": [
+              {
+                "name": "rows",
+                "value": "[[Client Hours, COUN603, COUN704, TOTAL], [One to One, 62.75, 41.25, 104], [Couple, 0.75, 0, 0.75]]"
+              },
+              {
+                "name": "caption",
+                "value": "Practicum Hours"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

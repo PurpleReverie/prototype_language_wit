@@ -1,0 +1,3 @@
+#sites: [{ name - Dunmore Head, status - operational }, { name - Carrick Point, status - maintenance }] !!
+
+@table |schema [name, status]| |rows @sites|

@@ -109,6 +109,24 @@ describe('parseNodeDef — captures', () => {
     const def = doc.children[0] as NodeDef;
     expect(def.captures).toEqual(['a', 'b']);
   });
+
+  it('infers captures from body when ||...|| omitted (single-line)', () => {
+    const doc = parse('#cite: ::author:: (::year::) !!');
+    const def = doc.children[0] as NodeDef;
+    expect(def.captures).toEqual(['author', 'year']);
+  });
+
+  it('infers captures from body when ||...|| omitted (block)', () => {
+    const doc = parse('#callout\nFrom ::source::: ::body::.\ncallout#');
+    const def = doc.children[0] as NodeDef;
+    expect(def.captures).toEqual(['source', 'body']);
+  });
+
+  it('explicit ||a|| wins over body interpolations', () => {
+    const doc = parse('#x ||a||: ::a:: ::b:: !!');
+    const def = doc.children[0] as NodeDef;
+    expect(def.captures).toEqual(['a']);
+  });
 });
 
 describe('parseNodeDef — additive prefix', () => {

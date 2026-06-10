@@ -19,7 +19,7 @@ Companion to `wit-spec.pdf` (canonical language reference) and `examples/` (narr
 
 ### Non-goals
 
-- Not a renderer-defining language. Wit produces a tree; the renderer decides HTML/CSS/visual form.
+- Wit reserves a small core vocabulary mirroring HTML's semantic shapes (headings, lists, links, images, tables, sections, etc.). Renderers commit to handling these faithfully. Beyond the core, writers define their own vocabulary with `#name`. For renderer-specific extensions (custom React components, mapboxes, game-state widgets), `@node(...)` is the opaque pass-through that carries params straight to the renderer.
 - Not Turing-complete on its own. `<% %>` is the explicit escape hatch for general computation.
 - Not a templating engine for arbitrary string interpolation.
 - Not a CMS or authoring environment. Wit is a file format.
@@ -88,6 +88,39 @@ Composition:
 - A pipe value containing an access path that resolves to a collection: eager evaluation produces the collection reference, which is then frozen if iterated.
 
 Source: `tests/M1-RECONCILIATIONS.md` R4. Cross-refs: I.120, I.123, R3.
+
+### Core vocabulary
+
+A small reserved set of node names ships with the language. The
+resolver does NOT require a `#def` for these names, and renderers
+commit to mapping them to faithful semantic output. They mirror
+HTML's semantic shapes.
+
+| Group | Names |
+|---|---|
+| Headings | `h1`, `h2`, `h3`, `h4`, `h5`, `h6` |
+| Inline | `em`, `strong`, `code`, `u`, `s`, `sub`, `sup`, `mark`, `small`, `br` |
+| Lists | `ul`, `ol`, `li`, `dl`, `dt`, `dd` |
+| Link + media | `a` (href, target), `img` (src, alt, width, height), `figure`, `figcaption`, `audio`, `video` |
+| Tables | `table`, `thead`, `tbody`, `tfoot`, `tr`, `th`, `td`, `caption` |
+| Blocks | `p`, `blockquote`, `pre`, `hr` |
+| Sectioning | `section`, `article`, `aside`, `header`, `footer`, `nav`, `main` |
+| Other | `cite` |
+
+In addition, `@node` is a universal opaque pass-through. Resolver
+skips binding lookup; the expander emits the NodeUse intact with all
+params, so renderers can dispatch on the `type` param (convention,
+not a reserved word). User-defined wrappers compose naturally:
+
+```
+#highlight ||content||
+@node(type highlight) ::content:: node@
+highlight#
+
+@highlight Some text highlight@
+```
+
+Source: M10.core-vocab.
 
 ---
 

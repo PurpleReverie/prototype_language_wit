@@ -1,0 +1,31 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "table",
+            "params": [
+              {
+                "name": "schema { name",
+                "value": "Site, status Status }"
+              },
+              {
+                "name": "rows",
+                "value": "[[Dunmore Head, operational], [Carrick Point, maintenance]]"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

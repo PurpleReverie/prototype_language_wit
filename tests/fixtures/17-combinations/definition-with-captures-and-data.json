@@ -56,7 +56,10 @@
             "name": "work"
           }
         ],
-        "captures": [],
+        "captures": [
+          "author",
+          "work"
+        ],
         "kind": "nodeDef",
         "name": "cite",
         "shape": "single-line"

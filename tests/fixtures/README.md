@@ -13,7 +13,16 @@ tests/fixtures/
     _notes.md            # category-level authoring notes
 ```
 
-`NN` matches the M1.NN milestone (`00`–`17`).
+`NN` matches the M1.NN milestone (`00`–`17`). Categories `18`–`21`
+were added during M10.core-vocab:
+
+- `18-core-vocab/` — reserved HTML-derived node names (`h1`..`h6`,
+  `em`, `ul`, `a`, etc.) that need no `#def`.
+- `19-tables/` — `@table` authoring forms (inline CSV, schema-array,
+  schema-record) plus edge cases.
+- `20-opaque-node/` — `@node(type X)` pass-through container.
+- `21-optional-captures/` — explicit `||a, b||` vs body-inferred
+  capture lists.
 
 ## Filename rules
 

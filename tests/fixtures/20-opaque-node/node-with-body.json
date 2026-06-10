@@ -1,0 +1,32 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "  An inline body that the renderer treats opaquely."
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "node",
+        "params": [
+          {
+            "name": "type",
+            "value": "figure"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

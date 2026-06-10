@@ -1,0 +1,12 @@
+@article
+  @header
+    @h1 Article Title h1@
+  header@
+  @section
+    @p A first paragraph. p@
+    @p A second paragraph. p@
+  section@
+  @footer
+    @small Published 2024. small@
+  footer@
+article@

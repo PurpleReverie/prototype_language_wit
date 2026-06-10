@@ -31,6 +31,7 @@ import type {
 import type { ResolvedDocument } from './resolved-ast.js';
 import type { ExpandedDocument } from './expanded-ast.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
+import { isReservedNodeName } from './core-vocab.js';
 import { expandNodeDef, expandDataValue, type Splice } from './expander-inline.js';
 import { evaluateCondition, type DataLookups } from './expander-conditions.js';
 import {
@@ -202,11 +203,23 @@ function expandUse(use: NodeUse, ctx: ExpandCtx): Splice {
     // Container without access path — defer per M1.11; pass through.
     return [structuredClone(use) as NodeUse];
   }
+  if (isReservedNodeName(use.name)) {
+    // Core vocab / @node — body still needs to be expanded so any
+    // nested @-refs, ::interpolations::, or scripts get processed.
+    return [expandReservedUse(use, ctx)];
+  }
   throw new ExpanderError(
     RuntimeErrorCode.E_UNRESOLVED_REFERENCE,
     `Unresolved reference @${use.name}`,
     use.loc,
   );
+}
+
+function expandReservedUse(use: NodeUse, ctx: ExpandCtx): NodeUse {
+  const clone = structuredClone(use) as NodeUse;
+  if (use.body === null) return clone;
+  clone.body = expandSplice(use.body, ctx) as (typeof clone.body);
+  return clone;
 }
 
 function expandIterRef(use: NodeUse, value: DataValue): Splice {
