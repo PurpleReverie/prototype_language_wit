@@ -1,0 +1,8 @@
+#cite ||author, journal||
+::author:: in ::journal::
+cite#
+
+@cite
+  author: A. Researcher
+  journal: _Journal of Studies_ and *important findings*
+cite@

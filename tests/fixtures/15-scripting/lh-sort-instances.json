@@ -11,12 +11,12 @@
             "name": "finding",
             "params": [
               {
-                "name": "weight:",
+                "name": "weight",
                 "value": "3"
               },
               {
-                "name": "claim:",
-                "value": "\"low\""
+                "name": "claim",
+                "value": "low"
               }
             ],
             "paramsSource": "parens"
@@ -29,12 +29,12 @@
             "name": "finding",
             "params": [
               {
-                "name": "weight:",
+                "name": "weight",
                 "value": "9"
               },
               {
-                "name": "claim:",
-                "value": "\"high\""
+                "name": "claim",
+                "value": "high"
               }
             ],
             "paramsSource": "parens"
@@ -47,12 +47,12 @@
             "name": "finding",
             "params": [
               {
-                "name": "weight:",
+                "name": "weight",
                 "value": "6"
               },
               {
-                "name": "claim:",
-                "value": "\"mid\""
+                "name": "claim",
+                "value": "mid"
               }
             ],
             "paramsSource": "parens"

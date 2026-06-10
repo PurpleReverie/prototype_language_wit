@@ -1,0 +1,40 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "thing",
+        "params": [
+          {
+            "name": "key",
+            "value": "@b body-b b@"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

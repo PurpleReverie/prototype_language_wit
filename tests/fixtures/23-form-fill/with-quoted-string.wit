@@ -1,0 +1,6 @@
+#cite ||author, year|| ::author:: (::year::) cite#
+
+@cite
+  author: "Came, H."
+  year: 2024
+cite@

@@ -38,7 +38,7 @@ export { ParseError };
 
 export function parse(source: string, file: string = '<inline>'): Document {
   const tokens = lexOrThrow(source, file);
-  const cursor = new TokenCursor(tokens);
+  const cursor = new TokenCursor(tokens, source);
   const children: Block[] = [];
   while (!cursor.isAtEnd()) {
     skipParagraphBreaks(cursor);

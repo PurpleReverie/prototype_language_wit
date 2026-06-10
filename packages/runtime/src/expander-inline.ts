@@ -47,7 +47,7 @@ export interface ExpandDefArgs {
 }
 
 function isFieldKeyed(source: NodeUse['paramsSource']): boolean {
-  return source === 'record';
+  return source === 'record' || source === 'form-fill';
 }
 
 export function expandNodeDef(args: ExpandDefArgs): Splice {

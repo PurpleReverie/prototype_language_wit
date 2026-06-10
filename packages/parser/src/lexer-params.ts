@@ -38,8 +38,10 @@ export function lexParamState(state: LexState, closer: Closer): void {
     if (c === '\n') break; // unclosed — parser diagnoses
     if (c === closer) { flushTextRun(state, buf); emitCloser(state, closer); return; }
     if (handleEscape(state, buf)) continue;
+    if (handleQuotedString(state, buf)) continue;
     if (handleComma(state, buf, closer)) { buf = freshBuf(state); continue; }
     if (handleHyphen(state, buf, closer)) { buf = freshBuf(state); continue; }
+    if (handleColon(state, buf, closer)) { buf = freshBuf(state); continue; }
     if (handleBang(state, buf, closer)) { buf = freshBuf(state); continue; }
     buf.value += c;
     advance(state);
@@ -63,7 +65,49 @@ function handleEscape(state: LexState, buf: RunBuf): boolean {
 }
 
 function isEscapable(c: string): boolean {
-  return c === '|' || c === ',' || c === '!' || c === '\\';
+  return c === '|' || c === ',' || c === '!' || c === '\\' ||
+         c === ':' || c === '"' || c === '{' || c === '}';
+}
+
+function handleQuotedString(state: LexState, buf: RunBuf): boolean {
+  // M15.form-fill: `"..."` inside a param slot consumes a literal string
+  // value. Inside the quotes only \" and \\ escapes are recognized; other
+  // bytes (commas, |, newlines) are content. The quotes ARE preserved in
+  // the buf so downstream consumers (parser-params, scriptCall) can see
+  // the quoted-string boundary and strip if desired.
+  if (state.src.charAt(state.cur.offset) !== '"') return false;
+  buf.value += '"';
+  advance(state); // opening "
+  while (state.cur.offset < state.src.length) {
+    const c = state.src.charAt(state.cur.offset);
+    if (c === '\\') {
+      const next = state.src.charAt(state.cur.offset + 1);
+      if (next === '"' || next === '\\') {
+        buf.value += '\\' + next; advance(state); advance(state); continue;
+      }
+    }
+    if (c === '"') { buf.value += '"'; advance(state); return true; }
+    buf.value += c;
+    advance(state);
+  }
+  return true;
+}
+
+function handleColon(state: LexState, buf: RunBuf, _closer: Closer): boolean {
+  // M15.form-fill: `:` as key-value separator inside param state. Only
+  // fires when the buffer accumulated so far is a single bare identifier
+  // (so `href https://example.org` keeps the `://` as content; the space
+  // already split key/value).
+  const { src, cur } = state;
+  if (src.charAt(cur.offset) !== ':') return false;
+  if (!isLeadingIdentifier(buf.value)) return false;
+  flushTrimmedKey(state, buf);
+  emitHyphenSeparator(state);
+  return true;
+}
+
+function isLeadingIdentifier(s: string): boolean {
+  return /^\s*[A-Za-z][A-Za-z0-9_-]*\s*$/.test(s);
 }
 
 function handleComma(

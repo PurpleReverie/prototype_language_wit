@@ -1,0 +1,63 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "interpolation",
+                "name": "author"
+              },
+              {
+                "kind": "text",
+                "value": " ("
+              },
+              {
+                "kind": "interpolation",
+                "name": "year"
+              },
+              {
+                "kind": "text",
+                "value": ") "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "author",
+          "year"
+        ],
+        "kind": "nodeDef",
+        "name": "cite",
+        "shape": "block"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "cite",
+        "params": [
+          {
+            "name": "author",
+            "value": "Came, H."
+          },
+          {
+            "name": "year",
+            "value": "2024"
+          }
+        ],
+        "paramsSource": "form-fill"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -8,14 +8,27 @@ import type { Token, TokenKind } from './tokens.js';
 
 export class TokenCursor {
   private readonly tokens: Token[];
+  private readonly src: string;
   private idx: number;
 
-  constructor(tokens: Token[]) {
+  constructor(tokens: Token[], source: string = '') {
     if (tokens.length === 0) {
       throw new Error('TokenCursor requires at least one token (EOF).');
     }
     this.tokens = tokens;
+    this.src = source;
     this.idx = 0;
+  }
+
+  // Raw source text (for form-fill detection and similar shape-on-text checks
+  // that need the original byte sequence, not the post-lex token stream).
+  source(): string {
+    return this.src;
+  }
+
+  // Substring of the original source between two absolute byte offsets.
+  sliceSource(start: number, end: number): string {
+    return this.src.slice(start, end);
   }
 
   // Current token (without advancing).

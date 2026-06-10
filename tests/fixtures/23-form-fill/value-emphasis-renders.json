@@ -1,0 +1,55 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "interpolation",
+                "name": "author"
+              },
+              {
+                "kind": "text",
+                "value": " in "
+              },
+              {
+                "kind": "interpolation",
+                "name": "journal"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "author",
+          "journal"
+        ],
+        "kind": "nodeDef",
+        "name": "cite",
+        "shape": "block"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "cite",
+        "params": [
+          {
+            "name": "author",
+            "value": "A. Researcher"
+          },
+          {
+            "name": "journal",
+            "value": "_Journal of Studies_ and *important findings*"
+          }
+        ],
+        "paramsSource": "form-fill"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

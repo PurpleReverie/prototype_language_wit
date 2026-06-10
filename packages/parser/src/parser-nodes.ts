@@ -15,6 +15,12 @@
 
 import { ErrorCode } from './errors.js';
 import { ParseError } from './parser-errors.js';
+import {
+  formFillToParams,
+  isFormFillRawText,
+  liftBodyScatter,
+  stripBodyEscapes,
+} from './parser-body-forms.js';
 import { parseParenParams, parsePipeRun } from './parser-params.js';
 import {
   finalizeRecordArgUse,
@@ -216,9 +222,91 @@ function parseBodied(
   paramsSource: NodeUse['paramsSource'],
   opts: NodeUseOptions,
 ): NodeUse {
+  // M15 form-fill bypass: probe the raw source span between the open and
+  // its matching close BEFORE invoking the inline parser. Inline parsing
+  // expands `_x_` into italic AST nodes that drop content (the original
+  // bug). Form-fill bodies have line-shaped raw text that we parse here
+  // directly, treating values as opaque strings.
+  const rawBody = peekRawBody(cursor, open, opts.inline);
+  const fastFill = rawBody !== null && paramsSource === 'none' &&
+    isFormFillRawText(rawBody)
+    ? formFillToParams(rawBody, open.loc) : null;
   const body = parseBodyContent(cursor, open, opts);
   const closeLoc = consumeMatchingClose(cursor, open);
-  return makeBodied(open, access, params, paramsSource, body, opts.inline, closeLoc);
+  if (fastFill !== null) {
+    return makeBodied(
+      open, access, fastFill, 'form-fill', [], opts.inline, closeLoc,
+    );
+  }
+  const post = applyBodyForms(
+    body, params, paramsSource, open.loc, cursor.source(),
+  );
+  return makeBodied(
+    open, access, post.params, post.paramsSource,
+    post.body, opts.inline, closeLoc,
+  );
+}
+
+// Look ahead for the matching `name@` close token without consuming any
+// tokens. Returns the raw source substring strictly between the open
+// token's end and the close token's start, or null if no matching close
+// is found in scope. The substring is the text the lexer would have
+// otherwise tokenized as the body — including emphasis markers and the
+// like — kept as-is so form-fill values survive intact.
+function peekRawBody(
+  cursor: TokenCursor, open: NodeOpen, inline: boolean,
+): string | null {
+  let i = 0;
+  while (true) {
+    const tok = cursor.peek(i);
+    if (tok.kind === 'eof') return null;
+    if (inline && tok.kind === 'paragraphBreak') return null;
+    if (tok.kind === 'nodeClose' && tok.name === open.name) {
+      const start = open.loc.offset + open.loc.length;
+      const end = tok.loc.offset;
+      return cursor.sliceSource(start, end);
+    }
+    i += 1;
+  }
+}
+
+interface PostBody {
+  body: (Block | Inline)[];
+  params: Param[];
+  paramsSource: NodeUse['paramsSource'];
+}
+
+// M15.form-fill-and-colon-params: post-process a bodied NodeUse body for
+// scatter. (Form-fill detection runs earlier in parseBodied against the
+// raw source span and short-circuits this path entirely.) Scatter lifts
+// `<id>:<v>` tokens from prose text and leaves the body text in place
+// (with backslash escapes stripped).
+function applyBodyForms(
+  body: (Block | Inline)[],
+  params: Param[],
+  paramsSource: NodeUse['paramsSource'],
+  _loc: Loc,
+  source: string,
+): PostBody {
+  const lifted = liftBodyScatter(body, source);
+  const merged = mergeScattered(params, lifted.params);
+  const newSource = lifted.params.length > 0 && paramsSource === 'none'
+    ? 'pipes' : paramsSource;
+  return {
+    body: stripBodyEscapes(lifted.body),
+    params: merged,
+    paramsSource: newSource,
+  };
+}
+
+function mergeScattered(prior: Param[], lifted: Param[]): Param[] {
+  if (lifted.length === 0) return prior;
+  const out: Param[] = [...prior];
+  for (const l of lifted) {
+    const idx = out.findIndex((p) => p.name === l.name);
+    if (idx >= 0) out[idx] = l; else out.push(l);
+  }
+  return out;
 }
 
 function parseBodyContent(

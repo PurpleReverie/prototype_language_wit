@@ -132,6 +132,7 @@ function consumeParagraphContent(state: LexState): void {
 }
 
 function runRecognizers(state: LexState, buf: RunBuf): boolean {
+  if (tryBackslashEscape(state, buf)) return true;
   if (tryBlockComment(state, buf)) return true;
   if (tryLineComment(state, buf)) return true;
   if (tryReferenceDirective(state, buf)) return true;
@@ -153,6 +154,22 @@ function runRecognizers(state: LexState, buf: RunBuf): boolean {
 
 function freshBuf(state: LexState): RunBuf {
   return { value: '', start: snapshot(state.cur) };
+}
+
+// M15.form-fill: backslash escape for `\|` in prose context — suppresses
+// the pipe-open recognizer so the `|` becomes literal text. Other special
+// chars (`:`, `"`, `{`, `}`, `\\`) are handled later (param-state lexer
+// inside brackets, or the body post-processor for prose). Leaving the
+// backslash + char unchanged in the text run lets the post-processor see
+// it (e.g. `name\:Tauraj` must NOT be lifted by the colon-scatter scan).
+function tryBackslashEscape(state: LexState, buf: RunBuf): boolean {
+  if (state.src.charAt(state.cur.offset) !== '\\') return false;
+  const next = state.src.charAt(state.cur.offset + 1);
+  if (next !== '|') return false;
+  buf.value += next;
+  advance(state);
+  advance(state);
+  return true;
 }
 
 function tryEmphasis(state: LexState, buf: RunBuf): boolean {

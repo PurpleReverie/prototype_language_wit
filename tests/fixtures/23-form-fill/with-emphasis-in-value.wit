@@ -1,0 +1,10 @@
+#refE ||author, year, title, publisher||
+::author:: (::year::). ::title::. ::publisher::
+refE#
+
+@refE
+  author: Came, H., Cornes, R., & McCreanor, T.
+  year: 2021
+  title: Te Tiriti o Waitangi and public health equity
+  publisher: _New Zealand Medical Journal_, 134(1532), 96–103
+refE@

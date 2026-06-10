@@ -1,0 +1,94 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "interpolation",
+                "name": "author"
+              },
+              {
+                "kind": "text",
+                "value": " ("
+              },
+              {
+                "kind": "interpolation",
+                "name": "year"
+              },
+              {
+                "kind": "text",
+                "value": "). "
+              },
+              {
+                "kind": "interpolation",
+                "name": "title"
+              },
+              {
+                "kind": "text",
+                "value": ". "
+              },
+              {
+                "kind": "interpolation",
+                "name": "publisher"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "author",
+          "year",
+          "title",
+          "publisher"
+        ],
+        "kind": "nodeDef",
+        "name": "reference_entry",
+        "shape": "block"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "kind": "text",
+            "value": "\n  "
+          },
+          {
+            "body": [],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "reference_entry",
+            "params": [
+              {
+                "name": "author",
+                "value": "Boud, D."
+              },
+              {
+                "name": "year",
+                "value": "2001"
+              },
+              {
+                "name": "title",
+                "value": "Using journal writing"
+              },
+              {
+                "name": "publisher",
+                "value": "New Directions, 9-18"
+              }
+            ],
+            "paramsSource": "form-fill"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "value-block"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,8 @@
+#cite ||author, year|| ::author:: (::year::) cite#
+
+@cite
+  ~ first field
+  author: Smith
+  ~ second field
+  year: 2024
+cite@

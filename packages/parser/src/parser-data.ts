@@ -176,15 +176,18 @@ interface KeyEnd {
 }
 
 function findFieldKeyEnd(s: Scanner): KeyEnd | null {
-  // Scan forward for ` - ` (hyphen value form) or ` {` / `{` / `[`
-  // (brace/bracket forms). Stop at `,`, `\n`, `}` (these terminate the
-  // field before a value).
+  // Scan forward for ` - ` (hyphen value form), `:` (M15 colon form),
+  // or ` {` / `{` / `[` (brace/bracket forms). Stop at `,`, `\n`, `}`.
   let i = s.pos;
   while (i < s.src.length) {
     const c = s.src.charAt(i);
+    if (c === '\\' && isEscapableInRecord(s.src.charAt(i + 1))) { i += 2; continue; }
     if (c === ',' || c === '\n' || c === '}') return null;
     if (isHyphenSeparatorAt(s.src, i)) {
       return { keyTextEnd: i, afterKey: i + 3, kind: 'hyphen' };
+    }
+    if (c === ':') {
+      return { keyTextEnd: i, afterKey: i + 1, kind: 'hyphen' };
     }
     if (c === '{' || c === '[') {
       return { keyTextEnd: i, afterKey: i, kind: 'brace' };
@@ -192,6 +195,11 @@ function findFieldKeyEnd(s: Scanner): KeyEnd | null {
     i += 1;
   }
   return null;
+}
+
+function isEscapableInRecord(c: string): boolean {
+  return c === ':' || c === '"' || c === '\\' || c === '{' || c === '}' ||
+         c === ',';
 }
 
 function isHyphenSeparatorAt(src: string, i: number): boolean {
@@ -208,6 +216,7 @@ function parseFieldValue(s: Scanner, kind: 'hyphen' | 'brace'): DataValue {
   skipInlineWs(s);
   if (s.src.charAt(s.pos) === '{') return parseRecord(s);
   if (s.src.charAt(s.pos) === '[') return parseCollection(s);
+  if (s.src.charAt(s.pos) === '"') return parseQuotedString(s);
   if (kind === 'brace') {
     throw new ParseError(
       ErrorCode.E_MALFORMED_RECORD,
@@ -218,17 +227,51 @@ function parseFieldValue(s: Scanner, kind: 'hyphen' | 'brace'): DataValue {
   return parseStringValue(s, '}');
 }
 
-function parseStringValue(s: Scanner, closer: '}' | ']'): StringValue {
+function parseQuotedString(s: Scanner): StringValue {
+  // M15.form-fill: `"..."` value. Only \" and \\ escapes are recognized
+  // inside; commas / newlines are content. Unterminated → error.
   const start = s.pos;
+  s.pos += 1; // opening "
+  let value = '';
   while (s.pos < s.src.length) {
     const c = s.src.charAt(s.pos);
-    if (c === ',' || c === '\n' || c === closer) break;
+    if (c === '\\') {
+      const next = s.src.charAt(s.pos + 1);
+      if (next === '"' || next === '\\') { value += next; s.pos += 2; continue; }
+    }
+    if (c === '"') {
+      s.pos += 1;
+      return { kind: 'stringValue', value, loc: locOfRange(s, start, s.pos) };
+    }
+    value += c;
     s.pos += 1;
   }
-  const raw = s.src.slice(start, s.pos);
+  throw new ParseError(
+    ErrorCode.E_UNTERMINATED_STRING,
+    'unterminated quoted string',
+    locAt(s, start),
+  );
+}
+
+function parseStringValue(s: Scanner, closer: '}' | ']'): StringValue {
+  const start = s.pos;
+  let value = '';
+  while (s.pos < s.src.length) {
+    const c = s.src.charAt(s.pos);
+    if (c === '\\') {
+      const next = s.src.charAt(s.pos + 1);
+      if (next === ':' || next === '"' || next === '\\' ||
+          next === ',' || next === '{' || next === '}') {
+        value += next; s.pos += 2; continue;
+      }
+    }
+    if (c === ',' || c === '\n' || c === closer) break;
+    value += c;
+    s.pos += 1;
+  }
   return {
     kind: 'stringValue',
-    value: raw.trim(),
+    value: value.trim(),
     loc: locOfRange(s, start, s.pos),
   };
 }

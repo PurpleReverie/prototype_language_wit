@@ -121,7 +121,7 @@ export interface NodeUse extends HasLoc {
   name: string;
   access?: string[];
   params: Param[];
-  paramsSource: 'parens' | 'pipes' | 'mixed' | 'record' | 'none';
+  paramsSource: 'parens' | 'pipes' | 'mixed' | 'record' | 'form-fill' | 'none';
   body: (Block | Inline)[] | null;
   inline: boolean;
   closeStyle: 'named' | 'parens' | 'bare';

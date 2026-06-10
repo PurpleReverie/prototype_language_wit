@@ -4,6 +4,10 @@
 // parsed via caller-provided helpers to avoid a parser.ts import cycle.
 
 import { ErrorCode } from './errors.js';
+import {
+  formFillToRecord,
+  isFormFillRawText,
+} from './parser-body-forms.js';
 import { resolveCaptures, type CaptureList } from './parser-captures.js';
 import { maybeAsDataValue } from './parser-data.js';
 import { ParseError } from './parser-errors.js';
@@ -168,6 +172,14 @@ function parseBangBangDef(
   shape: 'single-line' | 'value-block',
 ): NodeDef | DataDef {
   stripLeadingColon(cursor);
+  // M15 form-fill bypass (value-block only): probe the raw source span
+  // between the colon and the matching `!!` before parsing. See
+  // parser-nodes.ts peekRawBody for rationale.
+  const rawValBlock = shape === 'value-block'
+    ? peekRawBangBangBody(cursor, open) : null;
+  const fastFillRec = rawValBlock !== null && !additive && captures === null &&
+    isFormFillRawText(rawValBlock)
+    ? formFillToRecord(rawValBlock, open.loc) : null;
   const raw = shape === 'single-line'
     ? collectSingleLineValue(cursor, opts) : collectValueBlock(cursor, opts);
   const trimmed = shape === 'single-line' ? trimTrailingTextWs(raw) : raw;
@@ -181,11 +193,40 @@ function parseBangBangDef(
       return { kind: 'dataDef', name: open.name, value: dataValue, loc };
     }
   }
+  if (fastFillRec !== null) {
+    return { kind: 'dataDef', name: open.name, value: fastFillRec, loc };
+  }
   return {
     kind: 'nodeDef', name: open.name,
     captures: resolveCaptures(captures, body),
     shape, body, additive, loc,
   };
+}
+
+// Peek raw source between the value-block opener and its closing `!!`
+// without consuming tokens. Stops at the next def-start as well — those
+// are implicit terminators that don't carry a raw body. The returned
+// substring has the leading `:` and inline whitespace stripped (those
+// are the value-block opener punctuation, not body content), so form-
+// fill detection sees the first real content line.
+function peekRawBangBangBody(
+  cursor: TokenCursor, open: HashOpen,
+): string | null {
+  let i = 0;
+  while (true) {
+    const tok = cursor.peek(i);
+    if (tok.kind === 'eof') return null;
+    if (i > 0 && (tok.kind === 'hashOpen' || tok.kind === 'additivePrefix')) {
+      return null;
+    }
+    if (tok.kind === 'bangBang') {
+      const start = open.loc.offset + open.loc.length;
+      const end = tok.loc.offset;
+      const raw = cursor.sliceSource(start, end);
+      return raw.replace(/^[ \t]*:[ \t]*/, '');
+    }
+    i += 1;
+  }
 }
 
 // A single-line def whose body collapsed to exactly a Record or
@@ -310,14 +351,44 @@ function isImplicitDefTerminator(kind: string): boolean {
 function parseBlockDef(
   cursor: TokenCursor, open: HashOpen, captures: CaptureList,
   additive: boolean, opts: NodeDefOptions,
-): NodeDef {
+): NodeDef | DataDef {
+  // M15 form-fill bypass (mirrors parser-nodes.ts): probe the raw source
+  // span between the hash-open and its matching `name#` close before
+  // invoking the body parser. Form-fill bodies are parsed line-shaped
+  // off the raw text so emphasis markers survive in values.
+  const rawBody = peekRawHashBody(cursor, open);
+  const fastFillRec = rawBody !== null && !additive && captures === null &&
+    isFormFillRawText(rawBody)
+    ? formFillToRecord(rawBody, open.loc) : null;
   const body = opts.parseBlocks(cursor, open.name);
   const closeLoc = expectHashClose(cursor, open);
+  const loc = spanLoc(open.loc, closeLoc);
+  if (fastFillRec !== null) {
+    return { kind: 'dataDef', name: open.name, value: fastFillRec, loc };
+  }
   return {
     kind: 'nodeDef', name: open.name,
     captures: resolveCaptures(captures, body),
-    shape: 'block', body, additive, loc: spanLoc(open.loc, closeLoc),
+    shape: 'block', body, additive, loc,
   };
+}
+
+// Peek the raw source substring between `#name` opener and matching
+// `name#` closer without consuming any tokens. Returns null when there's
+// no matching close in scope (the caller still proceeds to parse and
+// surface a normal unclosed-definition diagnostic).
+function peekRawHashBody(cursor: TokenCursor, open: HashOpen): string | null {
+  let i = 0;
+  while (true) {
+    const tok = cursor.peek(i);
+    if (tok.kind === 'eof') return null;
+    if (tok.kind === 'hashClose' && tok.name === open.name) {
+      const start = open.loc.offset + open.loc.length;
+      const end = tok.loc.offset;
+      return cursor.sliceSource(start, end);
+    }
+    i += 1;
+  }
 }
 
 function expectHashClose(cursor: TokenCursor, open: HashOpen): Loc {

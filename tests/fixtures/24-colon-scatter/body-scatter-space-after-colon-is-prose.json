@@ -1,0 +1,45 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " key: "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": " body "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "v",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": " "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "thing",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,12 @@
+#reference_entry ||author, year, title, publisher||
+::author:: (::year::). ::title::. ::publisher::
+reference_entry#
+
++#bibliography:
+  @reference_entry
+    author: "Boud, D."
+    year: 2001
+    title: Using journal writing
+    publisher: "New Directions, 9-18"
+  reference_entry@
+!!

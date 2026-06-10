@@ -156,11 +156,21 @@ function extendLoc(a: Loc, b: Loc): Loc {
 function slotToParam(slot: SlotTokens): Param | null {
   if (slot.loc === null) return null;
   const left = slot.text.trim();
-  const right = slot.rest.trim();
+  const right = maybeUnquote(slot.rest.trim());
   if (left.length === 0 && right.length === 0 && !slot.flag) return null;
   if (slot.hyphen) return namedFromHyphen(left, right, slot.loc);
   if (slot.flag) return flagParam(left, slot.loc);
   return splitFirstWord(left, slot.loc);
+}
+
+// M15.form-fill: a `rest` value that's exactly a `"..."` quoted string
+// has its surrounding quotes stripped and `\"` / `\\` unescaped. Quotes
+// embedded mid-value (e.g. `key foo"bar"`) are left as-is.
+function maybeUnquote(s: string): string {
+  if (s.length < 2 || s.charAt(0) !== '"' || s.charAt(s.length - 1) !== '"') {
+    return s;
+  }
+  return s.slice(1, -1).replace(/\\(["\\])/g, '$1');
 }
 
 function namedFromHyphen(left: string, right: string, loc: Loc): Param {
@@ -173,6 +183,6 @@ function flagParam(text: string, loc: Loc): Param {
 
 function splitFirstWord(text: string, loc: Loc): Param {
   const m = /^(\S+)\s+(.*)$/.exec(text);
-  if (m === null) return { name: null, value: text, loc };
-  return { name: m[1], value: m[2], loc };
+  if (m === null) return { name: null, value: maybeUnquote(text), loc };
+  return { name: m[1], value: maybeUnquote(m[2]), loc };
 }
