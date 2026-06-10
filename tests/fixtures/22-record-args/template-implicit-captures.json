@@ -1,0 +1,46 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "hello "
+          },
+          {
+            "kind": "interpolation",
+            "name": "name"
+          }
+        ],
+        "captures": [
+          "name"
+        ],
+        "kind": "nodeDef",
+        "name": "tpl",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "tpl",
+            "params": [
+              {
+                "name": "name",
+                "value": "world"
+              }
+            ],
+            "paramsSource": "record"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

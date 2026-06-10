@@ -33,6 +33,13 @@ const KNOWN_SKIPS: Record<string, string> = {
   'missing-reference-file.wit': 'E_MISSING_REFERENCE_FILE — resolver file loader not implemented',
   'mismatched-shape-additive.wit': 'E_PARTIAL_SHAPE_MISMATCH — resolver shape-merge not implemented',
   'mixed-types-impossible.wit': 'E_TYPE_MISMATCH — resolver type checker not implemented',
+  // Runtime/expander stage (M13.records-as-args): record-field binding
+  // errors are thrown at expand time, not parse time. The error harness
+  // only invokes parse(); these fixtures live for documentation and the
+  // expanded sidecar in tests/integration/ would surface them at full
+  // pipeline coverage.
+  'missing-record-field.wit': 'E_MISSING_RECORD_FIELD — expander stage, harness parse-only',
+  'extra-record-field.wit': 'E_EXTRA_RECORD_FIELD — expander stage, harness parse-only',
   // Parser stage but not yet emitting these errors:
   'comma-in-record-value-bare-word.wit': 'E_BARE_FIELD — record bare-word rejection not wired',
   'empty-pipe-in-body.wit': 'E_EMPTY_PIPE — empty-pipe sentinel rejection not wired',

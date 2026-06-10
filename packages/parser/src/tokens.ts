@@ -203,6 +203,15 @@ export interface RecordClose extends HasLoc {
   kind: 'recordClose';
 }
 
+export interface RecordArg extends HasLoc {
+  // M13.records-as-args: a balanced `{ ... }` immediately following a
+  // NodeOpen (or its access path / parens) carries the raw record bytes.
+  // The parser re-parses `text` via tryParseRecordFromText to obtain the
+  // field/value pairs, then binds template captures by field-key.
+  kind: 'recordArg';
+  text: string;
+}
+
 export interface CollectionOpen extends HasLoc {
   kind: 'collectionOpen';
 }
@@ -272,6 +281,7 @@ export type Token =
   | AdditivePrefix
   | RecordOpen
   | RecordClose
+  | RecordArg
   | CollectionOpen
   | CollectionClose
   | ValueBlockTerminator

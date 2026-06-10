@@ -33,6 +33,7 @@ import type {
   Text,
 } from '@wit/parser';
 import { lookupRecordField } from './canonical-key.js';
+import { ExpanderError, RuntimeErrorCode } from './errors.js';
 
 export type Splice = (Block | Inline)[];
 
@@ -45,8 +46,14 @@ export interface ExpandDefArgs {
   def: NodeDef;
 }
 
+function isFieldKeyed(source: NodeUse['paramsSource']): boolean {
+  return source === 'record';
+}
+
 export function expandNodeDef(args: ExpandDefArgs): Splice {
-  const env = buildCaptureEnv(args.def.captures, args.use.params);
+  const env = isFieldKeyed(args.use.paramsSource)
+    ? buildRecordCaptureEnv(args.use, args.def)
+    : buildCaptureEnv(args.def.captures, args.use.params);
   const body = args.use.body ?? [];
   const cloned = structuredClone(args.def.body) as (Block | Inline)[];
   return substituteAll(cloned, env, body);
@@ -65,6 +72,38 @@ function buildCaptureEnv(
       continue;
     }
     env.set(p.name, p.value);
+  }
+  return env;
+}
+
+// M13.records-as-args: record-arg bindings are field-keyed (not
+// positional). Missing field → E_MISSING_RECORD_FIELD. Extra field →
+// E_EXTRA_RECORD_FIELD. Both surface with the offending field name and
+// the template handle in the message.
+function buildRecordCaptureEnv(use: NodeUse, def: NodeDef): Map<string, string> {
+  const fieldByName = new Map<string, Param>();
+  for (const p of use.params) if (p.name !== null) fieldByName.set(p.name, p);
+  const env = new Map<string, string>();
+  for (const cap of def.captures) {
+    const field = fieldByName.get(cap);
+    if (field === undefined) {
+      throw new ExpanderError(
+        RuntimeErrorCode.E_MISSING_RECORD_FIELD,
+        `missing record field "${cap}" for template @${def.name}`,
+        use.loc,
+      );
+    }
+    env.set(cap, field.value);
+  }
+  const declared = new Set(def.captures);
+  for (const p of use.params) {
+    if (p.name !== null && !declared.has(p.name)) {
+      throw new ExpanderError(
+        RuntimeErrorCode.E_EXTRA_RECORD_FIELD,
+        `extra record field "${p.name}" not declared by template @${def.name}`,
+        p.loc,
+      );
+    }
   }
   return env;
 }

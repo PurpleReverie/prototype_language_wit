@@ -1,0 +1,71 @@
+{
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": "a, b"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          },
+          {
+            "kind": "text",
+            "value": " "
+          },
+          {
+            "kind": "interpolation",
+            "name": "a"
+          },
+          {
+            "kind": "text",
+            "value": " + "
+          },
+          {
+            "kind": "interpolation",
+            "name": "b"
+          }
+        ],
+        "captures": [
+          "a",
+          "b"
+        ],
+        "kind": "nodeDef",
+        "name": "tpl",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "tpl",
+            "params": [
+              {
+                "name": "a",
+                "value": "1"
+              },
+              {
+                "name": "b",
+                "value": "2"
+              }
+            ],
+            "paramsSource": "record"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

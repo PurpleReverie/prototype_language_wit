@@ -1,0 +1,3 @@
+#tpl: hello ::name:: !!
+
+@tpl {name - world}

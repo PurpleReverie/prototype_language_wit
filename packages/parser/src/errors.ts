@@ -13,6 +13,7 @@ export const ErrorCode = {
   E_MALFORMED_RECORD: 'E_MALFORMED_RECORD',
   E_UNCLOSED_COLLECTION: 'E_UNCLOSED_COLLECTION',
   E_UNCLOSED_SCRIPT: 'E_UNCLOSED_SCRIPT',
+  E_MIXED_PARAM_SOURCE: 'E_MIXED_PARAM_SOURCE',
 } as const;
 
 export type ErrorCodeName = (typeof ErrorCode)[keyof typeof ErrorCode];

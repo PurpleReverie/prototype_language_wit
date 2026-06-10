@@ -1,0 +1,4 @@
+{
+  "code": "E_MIXED_PARAM_SOURCE",
+  "message_contains": "cannot combine record-arg"
+}

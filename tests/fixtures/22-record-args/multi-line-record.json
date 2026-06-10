@@ -1,0 +1,39 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "reference_entry",
+            "params": [
+              {
+                "name": "author",
+                "value": "Boud"
+              },
+              {
+                "name": "year",
+                "value": "2001"
+              },
+              {
+                "name": "title",
+                "value": "Using journal writing to enhance reflective practice"
+              },
+              {
+                "name": "publisher",
+                "value": "_New Directions for Adult and Continuing Education_"
+              }
+            ],
+            "paramsSource": "record"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -16,6 +16,10 @@
 import { ErrorCode } from './errors.js';
 import { ParseError } from './parser-errors.js';
 import { parseParenParams, parsePipeRun } from './parser-params.js';
+import {
+  finalizeRecordArgUse,
+  tryConsumeRecordArg,
+} from './parser-record-arg.js';
 import type {
   Block,
   Inline,
@@ -44,6 +48,12 @@ export function parseNodeUse(
   const access = consumeAccessPath(cursor);
   const parenParams = tryConsumeParens(cursor);
   const pipeParams = parsePipeRun(cursor);
+  const recordArg = tryConsumeRecordArg(cursor);
+  if (recordArg !== null) {
+    return finalizeRecordArgUse(
+      open, access, parenParams, pipeParams, recordArg,
+    );
+  }
   const params = mergeParams(parenParams, pipeParams);
   const paramsSource = computeParamsSource(parenParams, pipeParams);
   return finalizeNodeUse(cursor, open, access, params, paramsSource, opts);

@@ -28,6 +28,7 @@ import type {
   NodeOpen,
   ParenOpen,
   PipeOpen,
+  RecordArg,
 } from './tokens.js';
 
 // ---------------------------------------------------------------------------
@@ -47,6 +48,7 @@ export function tryNodeOpen(state: LexState, buf: RunBuf): boolean {
   emitNodeOpen(state);
   consumeAccessPath(state);
   tryAttachParens(state);
+  tryAttachRecordArg(state);
   if (inline) state.afterInline = true;
   return true;
 }
@@ -62,8 +64,26 @@ function inlineFormLookahead(src: string, atOffset: number): boolean {
     while (isHandleChar(src.charAt(i))) i += 1;
   }
   if (src.charAt(i) === '(') i = scanBalancedParen(src, i);
+  // Skip optional whitespace + balanced `{...}` (record-arg form M13).
+  let j = i;
+  while (src.charAt(j) === ' ' || src.charAt(j) === '\t') j += 1;
+  if (src.charAt(j) === '{') i = scanBalancedBrace(src, j);
   const next = src.charAt(i);
   return next !== '\n' && next !== '';
+}
+
+function scanBalancedBrace(src: string, openAt: number): number {
+  // Skip balanced `{...}` including newlines (records may span lines).
+  // Stops at EOF (unclosed; parser diagnoses). Returns position past `}`.
+  let i = openAt + 1;
+  let depth = 1;
+  while (i < src.length && depth > 0) {
+    const c = src.charAt(i);
+    if (c === '{') depth += 1;
+    else if (c === '}') depth -= 1;
+    i += 1;
+  }
+  return i;
 }
 
 function scanBalancedParen(src: string, openAt: number): number {
@@ -135,6 +155,36 @@ function tryAttachParens(state: LexState): void {
   lexParamState(state, ')');
 }
 
+export function tryAttachRecordArg(state: LexState): void {
+  // M13.records-as-args: `@name {...}` (optional whitespace before `{`).
+  // The scan is balanced on `{`/`}` and tolerates newlines. Called from
+  // tryNodeOpen (post-parens) AND from tryPipeOpen (post-pipes) so the
+  // mixed case `@x |a 1| {b - 2}` produces both pipe tokens AND a
+  // recordArg token, letting the parser raise E_MIXED_PARAM_SOURCE.
+  const { src } = state;
+  let i = state.cur.offset;
+  while (src.charAt(i) === ' ' || src.charAt(i) === '\t') i += 1;
+  if (src.charAt(i) !== '{') return;
+  const startCur = snapshot(state.cur);
+  while (state.cur.offset < i) advance(state);
+  const textStart = state.cur.offset;
+  let depth = 0;
+  while (state.cur.offset < src.length) {
+    const c = src.charAt(state.cur.offset);
+    if (c === '{') depth += 1;
+    else if (c === '}') depth -= 1;
+    advance(state);
+    if (depth === 0) break;
+  }
+  const text = src.slice(textStart, state.cur.offset);
+  const tok: RecordArg = {
+    kind: 'recordArg',
+    text,
+    loc: locFrom(state.file, startCur, state.cur),
+  };
+  state.tokens.push(tok);
+}
+
 // ---------------------------------------------------------------------------
 // NodeClose (`name@`).
 // ---------------------------------------------------------------------------
@@ -191,6 +241,11 @@ export function tryPipeOpen(state: LexState, buf: RunBuf): boolean {
   else flushTextRun(state, buf);
   emitPipeOpen(state);
   lexParamState(state, '|');
+  // M13: a `{` immediately after a closing pipe (optionally with
+  // whitespace) opens a record-arg. The parser raises
+  // E_MIXED_PARAM_SOURCE when this combines with the just-emitted
+  // pipe params on the same node-use.
+  tryAttachRecordArg(state);
   if (inline) state.afterInline = true;
   return true;
 }
