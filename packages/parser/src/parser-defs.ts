@@ -4,6 +4,7 @@
 // parsed via caller-provided helpers to avoid a parser.ts import cycle.
 
 import { ErrorCode } from './errors.js';
+import { resolveCaptures, type CaptureList } from './parser-captures.js';
 import { maybeAsDataValue } from './parser-data.js';
 import { ParseError } from './parser-errors.js';
 import type {
@@ -40,6 +41,7 @@ export function parseNodeDef(
   return parseBlockDef(cursor, open, captures, additive, opts);
 }
 
+
 function consumeAdditive(cursor: TokenCursor): boolean {
   if (cursor.current().kind !== 'additivePrefix') return false;
   cursor.advance();
@@ -50,12 +52,12 @@ function consumeAdditive(cursor: TokenCursor): boolean {
 // Captures `||a, b, c||`.
 // ---------------------------------------------------------------------------
 
-function consumeCaptures(cursor: TokenCursor): string[] {
+function consumeCaptures(cursor: TokenCursor): CaptureList {
   const saved = cursor.position();
   skipInlineWhitespace(cursor);
   if (cursor.current().kind !== 'captureOpen') {
     cursor.reset(saved);
-    return [];
+    return null;
   }
   cursor.advance();
   const text = readCaptureText(cursor);
@@ -147,21 +149,21 @@ function scansAcrossBreak(cursor: TokenCursor): boolean {
 // ---------------------------------------------------------------------------
 
 function parseSingleLineDef(
-  cursor: TokenCursor, open: HashOpen, captures: string[],
+  cursor: TokenCursor, open: HashOpen, captures: CaptureList,
   additive: boolean, opts: NodeDefOptions,
 ): NodeDef | DataDef {
   return parseBangBangDef(cursor, open, captures, additive, opts, 'single-line');
 }
 
 function parseValueBlockDef(
-  cursor: TokenCursor, open: HashOpen, captures: string[],
+  cursor: TokenCursor, open: HashOpen, captures: CaptureList,
   additive: boolean, opts: NodeDefOptions,
 ): NodeDef {
   return parseBangBangDef(cursor, open, captures, additive, opts, 'value-block') as NodeDef;
 }
 
 function parseBangBangDef(
-  cursor: TokenCursor, open: HashOpen, captures: string[],
+  cursor: TokenCursor, open: HashOpen, captures: CaptureList,
   additive: boolean, opts: NodeDefOptions,
   shape: 'single-line' | 'value-block',
 ): NodeDef | DataDef {
@@ -180,7 +182,9 @@ function parseBangBangDef(
     }
   }
   return {
-    kind: 'nodeDef', name: open.name, captures, shape, body, additive, loc,
+    kind: 'nodeDef', name: open.name,
+    captures: resolveCaptures(captures, body),
+    shape, body, additive, loc,
   };
 }
 
@@ -304,14 +308,15 @@ function isImplicitDefTerminator(kind: string): boolean {
 // ---------------------------------------------------------------------------
 
 function parseBlockDef(
-  cursor: TokenCursor, open: HashOpen, captures: string[],
+  cursor: TokenCursor, open: HashOpen, captures: CaptureList,
   additive: boolean, opts: NodeDefOptions,
 ): NodeDef {
   const body = opts.parseBlocks(cursor, open.name);
   const closeLoc = expectHashClose(cursor, open);
   return {
-    kind: 'nodeDef', name: open.name, captures, shape: 'block', body,
-    additive, loc: spanLoc(open.loc, closeLoc),
+    kind: 'nodeDef', name: open.name,
+    captures: resolveCaptures(captures, body),
+    shape: 'block', body, additive, loc: spanLoc(open.loc, closeLoc),
   };
 }
 

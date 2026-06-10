@@ -29,6 +29,8 @@ import type {
 } from '@wit/parser';
 import type { ExpandedDocument } from '@wit/runtime';
 import { escapeHtml } from './escape.js';
+import { tryRenderCore } from './render-core-vocab.js';
+import { tryRenderTable } from './render-table.js';
 
 export function renderHtml(doc: ExpandedDocument): string {
   const inner = renderBlocks(doc.children);
@@ -133,6 +135,12 @@ function renderUnresolvedAccess(use: NodeUse): string {
 }
 
 function renderNodeUseShell(use: NodeUse): string {
+  // `@table` has its own complex renderer (schema + rows + caption).
+  const tableHtml = tryRenderTable(use, renderInlines, renderBlocks);
+  if (tableHtml !== null) return tableHtml;
+  // Core vocab + @node pass-through dispatch.
+  const coreHtml = tryRenderCore(use, renderUseBody);
+  if (coreHtml !== null) return coreHtml;
   const body = renderUseBody(use);
   if (isStandaloneRecord(use)) return renderRecord(extractRecord(use)!);
   if (isStandaloneCollection(use)) {

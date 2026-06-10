@@ -261,7 +261,20 @@ function parseCollectionItem(s: Scanner): DataValue | null {
   if (c === ']' || c === ',') return null;
   if (c === '{') return parseRecord(s);
   if (c === '[') return parseCollection(s);
+  if (c === '!') return parseBangValue(s);
   return parseStringValue(s, ']');
+}
+
+// `!...!` inside a Collection element: a multi-line string cell where
+// commas and newlines are content (M10.core-vocab Thread 5).
+function parseBangValue(s: Scanner): StringValue {
+  const start = s.pos;
+  s.pos += 1; // opening !
+  const contentStart = s.pos;
+  while (s.pos < s.src.length && s.src.charAt(s.pos) !== '!') s.pos += 1;
+  const raw = s.src.slice(contentStart, s.pos).trim();
+  if (s.pos < s.src.length) s.pos += 1; // closing !
+  return { kind: 'stringValue', value: raw, loc: locOfRange(s, start, s.pos) };
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,65 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " The Lamp Keeper "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "h1",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " Chapter One "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "h2",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " A Quiet Morning "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "h3",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

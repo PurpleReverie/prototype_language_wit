@@ -5,3 +5,4 @@ export * from './resolver.js';
 export * from './expander.js';
 export * from './lh-bridge.js';
 export * from './script-runner.js';
+export * from './core-vocab.js';

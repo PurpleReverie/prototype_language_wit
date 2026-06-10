@@ -1,0 +1,9 @@
+@blockquote
+  A quoted passage worth remembering.
+blockquote@
+
+@pre
+  function example() { return 1; }
+pre@
+
+@hr hr@

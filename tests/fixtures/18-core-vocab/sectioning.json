@@ -1,0 +1,149 @@
+{
+  "ast": {
+    "children": [
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "  "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": "    "
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " Article Title "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "h1",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "  "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "header",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "  "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": "    "
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " A first paragraph. "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "p",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "    "
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " A second paragraph. "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "p",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "  "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "section",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "  "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": "    "
+                  },
+                  {
+                    "body": [
+                      {
+                        "kind": "text",
+                        "value": " Published 2024. "
+                      }
+                    ],
+                    "closeStyle": "named",
+                    "inline": true,
+                    "kind": "nodeUse",
+                    "name": "small",
+                    "params": [],
+                    "paramsSource": "none"
+                  },
+                  {
+                    "kind": "text",
+                    "value": "  "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "footer",
+                "params": [],
+                "paramsSource": "none"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "article",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,35 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "node",
+            "params": [
+              {
+                "name": "type",
+                "value": "img"
+              },
+              {
+                "name": "src",
+                "value": "./lamp.png"
+              },
+              {
+                "name": "alt",
+                "value": "The keeper's lamp"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

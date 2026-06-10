@@ -1,0 +1,118 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Visit "
+          },
+          {
+            "body": [
+              {
+                "kind": "text",
+                "value": " Example "
+              }
+            ],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "a",
+            "params": [
+              {
+                "name": "href",
+                "value": "https://example.org"
+              }
+            ],
+            "paramsSource": "pipes"
+          },
+          {
+            "kind": "text",
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "img",
+            "params": [
+              {
+                "name": "src",
+                "value": "./lamp.png"
+              },
+              {
+                "name": "alt",
+                "value": "The keeper's lamp"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "  "
+              },
+              {
+                "body": null,
+                "closeStyle": "parens",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "img",
+                "params": [
+                  {
+                    "name": "src",
+                    "value": "./figure.png"
+                  },
+                  {
+                    "name": "alt",
+                    "value": "A figure"
+                  }
+                ],
+                "paramsSource": "pipes"
+              },
+              {
+                "kind": "text",
+                "value": "  "
+              },
+              {
+                "body": [
+                  {
+                    "kind": "text",
+                    "value": " A descriptive caption. "
+                  }
+                ],
+                "closeStyle": "named",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "figcaption",
+                "params": [],
+                "paramsSource": "none"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "figure",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

@@ -1,0 +1,5 @@
+#callout
+  A note from ::source:: about ::topic::.
+callout#
+
+@callout |source Iris Murdoch| |topic attention| callout@

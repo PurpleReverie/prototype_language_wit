@@ -58,7 +58,12 @@
             "value": "."
           }
         ],
-        "captures": [],
+        "captures": [
+          "author",
+          "year",
+          "title",
+          "publisher"
+        ],
         "kind": "nodeDef",
         "name": "cite",
         "shape": "single-line"

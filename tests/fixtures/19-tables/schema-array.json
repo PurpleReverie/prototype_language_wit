@@ -1,0 +1,78 @@
+{
+  "ast": {
+    "children": [
+      {
+        "kind": "dataDef",
+        "name": "sites",
+        "value": {
+          "items": [
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "Dunmore Head"
+                  }
+                },
+                {
+                  "key": "status",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "operational"
+                  }
+                }
+              ],
+              "kind": "record"
+            },
+            {
+              "fields": [
+                {
+                  "key": "name",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "Carrick Point"
+                  }
+                },
+                {
+                  "key": "status",
+                  "value": {
+                    "kind": "stringValue",
+                    "value": "maintenance"
+                  }
+                }
+              ],
+              "kind": "record"
+            }
+          ],
+          "kind": "collection"
+        }
+      },
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "table",
+            "params": [
+              {
+                "name": "schema",
+                "value": "[name, status]"
+              },
+              {
+                "name": "rows",
+                "value": "@sites"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

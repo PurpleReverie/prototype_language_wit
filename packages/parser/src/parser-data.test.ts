@@ -193,6 +193,17 @@ describe('tryParseCollectionFromText', () => {
       tryParseCollectionFromText('[ a, b', BASE_LOC),
     ).toThrow(/expected '\]'/);
   });
+
+  it('parses `!...!` as a multi-line cell (commas + newlines are content)', () => {
+    const src = '[ a, ! line one, line two\nthird line !, c ]';
+    const result = tryParseCollectionFromText(src, BASE_LOC);
+    const items = result!.collection.items;
+    expect(items).toHaveLength(3);
+    expect((items[0] as { value: string }).value).toBe('a');
+    expect((items[1] as { value: string }).value).toContain('line one, line two');
+    expect((items[1] as { value: string }).value).toContain('third line');
+    expect((items[2] as { value: string }).value).toBe('c');
+  });
 });
 
 describe('parse — single-line def with collection literal body', () => {

@@ -290,3 +290,23 @@ describe('resolver — merge partials', () => {
     expect(bodyKinds(merged).length).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe('resolver — M10.core-vocab reserved names', () => {
+  it('skips binding lookup for `@node`', () => {
+    const doc = parse('@node |type img| |src ./lamp.png|');
+    const resolved = resolve(doc);
+    expect(resolved.definitions.has('node')).toBe(false);
+    expect(resolved.bindings.size).toBe(0);
+  });
+
+  it('skips binding lookup for core-vocab names like `@h1`', () => {
+    const doc = parse('@h1 Title h1@');
+    const resolved = resolve(doc);
+    expect(resolved.bindings.size).toBe(0);
+  });
+
+  it('still errors on unknown unreserved names', () => {
+    const doc = parse('@unknownname body unknownname@');
+    expect(() => resolve(doc)).toThrow(/Unresolved reference/);
+  });
+});

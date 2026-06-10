@@ -1,0 +1,27 @@
+{
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "table",
+            "params": [
+              {
+                "name": "rows",
+                "value": "[[Article, Note], [Kāwanatanga, ! The practice of good governance, spanning multiple lines. !], [Tino rangatiratanga, Self-determination.]]"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

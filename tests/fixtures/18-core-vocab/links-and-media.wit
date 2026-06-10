@@ -1,0 +1,8 @@
+Visit @a |href https://example.org| Example a@.
+
+@img |src ./lamp.png| |alt The keeper's lamp|
+
+@figure
+  @img |src ./figure.png| |alt A figure|
+  @figcaption A descriptive caption. figcaption@
+figure@

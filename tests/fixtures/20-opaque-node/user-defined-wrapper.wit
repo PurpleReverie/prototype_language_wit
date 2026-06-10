@@ -1,0 +1,5 @@
+#highlight ||content||
+@node |type highlight| ::content:: node@
+highlight#
+
+@highlight Some emphasised text highlight@
