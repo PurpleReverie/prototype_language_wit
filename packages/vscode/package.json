@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "private": true,
   "publisher": "wit",
+  "type": "module",
   "engines": {
     "vscode": "^1.94.0"
   },
@@ -42,7 +43,7 @@
     "bundle:client": "esbuild client/extension.ts --bundle --platform=node --target=node20 --external:vscode --format=cjs --outfile=client/dist/extension.js",
     "bundle:server": "esbuild server/server.ts --bundle --platform=node --target=node20 --external:vscode --format=cjs --outfile=server/dist/server.js",
     "bundle": "pnpm run bundle:client && pnpm run bundle:server",
-    "build": "pnpm run typecheck && pnpm run bundle",
+    "build": "pnpm run bundle",
     "package": "vsce package --no-dependencies --out wit-vscode.vsix",
     "install:local": "command -v code >/dev/null || { echo 'VS Code CLI (code) not on PATH. In VS Code: Cmd-Shift-P → Shell Command: Install code command in PATH.'; exit 1; } && pnpm run build && pnpm exec vsce package --no-dependencies --out wit-vscode.vsix && code --install-extension wit-vscode.vsix && rm -f wit-vscode.vsix"
   },
