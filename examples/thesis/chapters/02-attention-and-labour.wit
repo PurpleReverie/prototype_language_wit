@@ -1,0 +1,38 @@
+~ Chapter 2 — attention as labour, the Arendt-Weil overlay.
+
+reference ../shared/schema.wit
+reference ../shared/sources.wit
+
++#bibliography: @entry Arendt, Hannah (1958). The Human Condition. University of Chicago Press. entry@
+
+#chapter_two
+@chapter |number 2| |title Attention and Labour|
+
+@section |title Arendt on labour|
+
+@arendt_labour distinguishes labour from work and action: labour
+is what sustains the species, what must be done again the next
+day, what leaves no monument. Most of human life, on this view,
+is labour. The trouble is that attention has been written out of
+this account — Arendt's _labour_ is bodily, agricultural, the
+keeping-alive of bodies. But the keeping-alive of meanings is
+also labour, and it, too, must be done again the next day.
+
+@section |title Weil on the cost of looking|
+
+Weil's intuition is that the cost is moral as well as cognitive.
+To attend, @weil_generosity argues, is to suspend the self — to
+hold the object as an _it_ rather than as material for one's own
+projects. Most of us cannot sustain this for more than a minute
+at a time. The minute is precious.
+
+@section |title The asymmetric ledger|
+
+@theorem |number 1| |statement Attention is asymmetrically distributed across the social field, and the distribution tracks power.|
+
+It does not follow that this is novel. It follows only that, if
+the labour reading is correct, the politics of attention is not a
+luxury topic — it is what most of our moral life consists in.
+
+Word count through this chapter: <% lh.prose().wordCount() %> words.
+chapter_two#

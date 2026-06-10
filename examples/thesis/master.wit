@@ -1,0 +1,35 @@
+~ master.wit — assembles the thesis from chapter files. Each chapter is
+~ defined as a block-shape node (#chapter_one .. #chapter_four) inside
+~ its own file; this master just references the files and emits the
+~ corresponding uses in order.
+
+reference ./shared/schema.wit
+reference ./shared/sources.wit
+reference ./chapters/00-frontmatter.wit
+reference ./chapters/01-introduction.wit
+reference ./chapters/02-attention-and-labour.wit
+reference ./chapters/03-the-asymmetry-of-looking.wit
+reference ./chapters/04-conclusion.wit
+
+~ Thesis metadata — single-line record so the parser classifies it as
+~ a DataDef whose fields are reachable via @thesis.field.
+
+#thesis: { title - Attention as a Moral Practice, author - T Greig, status - draft } !!
+
+# @thesis.title
+
+By @thesis.author
+
+(if @thesis.status is draft)
+@watermark()
+(end)
+
+@frontmatter frontmatter@
+
+@chapter_one chapter_one@
+
+@chapter_two chapter_two@
+
+@chapter_three chapter_three@
+
+@chapter_four chapter_four@

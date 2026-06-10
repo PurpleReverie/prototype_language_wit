@@ -1,0 +1,35 @@
+~ shared/schema.wit — templates and headings reused across the thesis.
+~ Single-line inline defs with named captures cover the common cases.
+
+~ Inline citation: @cite |author Weil| |year 1952| produces "Weil (1952)".
+#cite: ::author:: (::year::) !!
+
+~ Inline citation with page: "Weil (1952, p. 42)".
+#citepage: ::author:: (::year::, p. ::page::) !!
+
+~ Inline theorem-style emphasis: "Theorem 1 — The Asymmetry of Looking".
+#theorem: **Theorem ::number::** — ::statement:: !!
+
+~ Block chapter header. Lays down ATX markdown that reads as a heading
+~ in markdown and as plain prose in HTML — both outputs stay legible.
+#chapter ||number, title||
+# Chapter ::number::: ::title::
+chapter#
+
+~ Block section header.
+#section ||title||
+## ::title::
+section#
+
+~ Subsection header.
+#subsection ||title||
+### ::title::
+subsection#
+
+~ Inline draft watermark — referenced from a conditional in master.wit.
+#watermark: _Draft — not for distribution._ !!
+
+~ Wrapper for a bibliography entry. Lets +#bibliography partials each
+~ produce one renderable block instead of fragmenting into many text
+~ paragraphs when the inline def expands.
+#entry: ... !!

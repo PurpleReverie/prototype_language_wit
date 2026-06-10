@@ -14,6 +14,7 @@
   "devDependencies": {
     "@wit/parser": "workspace:*",
     "@wit/runtime": "workspace:*",
-    "@wit/render-html": "workspace:*"
+    "@wit/render-html": "workspace:*",
+    "@wit/render-markdown": "workspace:*"
   }
 }
