@@ -10,6 +10,11 @@ server/**/*.ts
 **/*.test.js
 **/*.map
 **/*.tsbuildinfo
-tsconfig.json
+**/*.d.ts
+tsconfig*.json
 .gitignore
 **/tsconfig.json
+client/dist/*
+server/dist/*
+!client/dist/extension.js
+!server/dist/server.js
