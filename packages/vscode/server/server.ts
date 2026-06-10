@@ -58,7 +58,11 @@ connection.onInitialize((_params: InitializeParams): InitializeResult => {
       referencesProvider: true,
       documentSymbolProvider: true,
       completionProvider: { triggerCharacters: ['@', '#', ':', '.'] },
-      diagnosticProvider: { interFileDependencies: true, workspaceDiagnostics: false },
+      // NOTE: do NOT declare diagnosticProvider — that would tell VS Code
+      // to PULL diagnostics via textDocument/diagnostic. We use the PUSH
+      // model (connection.sendDiagnostics on every change), so omitting
+      // the capability keeps VS Code on push and avoids "Unhandled method"
+      // errors flooding the channel.
     },
   };
 });
