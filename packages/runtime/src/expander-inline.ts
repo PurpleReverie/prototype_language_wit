@@ -32,6 +32,7 @@ import type {
   Loc,
   Text,
 } from '@wit/parser';
+import { parseInlineFromText } from '@wit/parser';
 import { lookupRecordField } from './canonical-key.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
 
@@ -130,13 +131,36 @@ function substituteOne(
   bodyContent: readonly (Block | Inline)[],
 ): (Block | Inline)[] {
   if (item.kind === 'interpolation') {
-    const value = env.get(item.name) ?? '';
-    return [textNode(value, item.loc)];
+    return expandInterpolationValue(env.get(item.name) ?? '', item.loc);
   }
   if (item.kind === 'bodySlot') {
     return structuredClone(bodyContent) as (Block | Inline)[];
   }
   return [substituteContainer(item, env, bodyContent)];
+}
+
+// Re-parse a captured raw-string value as inline content. The form-fill
+// (and pipe/parens/record-arg) parser captures values verbatim — emphasis
+// markers, `@-refs`, and other inline forms remain literal in the string
+// (per M15-followup, to avoid content loss). At expand time we re-run the
+// inline parser on the captured text so the result splices into the
+// template body as a proper inline AST (Text / Italic / Bold / NodeUse /
+// ...), not a single literal Text node. Both renderers then see the
+// emphasis structure and emit it correctly.
+//
+// Edge cases:
+//   - Empty value → empty splice (no-op, paragraph stays contiguous).
+//   - Pure plain text → single Text node (same as the prior behaviour).
+//   - `_x_` / `*x*` → Italic / Bold nodes.
+//   - `@ref` → NodeUse, which the caller's walker will recursively expand.
+//   - `<% expr %>` → ScriptBlock — handled by the script-runner phase.
+// Locs from the re-parsed result reference the captured string's internal
+// offsets; we keep them as-is since callers only use loc for diagnostics.
+function expandInterpolationValue(value: string, loc: Loc): (Block | Inline)[] {
+  if (value.length === 0) return [];
+  const parsed = parseInlineFromText(value, loc.file);
+  if (parsed.length === 0) return [textNode(value, loc)];
+  return parsed as (Block | Inline)[];
 }
 
 function substituteContainer(

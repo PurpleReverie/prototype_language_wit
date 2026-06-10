@@ -19,12 +19,14 @@
 //
 // Functions ≤ 20 lines (RULES 2). File ≤ 350 lines (RULES 1).
 
+import { lex } from './lexer.js';
 import { parseNodeUse } from './parser-nodes.js';
 import {
   isScriptCallStart,
   parseScriptBlock,
   parseScriptCall,
 } from './parser-script.js';
+import { TokenCursor } from './parser-cursor.js';
 import type {
   Bold,
   BodySlot,
@@ -38,7 +40,6 @@ import type {
   Text,
 } from './ast.js';
 import type { Loc } from './loc.js';
-import type { TokenCursor } from './parser-cursor.js';
 import type {
   BlockCommentClose,
   BlockCommentContent,
@@ -66,6 +67,24 @@ export function parseInline(cursor: TokenCursor): Inline[] {
     out.push(inline);
   }
   return out;
+}
+
+// Parse a free-form string as inline content (Text / Italic / Bold / ...).
+//
+// Used by the expander when interpolating a captured raw-string value into
+// a `::name::` placeholder. The value was captured verbatim at parse time
+// (per M15-followup, to avoid content loss); at expand time we re-parse it
+// as inline so emphasis markers (`_italic_`, `*bold*`) become proper AST
+// nodes rather than reaching renderers as literal text. Empty string
+// yields []. Strings with no marks yield a single Text node.
+export function parseInlineFromText(
+  source: string,
+  file: string = '<interpolation>',
+): Inline[] {
+  if (source.length === 0) return [];
+  const tokens = lex(source, file);
+  const cursor = new TokenCursor(tokens, source);
+  return parseInline(cursor);
 }
 
 function isParagraphBoundary(tok: Token): boolean {
@@ -176,6 +195,7 @@ function tokenSourceText(tok: Token): string {
   if (tok.kind === 'textRun') return tok.value;
   if (tok.kind === 'lineComment') return tok.text;
   if (tok.kind === 'blockCommentContent') return tok.text;
+  if (tok.kind === 'recordArg') return tok.text;
   return '';
 }
 

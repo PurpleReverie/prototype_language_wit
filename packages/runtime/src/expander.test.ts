@@ -94,6 +94,46 @@ describe('expander — inline NodeDef expansion', () => {
     expect(flat).not.toContain('3069nights');
   });
 
+  it('re-parses emphasis markers inside captured form-fill values', () => {
+    // Form-fill captures values verbatim (M15-followup avoids content
+    // loss). At expand time the placeholder substitution re-parses the
+    // raw string as inline so `_x_` / `*y*` become Italic / Bold AST
+    // nodes — without this, renderers (HTML in particular) emit the
+    // underscores as literal bytes.
+    const src =
+      '#cite ||author, journal||\n' +
+      '::author:: in ::journal::\n' +
+      'cite#\n\n' +
+      '@cite\n' +
+      '  author: A. Researcher\n' +
+      '  journal: _Journal of Studies_ and *findings*\n' +
+      'cite@\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('"italic"');
+    expect(flat).toContain('"bold"');
+    expect(flat).toContain('Journal of Studies');
+    expect(flat).toContain('findings');
+  });
+
+  it('treats empty captured form-fill value as a no-op splice', () => {
+    const src =
+      '#cite ||a, b||\n' +
+      '[::a::~::b::]\n' +
+      'cite#\n\n' +
+      '@cite\n' +
+      '  a: x\n' +
+      '  b:\n' +
+      'cite@\n';
+    const doc = parse(src, '<inline>');
+    const resolved = resolve(doc);
+    const expanded = expand(resolved);
+    const flat = collectText(expanded.children);
+    expect(flat).toContain('x');
+  });
+
   it('expands transitively across nested def references', () => {
     const src =
       '#inner: world !!\n' +
