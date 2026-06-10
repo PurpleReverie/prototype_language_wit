@@ -12,7 +12,7 @@
   "categories": [
     "Programming Languages"
   ],
-  "main": "./client/dist/extension.js",
+  "main": "./client/dist/extension.cjs",
   "activationEvents": [
     "onLanguage:wit"
   ],
@@ -40,8 +40,8 @@
   },
   "scripts": {
     "typecheck": "tsc --build --noEmit",
-    "bundle:client": "esbuild client/extension.ts --bundle --platform=node --target=node20 --external:vscode --format=cjs --outfile=client/dist/extension.js",
-    "bundle:server": "esbuild server/server.ts --bundle --platform=node --target=node20 --external:vscode --format=cjs --outfile=server/dist/server.js",
+    "bundle:client": "esbuild client/extension.ts --bundle --platform=node --target=node20 --external:vscode --format=cjs --outfile=client/dist/extension.cjs",
+    "bundle:server": "esbuild server/server.ts --bundle --platform=node --target=node20 --external:vscode --format=cjs --outfile=server/dist/server.cjs",
     "bundle": "pnpm run bundle:client && pnpm run bundle:server",
     "build": "pnpm run bundle",
     "package": "vsce package --no-dependencies --out wit-vscode.vsix",
