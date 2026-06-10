@@ -1,0 +1,36 @@
+~ Chapter 3 — the politics of looking, drawn from Berger.
+
+reference ../shared/schema.wit
+reference ../shared/sources.wit
+
+~ A second pass of Berger — different work, different argument.
++#bibliography: @entry Berger, John (1980). About Looking. Pantheon. entry@
+
+#chapter_three
+@chapter |number 3| |title The Asymmetry of Looking|
+
+@section |title The looked-at and the looker|
+
+@berger_looking is uncompromising on this: the act of looking is
+not symmetrical. To be the object of a sustained gaze is to be
+positioned, classified, available. @berger_consent extends the
+point: in some institutional settings, the consent of the
+looked-at is presupposed rather than asked for. Attention, here,
+is not a gift but an extraction.
+
+@section |title Two cases|
+
+Consider the museum gallery and the surveillance camera. Both
+require sustained attention; both produce records of what was
+seen. They differ in who is permitted to look back. The museum
+visitor may stare at the canvas for an hour and the canvas does
+not stare back; the surveillance camera, by contrast, looks at
+people who cannot, in the ordinary case, learn what was seen.
+
+@section |title What follows|
+
+If attention is labour and looking is asymmetric, then a serious
+moral psychology of looking will start from this asymmetry rather
+than from an abstract notion of the gaze. The next chapter draws
+the threads together.
+chapter_three#

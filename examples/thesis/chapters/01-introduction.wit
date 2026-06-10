@@ -1,0 +1,36 @@
+~ Introduction — sets out the central claim. Exposed as #chapter_one.
+
+reference ../shared/schema.wit
+reference ../shared/sources.wit
+
++#bibliography: @entry Berger, John (1972). Ways of Seeing. Penguin. entry@
+
+#chapter_one
+@chapter |number 1| |title Introduction|
+
+@section |title The problem|
+
+Attention, as @weil_attention argued, is the rarest form of
+generosity — and the easiest to mistake for something else. We
+say we are paying attention when we are merely looking; we say we
+have considered when we have only consulted. Berger complicates
+this @berger_looking by insisting that we never look at one thing
+alone: the act of looking is always laden with the histories of
+prior looking, with what the looker expects to find, with what
+the institution funding the looker is willing to pay for.
+
+What this thesis adds is the claim that attention, so understood,
+is _labour_ — and that the failure to recognize it as such has
+moral consequence. To attend is to expend; the expenditure is
+asymmetric; the asymmetry is political.
+
+@section |title The argument|
+
+I proceed in three steps. Chapter 2 develops the labour reading,
+drawing on @arendt_labour. Chapter 3 examines the asymmetry of
+looking — who is looked at, by whom, on whose terms. Chapter 4
+concludes by suggesting that the moral life is, in a precise
+sense, an attentional life.
+
+A note on method: the argument is _slow_ on purpose.
+chapter_one#

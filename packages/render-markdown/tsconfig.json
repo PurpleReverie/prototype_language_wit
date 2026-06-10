@@ -11,8 +11,6 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../parser" },
-    { "path": "../runtime" },
-    { "path": "../render-html" },
-    { "path": "../render-markdown" }
+    { "path": "../runtime" }
   ]
 }

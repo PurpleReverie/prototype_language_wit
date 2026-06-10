@@ -1,0 +1,28 @@
+~ frontmatter — abstract + acknowledgements + first bibliography entry.
+~ Exposes #frontmatter as a block-shape node so master.wit can render it
+~ by calling @frontmatter().
+
+reference ../shared/schema.wit
+reference ../shared/sources.wit
+
++#bibliography: @entry Weil, Simone (1952). Gravity and Grace. Routledge. entry@
+
+#frontmatter
+@section |title Abstract|
+
+This thesis argues that attention is not a passive cognitive state
+but a moral practice — a sustained orientation of the self toward
+what it does not yet understand. Drawing on @weil_attention,
+@berger_looking, and @arendt_labour, I trace a triangulated account
+of attention as labour, as ethical asymmetry, and as the
+precondition for political action. The argument unfolds across
+three substantive chapters; each closes with the same refrain:
+the lamp burns only as long as someone tends it.
+
+@section |title Acknowledgements|
+
+To the keeper of the lamp, who taught me that to look at something
+for long enough is to be changed by it. To my supervisor, whose
+patience exceeded any reasonable expectation. And to readers who
+will, I hope, find here not a proof but an invitation.
+frontmatter#

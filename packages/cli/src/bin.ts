@@ -5,7 +5,9 @@
 // Usage:
 //   wit parse <file>            Parse a .wit file, print AST as JSON.
 //   wit check <file>            Parse + resolve, report errors (exit 1).
-//   wit build <file> [-o out]   Render expanded HTML to stdout or file.
+//   wit build <file> [-o out]   Render to stdout or file. Format inferred
+//                               from -o extension (.html/.md), or set
+//                               explicitly with --format html|md.
 //   wit --version | --help
 
 import { runParse } from './cmd-parse.js';
@@ -20,7 +22,7 @@ export const HELP_TEXT = [
   'Usage:',
   '  wit parse <file>',
   '  wit check <file>',
-  '  wit build <file> [-o output.html]',
+  '  wit build <file> [-o output.html|output.md] [--format html|md]',
   '  wit --version | --help',
 ].join('\n');
 

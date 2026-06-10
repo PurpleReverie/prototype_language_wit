@@ -1,0 +1,42 @@
+~ Conclusion — names the upshot and iterates the bibliography.
+
+reference ../shared/schema.wit
+reference ../shared/sources.wit
+
++#bibliography: @entry Weil, Simone (1965). The Need for Roots. Routledge. entry@
+
+~ A simple source list that we iterate via (each), distinct from the
+~ additive #bibliography above. Same authors, different shape.
+#source_list: [Weil 1952, Berger 1972, Arendt 1958] !!
+
+#chapter_four
+@chapter |number 4| |title Conclusion|
+
+@section |title What was argued|
+
+Three claims, in order. First: attention is labour, in something
+close to @arendt_labour's sense — it must be done again the next
+day. Second: looking is asymmetric, after @berger_looking. Third:
+attending to something is a moral practice, after
+@weil_attention, because it requires the suspension of the self.
+
+@section |title What this implies|
+
+It implies that the moral life is not chiefly a matter of choice
+between actions; it is a matter of what one has paid attention to
+long enough to be changed by. The agent who has not looked is
+not, in any robust sense, a moral agent at all.
+
+@section |title Cited works (short list)|
+
+(each @source_list as src)
+- @src
+(end)
+
+@section |title References|
+
+@bibliography bibliography@
+
+A final tally — total words across the manuscript:
+**<% lh.prose().wordCount() %>**.
+chapter_four#

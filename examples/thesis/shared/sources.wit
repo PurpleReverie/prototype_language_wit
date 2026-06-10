@@ -1,0 +1,20 @@
+~ shared/sources.wit — bibliographic anchors and a named argument map.
+~ Each #author_idea: definition is an inline phrase that includes the
+~ author and the locus. Use sites read like:
+~     attention is, as @weil_attention argued, a moral discipline
+
+~ Primary sources — full citation, used in the bibliography.
+
+#weil_full:   Weil, Simone (1952). _Gravity and Grace_. Routledge. !!
+#berger_full: Berger, John (1972). _Ways of Seeing_. Penguin. !!
+#arendt_full: Arendt, Hannah (1958). _The Human Condition_. University of Chicago Press. !!
+
+~ Argument map — named ideas pinned to a source + page. Use these in
+~ prose to keep citations short and consistent.
+
+#weil_attention:   Weil (1952, p. 117) !!
+#weil_generosity:  Weil (1952, p. 119) !!
+#berger_looking:   Berger (1972, p. 9) !!
+#berger_consent:   Berger (1972, p. 47) !!
+#arendt_labour:    Arendt (1958, p. 79) !!
+#arendt_action:    Arendt (1958, p. 175) !!

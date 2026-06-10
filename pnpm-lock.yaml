@@ -26,6 +26,9 @@ importers:
       '@wit/render-html':
         specifier: workspace:*
         version: link:../render-html
+      '@wit/render-markdown':
+        specifier: workspace:*
+        version: link:../render-markdown
       '@wit/runtime':
         specifier: workspace:*
         version: link:../runtime
@@ -33,6 +36,15 @@ importers:
   packages/parser: {}
 
   packages/render-html:
+    devDependencies:
+      '@wit/parser':
+        specifier: workspace:*
+        version: link:../parser
+      '@wit/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+
+  packages/render-markdown:
     devDependencies:
       '@wit/parser':
         specifier: workspace:*
