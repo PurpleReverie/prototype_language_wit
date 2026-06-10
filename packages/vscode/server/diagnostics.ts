@@ -1,10 +1,14 @@
-// Convert WitError → LSP Diagnostic, and run the parser to collect them.
+// Convert WitError / ResolverError → LSP Diagnostic.
+// Two entry points: parseAndDiagnose (legacy, parse-only) and
+// diagnosticsFromState (new — emits parse + resolve errors).
 
 import {
   DiagnosticSeverity,
   type Diagnostic,
 } from 'vscode-languageserver/node';
 import { parse, WitError, type Document } from '@wit/parser';
+import { ResolverError } from '@wit/runtime';
+import type { DocumentState } from './document-cache.js';
 
 export interface ParseOutcome {
   ast: Document | null;
@@ -20,6 +24,16 @@ export function parseAndDiagnose(text: string, uri: string): ParseOutcome {
   }
 }
 
+export function diagnosticsFromState(state: DocumentState): Diagnostic[] {
+  const out: Diagnostic[] = [];
+  for (const err of state.parseErrors) out.push(witErrorToDiagnostic(err));
+  for (const err of state.resolveErrors) {
+    if (err instanceof ResolverError) out.push(resolverErrorToDiagnostic(err));
+    else if (err instanceof WitError) out.push(witErrorToDiagnostic(err));
+  }
+  return out;
+}
+
 function toDiagnostic(err: unknown): Diagnostic {
   if (err instanceof WitError) return witErrorToDiagnostic(err);
   const message = err instanceof Error ? err.message : String(err);
@@ -32,17 +46,29 @@ function toDiagnostic(err: unknown): Diagnostic {
 }
 
 function witErrorToDiagnostic(err: WitError): Diagnostic {
-  const line = Math.max(0, err.loc.line - 1);
-  const col = Math.max(0, err.loc.col - 1);
-  const len = Math.max(1, err.loc.length);
+  return locToDiag(err.code, err.message, err.loc);
+}
+
+function resolverErrorToDiagnostic(err: ResolverError): Diagnostic {
+  return locToDiag(err.code, err.message, err.loc);
+}
+
+function locToDiag(
+  code: string,
+  message: string,
+  loc: { line: number; col: number; length: number },
+): Diagnostic {
+  const line = Math.max(0, loc.line - 1);
+  const col = Math.max(0, loc.col - 1);
+  const len = Math.max(1, loc.length);
   return {
     severity: DiagnosticSeverity.Error,
     range: {
       start: { line, character: col },
       end: { line, character: col + len },
     },
-    message: err.message,
-    code: err.code,
+    message,
+    code,
     source: 'wit',
   };
 }
