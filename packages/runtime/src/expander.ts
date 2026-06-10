@@ -101,33 +101,90 @@ function expandBlock(block: Block, ctx: ExpandCtx): Block[] {
   if (block.kind === 'dataDef') return [];
   if (block.kind === 'reference') return [];
   if (block.kind === 'nodeUse') return spliceAsBlocks(expandUse(block, ctx));
-  if (block.kind === 'paragraph') return [expandParagraph(block, ctx)];
+  if (block.kind === 'paragraph') return expandParagraphToBlocks(block, ctx);
   if (block.kind === 'ifStatement') return expandIf(block, ctx);
   if (block.kind === 'eachStatement') return expandEach(block, ctx);
   return [structuredClone(block) as Block];
 }
 
+// A Paragraph at block position whose children include block-level
+// NodeUses (`inline=false`) — e.g. `@part_seven()` on its own line, or a
+// `@dl` opening a block-bodied def body — must be split into separate
+// blocks around those uses. Otherwise the use's block-shaped expansion
+// (paragraphs, definition lists, ...) gets flattened into the surrounding
+// paragraph's inline run and paragraph boundaries are lost. Splice items
+// that arrive as Block kinds are emitted as their own Block; remaining
+// inlines flush into a Paragraph chunk between them.
+function expandParagraphToBlocks(p: Paragraph, ctx: ExpandCtx): Block[] {
+  const out: Block[] = [];
+  let run: Inline[] = [];
+  const loc = p.loc;
+  const flush = (): void => {
+    if (run.length === 0) return;
+    out.push({ kind: 'paragraph', children: run, loc: structuredClone(loc) });
+    run = [];
+  };
+  for (const child of p.children) {
+    if (child.kind === 'nodeUse' && !(child as NodeUse).inline) {
+      const splice = expandUse(child as NodeUse, ctx);
+      for (const node of splice) {
+        if (isBlockKind(node.kind) && node.kind !== 'nodeUse') {
+          flush();
+          out.push(node as Block);
+        } else if (node.kind === 'nodeUse' && !(node as NodeUse).inline) {
+          flush();
+          out.push(node as Block);
+        } else {
+          run.push(...toInlines(node));
+        }
+      }
+      continue;
+    }
+    for (const i of expandInline(child, ctx)) run.push(i);
+  }
+  flush();
+  if (out.length === 0) {
+    return [{ kind: 'paragraph', children: [], loc: structuredClone(loc) }];
+  }
+  return out;
+}
+
+// Convert a Splice (mixed Block/Inline) returned by NodeUse expansion
+// into Block[]. Block items pass through; runs of inline items
+// accumulate into a single Paragraph so the rendered output stays a
+// coherent line rather than fragmenting on every text/interpolation
+// boundary (e.g. `::author:: (::year::).` after substitution should be
+// one paragraph, not seven).
 function spliceAsBlocks(splice: Splice): Block[] {
-  return splice.map((node) => toBlock(node));
-}
-
-function toBlock(node: Block | Inline): Block {
-  if (isBlockKind(node.kind)) return node as Block;
-  // Inline node spliced at block position — wrap in a paragraph so the
-  // result is uniformly Block[]. Loc reuses the inline's loc.
-  return {
-    kind: 'paragraph',
-    children: [node as Inline],
-    loc: structuredClone(node.loc),
+  const out: Block[] = [];
+  let run: Inline[] = [];
+  let runLoc: Loc | null = null;
+  const flush = (): void => {
+    if (run.length === 0) return;
+    out.push({
+      kind: 'paragraph',
+      children: run,
+      loc: structuredClone(runLoc ?? run[0]!.loc),
+    });
+    run = [];
+    runLoc = null;
   };
-}
-
-function expandParagraph(p: Paragraph, ctx: ExpandCtx): Paragraph {
-  return {
-    kind: 'paragraph',
-    children: expandInlines(p.children, ctx),
-    loc: structuredClone(p.loc),
-  };
+  for (const node of splice) {
+    if (isBlockKind(node.kind) && node.kind !== 'nodeUse') {
+      flush();
+      out.push(node as Block);
+      continue;
+    }
+    if (node.kind === 'nodeUse' && !(node as NodeUse).inline) {
+      flush();
+      out.push(node as Block);
+      continue;
+    }
+    if (runLoc === null) runLoc = node.loc;
+    run.push(node as Inline);
+  }
+  flush();
+  return out;
 }
 
 function expandIf(block: IfStatement, ctx: ExpandCtx): Block[] {

@@ -95,11 +95,15 @@ describe('renderMarkdown — headings', () => {
     expect(renderMarkdown(doc([u]))).toBe('# intro\n');
   });
 
-  it('section maps to h2 and subsection to h3', () => {
+  it('section and subsection are transparent sectioning wrappers', () => {
+    // section / subsection no longer emit heading markers — they emit
+    // their children with block separation (transparent wrappers,
+    // matching HTML <section> semantics). Headings come from explicit
+    // @h1..@h6 inside the section body.
     const sec = useBlock('section', [text('a')]);
     const sub = useBlock('subsection', [text('b')]);
     const out = renderMarkdown(doc([sec, sub]));
-    expect(out).toBe('## a\n\n### b\n');
+    expect(out).toBe('a\n\nb\n');
   });
 
   it('chapter takes title from |title ...| param when present', () => {
@@ -165,11 +169,13 @@ describe('renderMarkdown — blockquote-style nodes', () => {
 });
 
 describe('renderMarkdown — bibliography', () => {
-  it('emits each child body as a "- " list element', () => {
+  it('emits each child body as its own paragraph (blank-line separated)', () => {
+    // APA-style reference lists read as a paragraph per entry; bullets
+    // would suggest list-of-citations rather than a formal bibliography.
     const item1 = useBlock('cite', [text('Weil 1952')]);
     const item2 = useBlock('cite', [text('Berger 1972')]);
     const bib = useBlock('bibliography', [item1, item2]);
-    expect(renderMarkdown(doc([bib]))).toBe('- Weil 1952\n- Berger 1972\n');
+    expect(renderMarkdown(doc([bib]))).toBe('Weil 1952\n\nBerger 1972\n');
   });
 });
 

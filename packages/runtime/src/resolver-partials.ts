@@ -10,7 +10,7 @@
 // Errors:
 // - E_PARTIAL_SHAPE_MISMATCH — partials disagree on shape or captures.
 
-import type { Block, Inline, NodeDef, Record, Collection } from '@wit/parser';
+import type { Block, Inline, NodeDef, Paragraph, Record, Collection } from '@wit/parser';
 
 import type { MergedNodeDef } from './resolved-ast.js';
 import { ResolverError, RuntimeErrorCode } from './errors.js';
@@ -95,7 +95,56 @@ function concatBodies(
   partials: readonly NodeDef[],
 ): (Block | Inline | Record | Collection)[] {
   const out: (Block | Inline | Record | Collection)[] = [];
-  if (base !== undefined) out.push(...base.body);
-  for (const p of partials) out.push(...p.body);
+  if (base !== undefined) out.push(...wrapPartialBody(base));
+  for (const p of partials) out.push(...wrapPartialBody(p));
   return out;
+}
+
+// Each `+#name:` value-block contribution represents one logical
+// element (e.g. one bibliography entry). Wrap its inline body in a
+// Paragraph so block-level expansion of the merged def keeps each
+// contribution on its own line, instead of fusing them into a single
+// run of inlines. Bodies that already contain block items (paragraphs,
+// nested defs, records) pass through unchanged.
+function wrapPartialBody(
+  def: NodeDef,
+): readonly (Block | Inline | Record | Collection)[] {
+  if (def.shape !== 'value-block') return def.body;
+  if (def.body.length === 0) return def.body;
+  const inlines: Inline[] = [];
+  for (const item of def.body) {
+    if (isInlineItem(item)) inlines.push(item as Inline);
+    else return def.body;
+  }
+  const trimmed = trimSurroundingWhitespace(inlines);
+  if (trimmed.length === 0) return def.body;
+  const para: Paragraph = {
+    kind: 'paragraph',
+    children: trimmed,
+    loc: trimmed[0]!.loc,
+  };
+  return [para];
+}
+
+function isInlineItem(
+  item: Block | Inline | Record | Collection,
+): boolean {
+  const kind = (item as { kind: string }).kind;
+  return kind === 'text' || kind === 'italic' || kind === 'bold'
+    || kind === 'interpolation' || kind === 'comment'
+    || kind === 'bodySlot' || kind === 'scriptCall'
+    || kind === 'scriptBlock'
+    || (kind === 'nodeUse' && (item as { inline: boolean }).inline);
+}
+
+function trimSurroundingWhitespace(items: readonly Inline[]): Inline[] {
+  let start = 0;
+  let end = items.length;
+  while (start < end && isWhitespaceText(items[start]!)) start += 1;
+  while (end > start && isWhitespaceText(items[end - 1]!)) end -= 1;
+  return items.slice(start, end);
+}
+
+function isWhitespaceText(node: Inline): boolean {
+  return node.kind === 'text' && /^\s*$/.test(node.value);
 }

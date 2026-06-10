@@ -2,11 +2,20 @@
 //
 // Walks the expanded AST and emits a CommonMark-compatible Markdown
 // string. Mirrors @wit/render-html but produces plain text with
-// Markdown syntax. The conventional NodeUse names (h1..h6, chapter,
-// section, subsection, figure, callout, aside, pullquote, bibliography)
-// each have a hand-rolled mapping; unknown NodeUse kinds fall back to
-// emitting their content without decoration (Markdown has no opaque
-// container).
+// Markdown syntax. Conventional NodeUse names (h1..h6, chapter, figure,
+// callout, aside, pullquote, bibliography, dl, ul/ol, blockquote, pre,
+// hr, table, a, img) each have a hand-rolled mapping. Sectioning names
+// (section, subsection, header, footer, article, main, nav) are
+// transparent wrappers — they emit their children with proper block
+// separation but no leading marker. Unknown NodeUse kinds fall back to
+// emitting their content unwrapped.
+//
+// Block-aware paragraph splitting: when the parser wraps consecutive
+// source lines into a single Paragraph that contains block-level uses
+// (e.g. an `@h2` plus prose plus a `@ul`), the renderer splits the
+// paragraph into separate block chunks joined by `\n\n` so headings,
+// lists, and tables each sit on their own line with blank lines around
+// them.
 //
 // Comments and ScriptBlock nodes are omitted — there is no portable
 // Markdown analog without dropping into raw HTML.
@@ -28,6 +37,7 @@ import {
   renderNodeUseBlock,
   setBlockRecursor,
   renderChildList,
+  isBlockLevelUse,
 } from './render-block.js';
 
 export function renderMarkdown(doc: ExpandedDocument): string {
@@ -46,32 +56,67 @@ export function joinBlocks(parts: readonly string[]): string {
 export function collectBlockChunks(blocks: readonly Block[]): string[] {
   const out: string[] = [];
   for (const block of blocks) {
-    const chunk = renderBlock(block);
-    if (chunk.length > 0) out.push(chunk);
+    pushChunks(out, renderBlockMulti(block));
   }
   return out;
 }
 
-export function renderBlock(block: Block): string {
-  const kind = (block as unknown as { kind: string }).kind;
-  if (kind === 'record') return renderRecordBlock(block as unknown as RecordNode);
-  if (kind === 'collection') {
-    return renderCollectionBlock(block as unknown as Collection);
-  }
-  if (block.kind === 'paragraph') return renderParagraph(block);
-  if (block.kind === 'nodeUse') return renderNodeUseBlock(block);
-  if (block.kind === 'ifStatement') {
-    return collectBlockChunks(block.then).join('\n\n');
-  }
-  if (block.kind === 'eachStatement') {
-    return collectBlockChunks(block.body).join('\n\n');
-  }
-  // comment, nodeDef, dataDef, reference, scriptBlock: omitted.
-  return '';
+function pushChunks(out: string[], chunks: readonly string[]): void {
+  for (const c of chunks) if (c.length > 0) out.push(c);
 }
 
-function renderParagraph(p: Paragraph): string {
-  return renderInlines(p.children);
+// Returns one or more block chunks. A paragraph containing block-level
+// NodeUses (e.g. @h1, @ul, @table sitting on their own line in source)
+// is split into multiple chunks so the renderer can join them with the
+// standard `\n\n` block separator.
+export function renderBlockMulti(block: Block): string[] {
+  const kind = (block as unknown as { kind: string }).kind;
+  if (kind === 'record') return [renderRecordBlock(block as unknown as RecordNode)];
+  if (kind === 'collection') {
+    return [renderCollectionBlock(block as unknown as Collection)];
+  }
+  if (block.kind === 'paragraph') return paragraphChunks(block.children);
+  if (block.kind === 'nodeUse') return [renderNodeUseBlock(block)];
+  if (block.kind === 'ifStatement') return collectBlockChunks(block.then);
+  if (block.kind === 'eachStatement') return collectBlockChunks(block.body);
+  // comment, nodeDef, dataDef, reference, scriptBlock: omitted.
+  return [];
+}
+
+export function renderBlock(block: Block): string {
+  return renderBlockMulti(block).filter((c) => c.length > 0).join('\n\n');
+}
+
+// Walks paragraph children, emitting one chunk per run of inline content
+// and one chunk per block-level NodeUse. Whitespace-only Text nodes
+// adjacent to a block-level NodeUse are dropped. Inline runs are trimmed
+// of leading / trailing whitespace; internal whitespace is preserved
+// (Markdown is whitespace-tolerant in inline position).
+export function paragraphChunks(children: readonly Inline[]): string[] {
+  const chunks: string[] = [];
+  let inlineRun: Inline[] = [];
+  const flush = (): void => {
+    if (inlineRun.length === 0) return;
+    const rendered = renderInlines(inlineRun);
+    const trimmed = rendered.replace(/\s+/g, ' ').trim();
+    if (trimmed.length > 0) chunks.push(trimmed);
+    inlineRun = [];
+  };
+  for (const child of children) {
+    if (
+      child.kind === 'nodeUse'
+      && (child.access === undefined || child.access.length === 0)
+      && isBlockLevelUse(child)
+    ) {
+      flush();
+      const rendered = renderNodeUseBlock(child);
+      if (rendered.length > 0) chunks.push(rendered);
+      continue;
+    }
+    inlineRun.push(child);
+  }
+  flush();
+  return chunks;
 }
 
 // ---------------------------------------------------------------------------

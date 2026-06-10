@@ -138,6 +138,10 @@ function renderNodeUseShell(use: NodeUse): string {
   // `@table` has its own complex renderer (schema + rows + caption).
   const tableHtml = tryRenderTable(use, renderInlines, renderBlocks);
   if (tableHtml !== null) return tableHtml;
+  // `@bibliography` emits each contributed entry as its own paragraph
+  // so APA citations don't run together. Predates core-vocab because
+  // it has no native HTML element.
+  if (use.name === 'bibliography') return renderBibliography(use);
   // Core vocab + @node pass-through dispatch.
   const coreHtml = tryRenderCore(use, renderUseBody);
   if (coreHtml !== null) return coreHtml;
@@ -159,6 +163,23 @@ function nodeAttrs(use: NodeUse): string {
 function renderParamAttr(p: Param): string {
   if (p.name === null) return '';
   return ` data-param-${escapeHtml(p.name)}="${escapeHtml(p.value)}"`;
+}
+
+function renderBibliography(use: NodeUse): string {
+  if (use.body === null) return '<div class="wit-bibliography"></div>';
+  const parts: string[] = [];
+  for (const child of use.body) {
+    const rendered = isBlockChild(child)
+      ? renderBlock(child as Block)
+      : renderInline(child as Inline);
+    if (rendered.length === 0) continue;
+    // Strip a single surrounding `<p>…</p>` so the entry is one clean
+    // `<p>` even if the inner Paragraph already wraps it.
+    const m = /^<p>([\s\S]*)<\/p>$/.exec(rendered.trim());
+    const inner = m !== null ? m[1]!.trim() : rendered.trim();
+    if (inner.length > 0) parts.push(`<p>${inner}</p>`);
+  }
+  return `<div class="wit-bibliography">${parts.join('')}</div>`;
 }
 
 function renderUseBody(use: NodeUse): string {

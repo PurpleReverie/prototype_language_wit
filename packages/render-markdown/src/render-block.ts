@@ -20,6 +20,24 @@ export function setBlockRecursor(fn: BlockRecursor): void {
   recurse = fn;
 }
 
+// Block-level core-vocab names. A NodeUse with one of these names should
+// always sit on its own block chunk in Markdown output, even if the
+// parser produced it with `inline=true` (which happens when the use
+// appears within a paragraph-wrapped run of source lines).
+const BLOCK_VOCAB_NAMES = new Set<string>([
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'chapter', 'section', 'subsection',
+  'p', 'blockquote', 'pre', 'hr',
+  'ul', 'ol', 'dl', 'figure', 'table',
+  'callout', 'aside', 'pullquote', 'bibliography',
+  'article', 'header', 'footer', 'nav', 'main',
+]);
+
+export function isBlockLevelUse(use: NodeUse): boolean {
+  if (!use.inline) return true;
+  return BLOCK_VOCAB_NAMES.has(use.name);
+}
+
 export function renderNodeUseBlock(use: NodeUse): string {
   if (use.access !== undefined && use.access.length > 0) {
     return renderUnresolvedAccess(use);
@@ -91,14 +109,18 @@ function blockquoteHandler(use: NodeUse): string {
 
 function bibliographyHandler(use: NodeUse): string {
   if (use.body === null) return '';
+  // Each `+#bibliography` contribution lands as its own Block child of
+  // the `@bibliography` use's body — render each as a stand-alone
+  // paragraph and separate them with a blank line so APA entries don't
+  // run together. Internal newlines within an entry collapse to a single
+  // space (the entries are author-facing one-liners).
   const items: string[] = [];
   for (const child of use.body) {
     const rendered = renderChild(child);
     if (rendered.length === 0) continue;
-    const flat = rendered.replace(/\n+/g, ' ').trim();
-    items.push(`- ${flat}`);
+    items.push(rendered.replace(/\n+/g, ' ').trim());
   }
-  return items.join('\n');
+  return items.join('\n\n');
 }
 
 function listHandler(ordered: boolean): (use: NodeUse) => string {
@@ -152,17 +174,42 @@ function brHandler(_use: NodeUse): string {
 
 function dlHandler(use: NodeUse): string {
   if (use.body === null) return '';
-  const lines: string[] = [];
-  for (const child of use.body) {
-    if ((child as { kind: string }).kind !== 'nodeUse') continue;
-    const c = child as NodeUse;
-    if (c.name === 'dt') {
-      lines.push(`**${renderInlineBody(c)}**`);
-    } else if (c.name === 'dd') {
-      lines.push(renderBodyChunks(c).join(' '));
+  // Walk the body collecting term/definition pairs. `@dt`/`@dd` may
+  // arrive either as direct NodeUse children (when authored on separate
+  // source lines as block uses) OR wrapped inside Paragraph children
+  // (when authored inline on the same source line as `@dl`, or when
+  // produced by template expansion). Descend through Paragraph wrappers
+  // so both shapes pair up correctly.
+  const pairs: { term: string; def: string }[] = [];
+  let pendingTerm: string | null = null;
+  const visit = (node: Block | Inline): void => {
+    const kind = (node as { kind: string }).kind;
+    if (kind === 'paragraph') {
+      const para = node as { children: Inline[] };
+      for (const c of para.children) visit(c);
+      return;
     }
-  }
-  return lines.join('\n');
+    if (kind !== 'nodeUse') return;
+    const c = node as NodeUse;
+    if (c.name === 'dt') {
+      if (pendingTerm !== null) pairs.push({ term: pendingTerm, def: '' });
+      pendingTerm = renderInlineBody(c);
+      return;
+    }
+    if (c.name === 'dd') {
+      const def = renderInlineBody(c);
+      pairs.push({ term: pendingTerm ?? '', def });
+      pendingTerm = null;
+    }
+  };
+  for (const child of use.body) visit(child);
+  if (pendingTerm !== null) pairs.push({ term: pendingTerm, def: '' });
+  const blocks = pairs.map(({ term, def }) => {
+    if (term.length === 0) return def;
+    if (def.length === 0) return `**${term}**`;
+    return `**${term}**: ${def}`;
+  });
+  return blocks.filter((b) => b.length > 0).join('\n\n');
 }
 
 const HANDLERS = new Map<string, (use: NodeUse) => string>([
@@ -173,8 +220,10 @@ const HANDLERS = new Map<string, (use: NodeUse) => string>([
   ['h5', headingHandler(5)],
   ['h6', headingHandler(6)],
   ['chapter', headingHandler(1)],
-  ['section', headingHandler(2)],
-  ['subsection', headingHandler(3)],
+  // section / subsection / header / footer / article / main / nav are
+  // sectioning wrappers — they emit their children with block separation
+  // but no leading marker. Handled by renderCoreVocabBlock fallback (no
+  // entry in HANDLERS).
   ['figure', figureHandler],
   ['callout', blockquoteHandler],
   ['aside', blockquoteHandler],
@@ -212,7 +261,9 @@ function renderInlineBody(use: NodeUse): string {
       parts.push(renderInline(child as Inline));
     }
   }
-  return parts.join('').trim();
+  // Collapse runs of whitespace (including embedded source-indent
+  // newlines) to a single space — inline context is always a single line.
+  return parts.join('').replace(/\s+/g, ' ').trim();
 }
 
 function renderBodyChunks(use: NodeUse): string[] {
