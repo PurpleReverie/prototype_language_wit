@@ -1,0 +1,9 @@
+#card_h
+  title: Card title
+  body:
+    Body intro paragraph.
+
+    @h1 inline heading h1@
+card_h#
+
+@card_h.body

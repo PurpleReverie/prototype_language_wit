@@ -1,0 +1,9 @@
+#card_m
+  title: Mixed card
+  body:
+    Lead paragraph with _italic_ phrasing.
+
+    Trailing paragraph after a break.
+card_m#
+
+Before @card_m.body after.

@@ -124,20 +124,28 @@ function expandParagraphToBlocks(p: Paragraph, ctx: ExpandCtx): Block[] {
     out.push({ kind: 'paragraph', children: run, loc: structuredClone(loc) });
     run = [];
   };
-  for (const child of p.children) {
-    if (child.kind === 'nodeUse' && !(child as NodeUse).inline) {
-      const splice = expandUse(child as NodeUse, ctx);
-      for (const node of splice) {
-        if (isBlockKind(node.kind) && node.kind !== 'nodeUse') {
-          flush();
-          out.push(node as Block);
-        } else if (node.kind === 'nodeUse' && !(node as NodeUse).inline) {
-          flush();
-          out.push(node as Block);
-        } else {
-          run.push(...toInlines(node));
-        }
+  const emitSplice = (splice: Splice): void => {
+    for (const node of splice) {
+      if (isBlockKind(node.kind) && node.kind !== 'nodeUse') {
+        flush();
+        out.push(node as Block);
+      } else if (node.kind === 'nodeUse' && !(node as NodeUse).inline) {
+        flush();
+        out.push(node as Block);
+      } else {
+        run.push(...toInlines(node));
       }
+    }
+  };
+  for (const child of p.children) {
+    // M17: every NodeUse in a Paragraph's children goes through
+    // emitSplice so Block-kinded splice items (e.g. headings or extra
+    // paragraphs from a re-parsed captured string at a DataDef field)
+    // lift out of the surrounding Paragraph. Pre-M17 only block-flagged
+    // uses took this path; inline uses fell through expandInline which
+    // would flatten any block content to its inline children.
+    if (child.kind === 'nodeUse') {
+      emitSplice(expandUse(child as NodeUse, ctx));
       continue;
     }
     for (const i of expandInline(child, ctx)) run.push(i);

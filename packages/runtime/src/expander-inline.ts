@@ -28,11 +28,12 @@ import type {
   NodeUse,
   NodeDef,
   DataValue,
+  Paragraph,
   Param,
   Loc,
   Text,
 } from '@wit/parser';
-import { parseInlineFromText } from '@wit/parser';
+import { parse } from '@wit/parser';
 import { lookupRecordField } from './canonical-key.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
 
@@ -136,31 +137,46 @@ function substituteOne(
   if (item.kind === 'bodySlot') {
     return structuredClone(bodyContent) as (Block | Inline)[];
   }
+  if (item.kind === 'paragraph') {
+    return substituteParagraph(item, env, bodyContent);
+  }
   return [substituteContainer(item, env, bodyContent)];
 }
 
-// Re-parse a captured raw-string value as inline content. The form-fill
-// (and pipe/parens/record-arg) parser captures values verbatim — emphasis
-// markers, `@-refs`, and other inline forms remain literal in the string
-// (per M15-followup, to avoid content loss). At expand time we re-run the
-// inline parser on the captured text so the result splices into the
-// template body as a proper inline AST (Text / Italic / Bold / NodeUse /
-// ...), not a single literal Text node. Both renderers then see the
-// emphasis structure and emit it correctly.
+// M17.block-aware-capture-substitution: re-parse a captured raw-string
+// value as a FULL document (not just inline). The form-fill / pipe /
+// parens / record-arg parser captures values verbatim (per M15-followup),
+// so emphasis markers, `@-refs`, headings, lists, and paragraph breaks
+// all remain literal in the captured string. At expand time we re-run
+// the full parser so block-level constructs (`@h1 ... h1@`, lists,
+// tables, multi-paragraph prose) become real AST nodes instead of
+// flattening to literal text.
+//
+// Splicing rules (the caller decides positional fit):
+//   - Empty value → empty splice (no-op).
+//   - Single-paragraph value → that paragraph's inlines (back-compat with
+//     the prior `parseInlineFromText` behaviour at inline sites).
+//   - Single non-paragraph block → that block alone.
+//   - Multi-block value → all blocks as a sequence.
+// At an inline site (inside a Paragraph), the enclosing Paragraph is
+// split around any Block-kinded items by `substituteParagraph`. At a
+// strict inline-only site (inside `_emphasis_` / `*bold*`), only inline
+// content from the first parsed paragraph is taken — block-shaped
+// content there is a context mismatch and is dropped.
 //
 // Edge cases:
-//   - Empty value → empty splice (no-op, paragraph stays contiguous).
-//   - Pure plain text → single Text node (same as the prior behaviour).
-//   - `_x_` / `*x*` → Italic / Bold nodes.
+//   - Pure plain text → single Text node, unchanged from prior behaviour.
+//   - `_x_` / `*x*` → Italic / Bold nodes, unchanged from prior behaviour.
 //   - `@ref` → NodeUse, which the caller's walker will recursively expand.
 //   - `<% expr %>` → ScriptBlock — handled by the script-runner phase.
-// Locs from the re-parsed result reference the captured string's internal
-// offsets; we keep them as-is since callers only use loc for diagnostics.
 function expandInterpolationValue(value: string, loc: Loc): (Block | Inline)[] {
   if (value.length === 0) return [];
-  const parsed = parseInlineFromText(value, loc.file);
-  if (parsed.length === 0) return [textNode(value, loc)];
-  return parsed as (Block | Inline)[];
+  const doc = parse(value, loc.file);
+  if (doc.children.length === 0) return [textNode(value, loc)];
+  if (doc.children.length === 1 && doc.children[0]!.kind === 'paragraph') {
+    return (doc.children[0] as Paragraph).children as (Block | Inline)[];
+  }
+  return doc.children as (Block | Inline)[];
 }
 
 function substituteContainer(
@@ -168,9 +184,6 @@ function substituteContainer(
   env: Map<string, string>,
   bodyContent: readonly (Block | Inline)[],
 ): Block | Inline {
-  if (item.kind === 'paragraph') {
-    return { ...item, children: substituteInlines(item.children, env, bodyContent) };
-  }
   if (item.kind === 'italic' || item.kind === 'bold') {
     return { ...item, children: substituteInlines(item.children, env, bodyContent) };
   }
@@ -181,6 +194,73 @@ function substituteContainer(
   return item;
 }
 
+// Substitute interpolations inside a Paragraph's children. If any
+// interpolation expands to a Block-kinded item (e.g. a captured value
+// that parsed as `@h1 ... h1@` or as multiple paragraphs), the enclosing
+// Paragraph is split into a sequence of blocks around those items —
+// inline runs are re-wrapped in fresh Paragraphs that carry the original
+// loc. If no Block items appear the original Paragraph shape is preserved.
+function substituteParagraph(
+  p: Paragraph,
+  env: Map<string, string>,
+  bodyContent: readonly (Block | Inline)[],
+): (Block | Inline)[] {
+  const mixed: (Block | Inline)[] = [];
+  for (const child of p.children) {
+    for (const s of substituteOne(child, env, bodyContent)) mixed.push(s);
+  }
+  if (!mixed.some((n) => isBlockShape(n))) {
+    return [{ ...p, children: mixed as Inline[] }];
+  }
+  return liftMixedToBlocks(mixed, p.loc);
+}
+
+function isBlockShape(node: Block | Inline): boolean {
+  return BLOCK_KINDS.has(node.kind);
+}
+
+const BLOCK_KINDS = new Set<string>([
+  'paragraph',
+  'comment',
+  'nodeDef',
+  'dataDef',
+  'reference',
+  'ifStatement',
+  'eachStatement',
+  'scriptBlock',
+]);
+
+// Lift a mixed sequence of Block/Inline items into a flat Block[]: runs
+// of inlines re-wrap into a Paragraph (carrying the original paragraph
+// loc), block items emit on their own. Mirrors the `spliceAsBlocks`
+// helper in expander.ts but operates locally during template
+// substitution before the expander walks the splice.
+function liftMixedToBlocks(
+  mixed: readonly (Block | Inline)[],
+  loc: Loc,
+): (Block | Inline)[] {
+  const out: (Block | Inline)[] = [];
+  let run: Inline[] = [];
+  const flush = (): void => {
+    if (run.length === 0) return;
+    out.push({ kind: 'paragraph', children: run, loc: structuredClone(loc) });
+    run = [];
+  };
+  for (const node of mixed) {
+    if (isBlockShape(node)) {
+      flush();
+      out.push(node);
+    } else {
+      run.push(node as Inline);
+    }
+  }
+  flush();
+  return out;
+}
+
+// Substitute inlines at a strict inline-only site (inside emphasis).
+// Any block-shaped items from a capture expansion are dropped here —
+// emphasis can't contain block content — to keep the AST well-formed.
 function substituteInlines(
   items: readonly Inline[],
   env: Map<string, string>,
@@ -189,6 +269,7 @@ function substituteInlines(
   const out: Inline[] = [];
   for (const item of items) {
     for (const s of substituteOne(item, env, bodyContent)) {
+      if (isBlockShape(s)) continue;
       out.push(s as Inline);
     }
   }
@@ -203,6 +284,13 @@ export function expandDataValue(use: NodeUse, root: DataValue): Splice | null {
   const access = use.access ?? [];
   const value = walkAccess(root, access);
   if (value === null) return null;
+  // M17: re-parse string values as full documents so block-level content
+  // (headings, lists, multiple paragraphs) inside a captured field
+  // renders as real blocks at block positions and as inline at inline
+  // positions. The caller (expander.ts) does positional splicing.
+  if (value.kind === 'stringValue') {
+    return expandInterpolationValue(value.value, use.loc);
+  }
   const rendered = renderTerminal(value, use.loc);
   if (rendered === null) return null;
   return [rendered];

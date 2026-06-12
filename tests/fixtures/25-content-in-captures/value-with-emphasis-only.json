@@ -1,0 +1,52 @@
+{
+  "ast": {
+    "children": [
+      {
+        "kind": "dataDef",
+        "name": "card_e",
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "Emphasis card"
+              }
+            },
+            {
+              "key": "body",
+              "value": {
+                "kind": "stringValue",
+                "value": "Some _italic_ and *bold* text only."
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The body says: "
+          },
+          {
+            "access": [
+              "body"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "card_e",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

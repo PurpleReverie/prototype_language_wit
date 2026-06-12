@@ -1,0 +1,12 @@
+#card_l
+  title: List card
+  body:
+    Items follow.
+
+    @ul
+      @li First item li@
+      @li Second item li@
+    ul@
+card_l#
+
+@card_l.body

@@ -1,0 +1,48 @@
+{
+  "ast": {
+    "children": [
+      {
+        "kind": "dataDef",
+        "name": "card_l",
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "List card"
+              }
+            },
+            {
+              "key": "body",
+              "value": {
+                "kind": "stringValue",
+                "value": "  Items follow.\n\n  @ul\n    @li First item li@\n    @li Second item li@\n  ul@"
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "children": [
+          {
+            "access": [
+              "body"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "card_l",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

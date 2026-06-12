@@ -1,0 +1,6 @@
+#card_e
+  title: Emphasis card
+  body: Some _italic_ and *bold* text only.
+card_e#
+
+The body says: @card_e.body

@@ -1,0 +1,9 @@
+#card_b
+  title: Card title
+  body:
+    First paragraph in the body.
+
+    Second paragraph after a blank line.
+card_b#
+
+@card_b.body

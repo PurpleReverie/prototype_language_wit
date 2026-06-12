@@ -1,0 +1,48 @@
+{
+  "ast": {
+    "children": [
+      {
+        "kind": "dataDef",
+        "name": "card_b",
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "Card title"
+              }
+            },
+            {
+              "key": "body",
+              "value": {
+                "kind": "stringValue",
+                "value": "  First paragraph in the body.\n\n  Second paragraph after a blank line."
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "children": [
+          {
+            "access": [
+              "body"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "card_b",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

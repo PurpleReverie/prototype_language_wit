@@ -1,0 +1,48 @@
+{
+  "ast": {
+    "children": [
+      {
+        "kind": "dataDef",
+        "name": "card_h",
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "Card title"
+              }
+            },
+            {
+              "key": "body",
+              "value": {
+                "kind": "stringValue",
+                "value": "  Body intro paragraph.\n\n  @h1 inline heading h1@"
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "children": [
+          {
+            "access": [
+              "body"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "card_h",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "kind": "paragraph"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}
