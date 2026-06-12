@@ -1,7 +1,61 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @bio"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "Aldous Vane"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "keeper",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "The keeper of record was "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "keeper",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "."
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bio",
+        "shape": "block"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "bio",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

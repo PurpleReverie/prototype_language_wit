@@ -1,7 +1,35 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @sidebar"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "A panel that sits beside the main column. It carries supplementary\nprose, citations, or marginalia."
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "sidebar",
+        "shape": "block"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "sidebar",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

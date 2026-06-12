@@ -1,7 +1,22 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @paper-stats"
+  "ast": {
+    "children": [
+      {
+        "content": "\nconst stats = '#words: 1200\\n#pages: 4';\nlh.inject('paper-stats', stats);\n",
+        "inline": false,
+        "kind": "scriptBlock"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "paper-stats",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

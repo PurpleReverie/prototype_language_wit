@@ -138,17 +138,32 @@ function detectShape(
   paramsSource: NodeUse['paramsSource'],
   inline: boolean,
 ): Shape {
-  // Bodied first: any matching `name@` close in scope wins. Otherwise:
-  //   - parens form with no matching close: self-closing `@x(...)`.
-  //   - pipes form (inline) with no close: self-closing.
-  //   - inline context: bare reference, no body.
-  //   - block context: commit to bodied (parseBodied diagnoses
-  //     unclosed / mismatched at the close site).
+  // Structural shape wins over the downstream closer-search.
+  //   - parens form: self-closing per 05-nodes-parens spec (parens
+  //     close the node at `)`). The only exception is the
+  //     parens-then-body shape (`@x(p) body x@` on one paragraph),
+  //     pinned by fixture 05-nodes-parens/parens-then-body.wit: a
+  //     matching close in the SAME paragraph promotes to bodied.
+  //   - pipes form (inline) self-closes when no closer is present.
+  //   - otherwise: a matching `name@` in scope means bodied. A bare
+  //     `@name` with no close is a bare reference both inline and at
+  //     block position when nothing follows on the paragraph; a block
+  //     `@name` followed by body bytes with no close stays bodied so
+  //     parseBodied can diagnose the unclosed error.
+  if (paramsSource === 'parens') {
+    return hasMatchingClose(cursor, name, true) ? 'bodied' : 'self';
+  }
+  if (paramsSource === 'pipes' && inline) {
+    return hasMatchingClose(cursor, name, true) ? 'bodied' : 'self';
+  }
   if (hasMatchingClose(cursor, name, inline)) return 'bodied';
-  if (paramsSource === 'parens') return 'self';
-  if (paramsSource === 'pipes' && inline) return 'self';
   if (inline) return 'bare';
-  return 'bodied';
+  return atParagraphEnd(cursor) ? 'bare' : 'bodied';
+}
+
+function atParagraphEnd(cursor: TokenCursor): boolean {
+  const tok = cursor.current();
+  return tok.kind === 'paragraphBreak' || tok.kind === 'eof';
 }
 
 function hasMatchingClose(

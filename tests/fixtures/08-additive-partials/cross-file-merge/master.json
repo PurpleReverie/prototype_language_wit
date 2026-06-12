@@ -1,7 +1,25 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @bibliography"
+  "ast": {
+    "children": [
+      {
+        "kind": "reference",
+        "path": "./one.wit"
+      },
+      {
+        "kind": "reference",
+        "path": "./two.wit"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "bibliography",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

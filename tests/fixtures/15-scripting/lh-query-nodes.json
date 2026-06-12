@@ -1,7 +1,69 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @finding-count"
+  "ast": {
+    "children": [
+      {
+        "children": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "finding",
+            "params": [
+              {
+                "name": "claim",
+                "value": "A holds"
+              }
+            ],
+            "paramsSource": "parens"
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "finding",
+            "params": [
+              {
+                "name": "claim",
+                "value": "B holds"
+              }
+            ],
+            "paramsSource": "parens"
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "finding",
+            "params": [
+              {
+                "name": "claim",
+                "value": "C holds"
+              }
+            ],
+            "paramsSource": "parens"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "content": "\nconst all = lh.query('finding');\nlh.inject('finding-count', `#count: ${all.length}`);\n",
+        "inline": false,
+        "kind": "scriptBlock"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "finding-count",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

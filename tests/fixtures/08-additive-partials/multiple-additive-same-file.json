@@ -1,7 +1,83 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @bibliography"
+  "ast": {
+    "children": [
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "weil",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " Simone Weil, Gravity and Grace, 1952, Routledge"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "berger",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " John Berger, Ways of Seeing, 1972, Penguin"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "arendt",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " Hannah Arendt, The Human Condition, 1958, Chicago"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "bibliography",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

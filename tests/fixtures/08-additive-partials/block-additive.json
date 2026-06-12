@@ -1,7 +1,49 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @toc"
+  "ast": {
+    "children": [
+      {
+        "additive": true,
+        "body": [
+          {
+            "children": [
+              {
+                "body": null,
+                "closeStyle": "parens",
+                "inline": false,
+                "kind": "nodeUse",
+                "name": "tocrow",
+                "params": [
+                  {
+                    "name": "number",
+                    "value": "I"
+                  },
+                  {
+                    "name": "title",
+                    "value": "The Lamp"
+                  }
+                ],
+                "paramsSource": "pipes"
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "toc",
+        "shape": "block"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "toc",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

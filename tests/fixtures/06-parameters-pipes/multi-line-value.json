@@ -1,7 +1,22 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @scene"
+  "ast": {
+    "children": [
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "scene",
+        "params": [
+          {
+            "name": "key",
+            "value": "valuespanning linescontent"
+          }
+        ],
+        "paramsSource": "pipes"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

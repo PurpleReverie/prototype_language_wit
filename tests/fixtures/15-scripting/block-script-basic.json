@@ -1,7 +1,22 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @summary"
+  "ast": {
+    "children": [
+      {
+        "content": "\nconst count = lh.data.papers.length;\nlh.inject('summary', `#count: ${count}`);\n",
+        "inline": false,
+        "kind": "scriptBlock"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "summary",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

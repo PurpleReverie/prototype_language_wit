@@ -1,7 +1,30 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @epigraph"
+  "ast": {
+    "children": [
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "\nThe sea does not forgive forgetting.\n— coastal proverb"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "epigraph",
+        "shape": "value-block"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "epigraph",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }

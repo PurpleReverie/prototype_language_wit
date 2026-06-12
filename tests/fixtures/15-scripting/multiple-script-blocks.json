@@ -1,7 +1,36 @@
 {
-  "error": {
-    "code": "E_UNCLOSED_NODE",
-    "message": "unclosed @marker"
+  "ast": {
+    "children": [
+      {
+        "content": "\nlh.set('phase', 'first');\n",
+        "inline": false,
+        "kind": "scriptBlock"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Some prose between blocks."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "content": "\nconst phase = lh.data.phase;\nlh.inject('marker', `#phase-was: ${phase}`);\nlh.set('phase', 'second');\n",
+        "inline": false,
+        "kind": "scriptBlock"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "marker",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
   },
-  "ok": false
+  "ok": true
 }
