@@ -16,15 +16,15 @@
             {
               "key": "quarter",
               "value": {
-                "kind": "stringValue",
-                "value": "2024"
+                "kind": "numberValue",
+                "value": 2024
               }
             },
             {
               "key": "final",
               "value": {
-                "kind": "stringValue",
-                "value": "true"
+                "kind": "booleanValue",
+                "value": true
               }
             }
           ],

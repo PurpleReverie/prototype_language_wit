@@ -20,8 +20,8 @@
                   {
                     "key": "years",
                     "value": {
-                      "kind": "stringValue",
-                      "value": "31"
+                      "kind": "numberValue",
+                      "value": 31
                     }
                   },
                   {

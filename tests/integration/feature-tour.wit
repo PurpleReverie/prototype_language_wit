@@ -1,0 +1,185 @@
+~ Hello world, this is a test. this should be able to compile
+~ feature-tour.wit — every AST kind in one file. Read top-to-bottom.
+~ Goal is parser coverage, not clean rendering; some uses are intentionally
+~ exotic so the AST tree exposes the structure.
+
+reference ./feature-tour-missing.wit
+
+~~ Block comment:
+   this section shows prose, italic, and bold inline kinds.
+   The inline citation pattern lives further down. ~~/
+
+Plain prose with _italic_ and *bold* emphasis ~~ inline aside ~~/ in one line.
+
+A second paragraph keeps the blank-line rule honest.
+
+~ ---------------------------------------------------------------------
+~ Data definitions — single-line and block, scalar / record / collection.
+~ ---------------------------------------------------------------------
+
+#one: 1 !!
+#name: Robert !!
+#meta: { a - 1, b - 2 } !!
+#nums: [ 1, 2, 3 ] !!
+
+~ Typed scalars — number / boolean / null inside record + collection
+~ literals and the conditional RHS (v0.1.0 wires up these producers).
+#flags: { count - 42, enabled - true, optional - null } !!
+#values: [ 42, true, null ] !!
+
+#person
+  name: Robert
+  age: 31
+person#
+
+#card
+  title: My card
+  body:
+    Line one of the body.
+
+    Line two after a paragraph break.
+card#
+
+#card_b
+  title: My card
+  body:
+    Line one of the body.
+
+    Line two after a paragraph break.
+    @h1 heading test h1@
+card_b#
+
+~ ---------------------------------------------------------------------
+~ Node definitions — block, single-line, value-block, body-slot, additive.
+~ Captures: explicit list and implicit derivation.
+~ ---------------------------------------------------------------------
+
+#greeting ||name||
+Hello, ::name::.
+greeting#
+
+~ Implicit captures — no ||...|| list, parser derives from interpolations.
+#farewell
+Goodbye, ::name::.
+farewell#
+
+~ Single-line def with captures + interpolation.
+#cite: ::author:: (::year::) !!
+
+~ Body-slot def (value-block shape).
+#aside:
+  An aside wraps ... and emits the wrapped body verbatim.
+!!
+
+~ Additive prefix — contributions accumulate under one name.
++#bibliography: @cite |author Smith| |year 2024| !!
+
++#bibliography:
+  @cite
+    author: "Came, H."
+    year: 2024
+  cite@
+!!
+
+~ ---------------------------------------------------------------------
+~ Node uses — every call shape against @cite (and friends).
+~ ---------------------------------------------------------------------
+
+A bare reference inline: @greeting.
+
+@greeting
+body content for greeting.
+greeting@
+
+~ Parens, space-separated — standalone self-closing.
+@cite(author Smith, year 2024)
+
+~ Parens, colon-separated — standalone self-closing.
+@cite(author: Smith, year: 2024)
+
+~ Pipes form on its own line — self-closing without `cite@`.
+@cite |author Smith| |year 2024|
+
+Record arg with hyphen @cite { author - Smith, year - 2024 } inline.
+
+Record arg with colon @cite { author: Smith, year: 2024 } inline.
+
+@cite
+  author: Smith
+  year: 2024
+cite@
+
+@cite author:Smith year:2024 cite@
+
+Quoted-string record arg @cite { author: "Came, H.", year: 2024 } inline.
+
+@cite author:@strong Smith strong@ year:2024 cite@
+
+The variable name\:Tauraj is bad — backslash escape demo.
+
+~ ---------------------------------------------------------------------
+~ Data access (dotted) — both bare and inside conditions.
+~ ---------------------------------------------------------------------
+
+The first meta value is @meta.a and the person's name is @person.name.
+
+~ ---------------------------------------------------------------------
+~ Conditionals — existence + comparison, then + else.
+~ ---------------------------------------------------------------------
+
+(if @name) The name is set: @name. (end)
+
+(if @person.age is 31) Thirty-one. (else) Not thirty-one. (end)
+
+(if @flags.enabled is true) Enabled flag is on. (end)
+
+(if @flags.optional is null) Optional value is unset. (end)
+
+~ ---------------------------------------------------------------------
+~ Iteration.
+~ ---------------------------------------------------------------------
+
+(each @nums as n) item @n; (end)
+
+~ ---------------------------------------------------------------------
+~ Scripting — script block and inline script call.
+~ ---------------------------------------------------------------------
+
+<%
+function shout(s) {
+  return String(s).toUpperCase();
+}
+%>
+
+The system says: @scriptCall(shout, "hello")
+
+~ ---------------------------------------------------------------------
+~ Multi-line param value via form-fill (M16).
+~ ---------------------------------------------------------------------
+
+@card
+  title: Long card
+  body:
+    Multi
+    line
+    value
+card@
+
+~ ---------------------------------------------------------------------
+~ Block-aware capture substitution (M17).
+~ Record values can carry block-level content (headings, lists, paragraphs).
+~ Accessed downstream via @x.field, the captured value re-parses as full
+~ document content and splices block-shaped pieces as blocks.
+~ ---------------------------------------------------------------------
+
+The card_b title (inline use, single-paragraph value): @card_b.title.
+
+The card_b body (block use, multi-paragraph plus embedded heading):
+
+@card_b.body
+
+~ ---------------------------------------------------------------------
+~ Bibliography pattern — additive contributions get gathered at the use site.
+~ ---------------------------------------------------------------------
+
+@bibliography

@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { parse } from './parser.js';
 import type {
+  BooleanValue,
   ComparisonCondition,
   EachStatement,
   ExistenceCondition,
@@ -35,7 +36,8 @@ describe('parseIfStatement', () => {
     expect(cond.kind).toBe('comparisonCondition');
     expect(cond.op).toBe('is');
     expect(cond.left.segments).toEqual(['x', 'y']);
-    expect((cond.right as StringValue).value).toBe('true');
+    expect(cond.right.kind).toBe('booleanValue');
+    expect((cond.right as BooleanValue).value).toBe(true);
     expect(node.else).toBeUndefined();
   });
 

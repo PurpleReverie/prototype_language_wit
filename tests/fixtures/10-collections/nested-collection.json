@@ -9,12 +9,12 @@
             {
               "items": [
                 {
-                  "kind": "stringValue",
-                  "value": "1"
+                  "kind": "numberValue",
+                  "value": 1
                 },
                 {
-                  "kind": "stringValue",
-                  "value": "2"
+                  "kind": "numberValue",
+                  "value": 2
                 }
               ],
               "kind": "collection"
@@ -22,12 +22,12 @@
             {
               "items": [
                 {
-                  "kind": "stringValue",
-                  "value": "3"
+                  "kind": "numberValue",
+                  "value": 3
                 },
                 {
-                  "kind": "stringValue",
-                  "value": "4"
+                  "kind": "numberValue",
+                  "value": 4
                 }
               ],
               "kind": "collection"

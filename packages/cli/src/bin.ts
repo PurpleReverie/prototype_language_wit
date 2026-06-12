@@ -13,6 +13,7 @@
 import { runParse } from './cmd-parse.js';
 import { runCheck } from './cmd-check.js';
 import { runBuild } from './cmd-build.js';
+import { runTour } from './cmd-tour.js';
 
 export const VERSION = '0.1.0';
 
@@ -23,6 +24,7 @@ export const HELP_TEXT = [
   '  wit parse <file>',
   '  wit check <file>',
   '  wit build <file> [-o output.html|output.md] [--format html|md]',
+  '  wit tour <file>',
   '  wit --version | --help',
 ].join('\n');
 
@@ -48,6 +50,7 @@ async function dispatch(cmd: string, rest: readonly string[], io: CliIo): Promis
   if (cmd === 'parse') return runParse(rest, io);
   if (cmd === 'check') return runCheck(rest, io);
   if (cmd === 'build') return runBuild(rest, io);
+  if (cmd === 'tour') return runTour(rest, io);
   io.stderr(`wit: unknown command "${cmd}"\n${HELP_TEXT}\n`);
   return 2;
 }
@@ -59,10 +62,15 @@ if (isMain) {
     stdout: (s) => process.stdout.write(s),
     stderr: (s) => process.stderr.write(s),
   };
+  // Set exitCode instead of calling process.exit immediately: with a
+  // piped stdout (the usual harness setup) `process.stdout.write`
+  // returns false under backpressure and `process.exit` will then
+  // truncate pending data. Setting exitCode lets the event loop drain
+  // the streams before exiting naturally.
   runCli(process.argv.slice(2), io).then((code) => {
-    process.exit(code);
+    process.exitCode = code;
   }, (err: unknown) => {
     io.stderr(`wit: fatal: ${(err as Error).message ?? String(err)}\n`);
-    process.exit(1);
+    process.exitCode = 1;
   });
 }

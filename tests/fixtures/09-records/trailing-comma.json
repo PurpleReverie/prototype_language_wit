@@ -9,8 +9,8 @@
             {
               "key": "a",
               "value": {
-                "kind": "stringValue",
-                "value": "1"
+                "kind": "numberValue",
+                "value": 1
               }
             }
           ],

@@ -9,8 +9,8 @@
             {
               "key": "lit",
               "value": {
-                "kind": "stringValue",
-                "value": "true"
+                "kind": "booleanValue",
+                "value": true
               }
             },
             {

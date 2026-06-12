@@ -18,8 +18,8 @@
                 {
                   "key": "awake",
                   "value": {
-                    "kind": "stringValue",
-                    "value": "true"
+                    "kind": "booleanValue",
+                    "value": true
                   }
                 }
               ],
@@ -37,8 +37,8 @@
                 {
                   "key": "awake",
                   "value": {
-                    "kind": "stringValue",
-                    "value": "false"
+                    "kind": "booleanValue",
+                    "value": false
                   }
                 }
               ],
@@ -70,8 +70,8 @@
               },
               "op": "is",
               "right": {
-                "kind": "stringValue",
-                "value": "true"
+                "kind": "booleanValue",
+                "value": true
               }
             },
             "kind": "ifStatement",

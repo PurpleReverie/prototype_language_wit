@@ -9,8 +9,8 @@
             {
               "key": "flag",
               "value": {
-                "kind": "stringValue",
-                "value": "true"
+                "kind": "booleanValue",
+                "value": true
               }
             }
           ],

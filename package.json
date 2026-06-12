@@ -6,6 +6,8 @@
   "packageManager": "pnpm@9.15.9",
   "scripts": {
     "test": "vitest run --passWithNoTests",
+    "test:tour": "pnpm build && node packages/cli/dist/bin.js tour --report tests/integration/feature-tour.wit",
+    "test:parse": "pnpm build && node packages/cli/dist/bin.js parse tests/integration/feature-tour.wit",
     "typecheck": "tsc --build",
     "build": "tsc --build",
     "vscode:install": "pnpm --filter wit-vscode install:local"

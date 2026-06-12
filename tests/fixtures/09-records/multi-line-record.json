@@ -16,15 +16,15 @@
             {
               "key": "years at post",
               "value": {
-                "kind": "stringValue",
-                "value": "31"
+                "kind": "numberValue",
+                "value": 31
               }
             },
             {
               "key": "lamp lit",
               "value": {
-                "kind": "stringValue",
-                "value": "true"
+                "kind": "booleanValue",
+                "value": true
               }
             }
           ],

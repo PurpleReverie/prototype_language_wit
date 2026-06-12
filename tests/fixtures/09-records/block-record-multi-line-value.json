@@ -16,8 +16,8 @@
             {
               "key": "b",
               "value": {
-                "kind": "stringValue",
-                "value": "2"
+                "kind": "numberValue",
+                "value": 2
               }
             }
           ],

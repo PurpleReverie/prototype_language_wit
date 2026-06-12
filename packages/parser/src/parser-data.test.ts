@@ -10,6 +10,7 @@ import type {
   Collection as CollectionNode,
   DataDef,
   NodeDef,
+  NumberValue,
   Record as RecordNode,
   StringValue,
 } from './ast.js';
@@ -30,15 +31,15 @@ describe('tryParseRecordFromText', () => {
     const rec = result!.record;
     expect(rec.fields).toHaveLength(1);
     expect(rec.fields[0].key).toBe('a');
-    expect(rec.fields[0].value.kind).toBe('stringValue');
-    expect((rec.fields[0].value as StringValue).value).toBe('1');
+    expect(rec.fields[0].value.kind).toBe('numberValue');
+    expect((rec.fields[0].value as NumberValue).value).toBe(1);
   });
 
   it('parses a multi-field inline record (comma-separated)', () => {
     const result = tryParseRecordFromText('{ a - 1, b - 2 }', BASE_LOC);
     const rec = result!.record;
     expect(rec.fields.map((f) => f.key)).toEqual(['a', 'b']);
-    expect((rec.fields[1].value as StringValue).value).toBe('2');
+    expect((rec.fields[1].value as NumberValue).value).toBe(2);
   });
 
   it('tolerates a trailing comma', () => {
@@ -57,7 +58,7 @@ describe('tryParseRecordFromText', () => {
     const result = tryParseRecordFromText('{ years at post - 31 }', BASE_LOC);
     const rec = result!.record;
     expect(rec.fields[0].key).toBe('years at post');
-    expect((rec.fields[0].value as StringValue).value).toBe('31');
+    expect((rec.fields[0].value as NumberValue).value).toBe(31);
   });
 
   it('parses multi-word values (`name - Aldous Vane`)', () => {

@@ -23,14 +23,44 @@ import type { ErrorCodeName } from './errors.js';
 import { ParseError } from './parser-errors.js';
 import type {
   Block,
+  BooleanValue,
   Collection as CollectionNode,
   DataValue,
   Inline,
+  NullValue,
+  NumberValue,
   Record as RecordNode,
   StringValue,
   Text,
 } from './ast.js';
 import type { Loc } from './loc.js';
+
+// ---------------------------------------------------------------------------
+// Typed-scalar classifier (M1.09 / v0.1.0).
+// Bareword values that look like numbers / booleans / null get typed
+// eagerly at parse time. Quoted strings always stay as stringValue (the
+// quotes signal "treat these bytes literally"). Whitespace is trimmed
+// before classification.
+// ---------------------------------------------------------------------------
+
+const NUMBER_RE = /^-?(?:[0-9]+|[0-9]+\.[0-9]+)$/;
+
+export function classifyScalar(raw: string, loc: Loc): DataValue {
+  const trimmed = raw.trim();
+  if (trimmed === 'true') {
+    return { kind: 'booleanValue', value: true, loc } as BooleanValue;
+  }
+  if (trimmed === 'false') {
+    return { kind: 'booleanValue', value: false, loc } as BooleanValue;
+  }
+  if (trimmed === 'null') {
+    return { kind: 'nullValue', loc } as NullValue;
+  }
+  if (NUMBER_RE.test(trimmed)) {
+    return { kind: 'numberValue', value: Number(trimmed), loc } as NumberValue;
+  }
+  return { kind: 'stringValue', value: trimmed, loc };
+}
 
 // ---------------------------------------------------------------------------
 // Scanner state.
@@ -362,27 +392,30 @@ function parseQuotedString(s: Scanner): StringValue {
   );
 }
 
-function parseStringValue(s: Scanner, closer: '}' | ']'): StringValue {
+function parseStringValue(s: Scanner, closer: '}' | ']'): DataValue {
   const start = s.pos;
   let value = '';
+  let sawEscape = false;
   while (s.pos < s.src.length) {
     const c = s.src.charAt(s.pos);
     if (c === '\\') {
       const next = s.src.charAt(s.pos + 1);
       if (next === ':' || next === '"' || next === '\\' ||
           next === ',' || next === '{' || next === '}') {
-        value += next; s.pos += 2; continue;
+        value += next; s.pos += 2; sawEscape = true; continue;
       }
     }
     if (c === ',' || c === '\n' || c === closer) break;
     value += c;
     s.pos += 1;
   }
-  return {
-    kind: 'stringValue',
-    value: value.trim(),
-    loc: locOfRange(s, start, s.pos),
-  };
+  const loc = locOfRange(s, start, s.pos);
+  // If the bareword contained escape sequences, keep it as a string —
+  // the author explicitly wrote bytes, not a value to classify.
+  if (sawEscape) {
+    return { kind: 'stringValue', value: value.trim(), loc };
+  }
+  return classifyScalar(value, loc);
 }
 
 // ---------------------------------------------------------------------------

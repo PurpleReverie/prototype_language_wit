@@ -7,16 +7,16 @@
         "value": {
           "items": [
             {
-              "kind": "stringValue",
-              "value": "1"
+              "kind": "numberValue",
+              "value": 1
             },
             {
               "kind": "stringValue",
               "value": "two"
             },
             {
-              "kind": "stringValue",
-              "value": "true"
+              "kind": "booleanValue",
+              "value": true
             }
           ],
           "kind": "collection"

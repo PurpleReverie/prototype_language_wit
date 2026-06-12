@@ -16,8 +16,8 @@
             {
               "key": "year",
               "value": {
-                "kind": "stringValue",
-                "value": "2024"
+                "kind": "numberValue",
+                "value": 2024
               }
             }
           ],

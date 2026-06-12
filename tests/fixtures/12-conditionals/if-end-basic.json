@@ -9,8 +9,8 @@
             {
               "key": "flag",
               "value": {
-                "kind": "stringValue",
-                "value": "true"
+                "kind": "booleanValue",
+                "value": true
               }
             }
           ],
@@ -28,8 +28,8 @@
           },
           "op": "is",
           "right": {
-            "kind": "stringValue",
-            "value": "true"
+            "kind": "booleanValue",
+            "value": true
           }
         },
         "kind": "ifStatement",

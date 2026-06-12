@@ -9,8 +9,8 @@
             {
               "key": "value",
               "value": {
-                "kind": "stringValue",
-                "value": "99"
+                "kind": "numberValue",
+                "value": 99
               }
             }
           ],
@@ -28,8 +28,8 @@
           },
           "op": "is",
           "right": {
-            "kind": "stringValue",
-            "value": "99"
+            "kind": "numberValue",
+            "value": 99
           }
         },
         "kind": "ifStatement",

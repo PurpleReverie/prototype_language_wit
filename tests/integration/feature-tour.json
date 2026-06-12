@@ -1,0 +1,1272 @@
+{
+  "ast": {
+    "children": [
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Hello world, this is a test. this should be able to compile"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "feature-tour.wit — every AST kind in one file. Read top-to-bottom."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Goal is parser coverage, not clean rendering; some uses are intentionally"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "exotic so the AST tree exposes the structure."
+      },
+      {
+        "kind": "reference",
+        "path": "./feature-tour-missing.wit"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": " Block comment:\n   this section shows prose, italic, and bold inline kinds.\n   The inline citation pattern lives further down. "
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Plain prose with "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "italic"
+              }
+            ],
+            "kind": "italic"
+          },
+          {
+            "kind": "text",
+            "value": " and "
+          },
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "bold"
+              }
+            ],
+            "kind": "bold"
+          },
+          {
+            "kind": "text",
+            "value": " emphasis "
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": " inline aside "
+          },
+          {
+            "kind": "text",
+            "value": " in one line."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "A second paragraph keeps the blank-line rule honest."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Data definitions — single-line and block, scalar / record / collection."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "one",
+        "shape": "single-line"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "Robert"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "name",
+        "shape": "single-line"
+      },
+      {
+        "kind": "dataDef",
+        "name": "meta",
+        "value": {
+          "fields": [
+            {
+              "key": "a",
+              "value": {
+                "kind": "numberValue",
+                "value": 1
+              }
+            },
+            {
+              "key": "b",
+              "value": {
+                "kind": "numberValue",
+                "value": 2
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "kind": "dataDef",
+        "name": "nums",
+        "value": {
+          "items": [
+            {
+              "kind": "numberValue",
+              "value": 1
+            },
+            {
+              "kind": "numberValue",
+              "value": 2
+            },
+            {
+              "kind": "numberValue",
+              "value": 3
+            }
+          ],
+          "kind": "collection"
+        }
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Typed scalars — number / boolean / null inside record + collection"
+          },
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "literals and the conditional RHS (v0.1.0 wires up these producers)."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "kind": "dataDef",
+        "name": "flags",
+        "value": {
+          "fields": [
+            {
+              "key": "count",
+              "value": {
+                "kind": "numberValue",
+                "value": 42
+              }
+            },
+            {
+              "key": "enabled",
+              "value": {
+                "kind": "booleanValue",
+                "value": true
+              }
+            },
+            {
+              "key": "optional",
+              "value": {
+                "kind": "nullValue"
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "kind": "dataDef",
+        "name": "values",
+        "value": {
+          "items": [
+            {
+              "kind": "numberValue",
+              "value": 42
+            },
+            {
+              "kind": "booleanValue",
+              "value": true
+            },
+            {
+              "kind": "nullValue"
+            }
+          ],
+          "kind": "collection"
+        }
+      },
+      {
+        "kind": "dataDef",
+        "name": "person",
+        "value": {
+          "fields": [
+            {
+              "key": "name",
+              "value": {
+                "kind": "stringValue",
+                "value": "Robert"
+              }
+            },
+            {
+              "key": "age",
+              "value": {
+                "kind": "stringValue",
+                "value": "31"
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "kind": "dataDef",
+        "name": "card",
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "My card"
+              }
+            },
+            {
+              "key": "body",
+              "value": {
+                "kind": "stringValue",
+                "value": "  Line one of the body.\n\n  Line two after a paragraph break."
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "kind": "dataDef",
+        "name": "card_b",
+        "value": {
+          "fields": [
+            {
+              "key": "title",
+              "value": {
+                "kind": "stringValue",
+                "value": "My card"
+              }
+            },
+            {
+              "key": "body",
+              "value": {
+                "kind": "stringValue",
+                "value": "  Line one of the body.\n\n  Line two after a paragraph break.\n  @h1 heading test h1@"
+              }
+            }
+          ],
+          "kind": "record"
+        }
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Node definitions — block, single-line, value-block, body-slot, additive."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Captures: explicit list and implicit derivation."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Hello, "
+              },
+              {
+                "kind": "interpolation",
+                "name": "name"
+              },
+              {
+                "kind": "text",
+                "value": "."
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "name"
+        ],
+        "kind": "nodeDef",
+        "name": "greeting",
+        "shape": "block"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Implicit captures — no ||...|| list, parser derives from interpolations."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "Goodbye, "
+              },
+              {
+                "kind": "interpolation",
+                "name": "name"
+              },
+              {
+                "kind": "text",
+                "value": "."
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "captures": [
+          "name"
+        ],
+        "kind": "nodeDef",
+        "name": "farewell",
+        "shape": "block"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Single-line def with captures + interpolation."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "interpolation",
+            "name": "author"
+          },
+          {
+            "kind": "text",
+            "value": " ("
+          },
+          {
+            "kind": "interpolation",
+            "name": "year"
+          },
+          {
+            "kind": "text",
+            "value": ")"
+          }
+        ],
+        "captures": [
+          "author",
+          "year"
+        ],
+        "kind": "nodeDef",
+        "name": "cite",
+        "shape": "single-line"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Body-slot def (value-block shape)."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "additive": false,
+        "body": [
+          {
+            "kind": "text",
+            "value": "\n  An aside wraps "
+          },
+          {
+            "kind": "bodySlot"
+          },
+          {
+            "kind": "text",
+            "value": " and emits the wrapped body verbatim."
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "aside",
+        "shape": "value-block"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Additive prefix — contributions accumulate under one name."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Smith"
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "single-line"
+      },
+      {
+        "additive": true,
+        "body": [
+          {
+            "kind": "text",
+            "value": "\n  "
+          },
+          {
+            "body": [],
+            "closeStyle": "named",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Came, H."
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "form-fill"
+          }
+        ],
+        "captures": [],
+        "kind": "nodeDef",
+        "name": "bibliography",
+        "shape": "value-block"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Node uses — every call shape against @cite (and friends)."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "A bare reference inline: "
+          },
+          {
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "greeting",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "body content for greeting."
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "greeting",
+        "params": [],
+        "paramsSource": "none"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Parens, space-separated — standalone self-closing."
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Smith"
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "parens"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Parens, colon-separated — standalone self-closing."
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Smith"
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "parens"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "inline": true,
+            "kind": "comment",
+            "text": "Pipes form on its own line — self-closing without `cite@`."
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Smith"
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "pipes"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Record arg with hyphen "
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Smith"
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "record"
+          },
+          {
+            "kind": "text",
+            "value": " inline."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Record arg with colon "
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Smith"
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "record"
+          },
+          {
+            "kind": "text",
+            "value": " inline."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "cite",
+        "params": [
+          {
+            "name": "author",
+            "value": "Smith"
+          },
+          {
+            "name": "year",
+            "value": "2024"
+          }
+        ],
+        "paramsSource": "form-fill"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": "   "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "cite",
+        "params": [
+          {
+            "name": "author",
+            "value": "Smith"
+          },
+          {
+            "name": "year",
+            "value": "2024"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "Quoted-string record arg "
+          },
+          {
+            "body": null,
+            "closeStyle": "parens",
+            "inline": false,
+            "kind": "nodeUse",
+            "name": "cite",
+            "params": [
+              {
+                "name": "author",
+                "value": "Came, H."
+              },
+              {
+                "name": "year",
+                "value": "2024"
+              }
+            ],
+            "paramsSource": "record"
+          },
+          {
+            "kind": "text",
+            "value": " inline."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " "
+              },
+              {
+                "kind": "text",
+                "value": "  "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "cite",
+        "params": [
+          {
+            "name": "author",
+            "value": "@strong Smith strong@"
+          },
+          {
+            "name": "year",
+            "value": "2024"
+          }
+        ],
+        "paramsSource": "pipes"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The variable name\\:Tauraj is bad — backslash escape demo."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Data access (dotted) — both bare and inside conditions."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The first meta value is "
+          },
+          {
+            "access": [
+              "a"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "meta",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": " and the person's name is "
+          },
+          {
+            "access": [
+              "name"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "person",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Conditionals — existence + comparison, then + else."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "cond": {
+          "kind": "existenceCondition",
+          "path": {
+            "segments": [
+              "name"
+            ]
+          }
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " The name is set: "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "name",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": ". "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
+      },
+      {
+        "cond": {
+          "kind": "comparisonCondition",
+          "left": {
+            "segments": [
+              "person",
+              "age"
+            ]
+          },
+          "op": "is",
+          "right": {
+            "kind": "numberValue",
+            "value": 31
+          }
+        },
+        "else": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " Not thirty-one. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " Thirty-one. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
+      },
+      {
+        "cond": {
+          "kind": "comparisonCondition",
+          "left": {
+            "segments": [
+              "flags",
+              "enabled"
+            ]
+          },
+          "op": "is",
+          "right": {
+            "kind": "booleanValue",
+            "value": true
+          }
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " Enabled flag is on. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
+      },
+      {
+        "cond": {
+          "kind": "comparisonCondition",
+          "left": {
+            "segments": [
+              "flags",
+              "optional"
+            ]
+          },
+          "op": "is",
+          "right": {
+            "kind": "nullValue"
+          }
+        },
+        "kind": "ifStatement",
+        "then": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " Optional value is unset. "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ]
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Iteration."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "body": [
+          {
+            "children": [
+              {
+                "kind": "text",
+                "value": " item "
+              },
+              {
+                "body": null,
+                "closeStyle": "bare",
+                "inline": true,
+                "kind": "nodeUse",
+                "name": "n",
+                "params": [],
+                "paramsSource": "none"
+              },
+              {
+                "kind": "text",
+                "value": "; "
+              }
+            ],
+            "kind": "paragraph"
+          }
+        ],
+        "collection": {
+          "segments": [
+            "nums"
+          ]
+        },
+        "itemName": "n",
+        "kind": "eachStatement"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Scripting — script block and inline script call."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "content": "\nfunction shout(s) {\n  return String(s).toUpperCase();\n}\n",
+        "inline": false,
+        "kind": "scriptBlock"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The system says: "
+          },
+          {
+            "args": [
+              "\"hello\""
+            ],
+            "fnName": "shout",
+            "kind": "scriptCall"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Multi-line param value via form-fill (M16)."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "body": [],
+        "closeStyle": "named",
+        "inline": false,
+        "kind": "nodeUse",
+        "name": "card",
+        "params": [
+          {
+            "name": "title",
+            "value": "Long card"
+          },
+          {
+            "name": "body",
+            "value": "  Multi\n  line\n  value"
+          }
+        ],
+        "paramsSource": "form-fill"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Block-aware capture substitution (M17)."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Record values can carry block-level content (headings, lists, paragraphs)."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Accessed downstream via @x.field, the captured value re-parses as full"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "document content and splices block-shaped pieces as blocks."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The card_b title (inline use, single-paragraph value): "
+          },
+          {
+            "access": [
+              "title"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "card_b",
+            "params": [],
+            "paramsSource": "none"
+          },
+          {
+            "kind": "text",
+            "value": "."
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "kind": "text",
+            "value": "The card_b body (block use, multi-paragraph plus embedded heading):"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "children": [
+          {
+            "access": [
+              "body"
+            ],
+            "body": null,
+            "closeStyle": "bare",
+            "inline": true,
+            "kind": "nodeUse",
+            "name": "card_b",
+            "params": [],
+            "paramsSource": "none"
+          }
+        ],
+        "kind": "paragraph"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "Bibliography pattern — additive contributions get gathered at the use site."
+      },
+      {
+        "inline": false,
+        "kind": "comment",
+        "text": "---------------------------------------------------------------------"
+      },
+      {
+        "body": null,
+        "closeStyle": "bare",
+        "inline": true,
+        "kind": "nodeUse",
+        "name": "bibliography",
+        "params": [],
+        "paramsSource": "none"
+      }
+    ],
+    "kind": "document"
+  },
+  "ok": true
+}

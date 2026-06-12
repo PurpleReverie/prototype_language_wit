@@ -28,14 +28,15 @@ import type {
   Block,
   ComparisonCondition,
   Condition,
+  DataValue,
   EachStatement,
   ExistenceCondition,
   IfStatement,
-  StringValue,
 } from './ast.js';
 import type { Loc } from './loc.js';
+import { classifyScalar } from './parser-data.js';
 import type { TokenCursor } from './parser-cursor.js';
-import type { Keyword, ParenStatementOpen, Token } from './tokens.js';
+import type { ParenStatementOpen, Token } from './tokens.js';
 
 // ---------------------------------------------------------------------------
 // Public entry.
@@ -232,7 +233,7 @@ function makeExistenceCondition(path: AccessPath): ExistenceCondition {
 function makeComparisonCondition(
   path: AccessPath,
   op: 'is' | 'equals',
-  right: StringValue,
+  right: DataValue,
 ): ComparisonCondition {
   return {
     kind: 'comparisonCondition',
@@ -274,7 +275,7 @@ function emptyAccessPath(loc: Loc): AccessPath {
 // but type coercion is deferred to a resolver pass; we keep StringValue).
 // ---------------------------------------------------------------------------
 
-function parseRhsValue(cursor: TokenCursor): StringValue {
+function parseRhsValue(cursor: TokenCursor): DataValue {
   skipWhitespaceTokens(cursor);
   let value = '';
   const startLoc = cursor.current().loc;
@@ -284,11 +285,7 @@ function parseRhsValue(cursor: TokenCursor): StringValue {
     value += tokenSourceText(tok);
     endLoc = tok.loc;
   }
-  return {
-    kind: 'stringValue',
-    value: value.trim(),
-    loc: spanLoc(startLoc, endLoc),
-  };
+  return classifyScalar(value, spanLoc(startLoc, endLoc));
 }
 
 function isRhsTerminator(tok: Token): boolean {

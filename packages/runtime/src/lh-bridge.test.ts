@@ -54,7 +54,7 @@ describe('lh.data', () => {
     const { bridge } = build(src);
     const paper = bridge.data['paper'] as Record<string, unknown> | undefined;
     expect(paper).toBeDefined();
-    expect(paper!['word_target']).toBe('5000');
+    expect(paper!['word_target']).toBe(5000);
     expect(paper!['status']).toBe('draft');
   });
 

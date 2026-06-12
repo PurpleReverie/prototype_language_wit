@@ -1,0 +1,244 @@
+document
+├── comment (line, "Hello world, this is a test. this should…")
+├── comment (line, "feature-tour.wit — every AST kind in one…")
+├── comment (line, "Goal is parser coverage, not clean rende…")
+├── comment (line, "exotic so the AST tree exposes the struc…")
+├── reference "./feature-tour-missing.wit"
+├── comment (line, " Block comment:\n   this section shows pr…")
+├── paragraph
+│   ├── text "Plain prose with "
+│   ├── italic
+│   │   └── text "italic"
+│   ├── text " and "
+│   ├── bold
+│   │   └── text "bold"
+│   ├── text " emphasis "
+│   ├── comment (inline, " inline aside ")
+│   └── text " in one line."
+├── paragraph
+│   └── text "A second paragraph keeps the blank-line …"
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Data definitions — single-line and block…")
+├── comment (line, "----------------------------------------…")
+├── nodeDef #one [shape: single-line]
+│   └── text "1"
+├── nodeDef #name [shape: single-line]
+│   └── text "Robert"
+├── dataDef #meta [type: record]
+│   └── record [keys: a,b]
+│       ├── field "a"
+│       │   └── numberValue 1
+│       └── field "b"
+│           └── numberValue 2
+├── dataDef #nums [type: collection]
+│   └── collection [length: 3]
+│       ├── numberValue 1
+│       ├── numberValue 2
+│       └── numberValue 3
+├── paragraph
+│   ├── comment (inline, "Typed scalars — number / boolean / null …")
+│   └── comment (inline, "literals and the conditional RHS (v0.1.0…")
+├── dataDef #flags [type: record]
+│   └── record [keys: count,enabled,optional]
+│       ├── field "count"
+│       │   └── numberValue 42
+│       ├── field "enabled"
+│       │   └── booleanValue true
+│       └── field "optional"
+│           └── nullValue
+├── dataDef #values [type: collection]
+│   └── collection [length: 3]
+│       ├── numberValue 42
+│       ├── booleanValue true
+│       └── nullValue
+├── dataDef #person [type: record]
+│   └── record [keys: name,age]
+│       ├── field "name"
+│       │   └── stringValue "Robert"
+│       └── field "age"
+│           └── stringValue "31"
+├── dataDef #card [type: record]
+│   └── record [keys: title,body]
+│       ├── field "title"
+│       │   └── stringValue "My card"
+│       └── field "body"
+│           └── stringValue "  Line one of the body.\n\n  Line two afte…"
+├── dataDef #card_b [type: record]
+│   └── record [keys: title,body]
+│       ├── field "title"
+│       │   └── stringValue "My card"
+│       └── field "body"
+│           └── stringValue "  Line one of the body.\n\n  Line two afte…"
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Node definitions — block, single-line, v…")
+├── comment (line, "Captures: explicit list and implicit der…")
+├── comment (line, "----------------------------------------…")
+├── nodeDef #greeting [shape: block, captures: name]
+│   └── paragraph
+│       ├── text "Hello, "
+│       ├── interpolation ::name::
+│       └── text "."
+├── paragraph
+│   └── comment (inline, "Implicit captures — no ||...|| list, par…")
+├── nodeDef #farewell [shape: block, captures: name]
+│   └── paragraph
+│       ├── text "Goodbye, "
+│       ├── interpolation ::name::
+│       └── text "."
+├── paragraph
+│   └── comment (inline, "Single-line def with captures + interpol…")
+├── nodeDef #cite [shape: single-line, captures: author,year]
+│   ├── interpolation ::author::
+│   ├── text " ("
+│   ├── interpolation ::year::
+│   └── text ")"
+├── paragraph
+│   └── comment (inline, "Body-slot def (value-block shape).")
+├── nodeDef #aside [shape: value-block]
+│   ├── text "\n  An aside wraps "
+│   ├── bodySlot
+│   └── text " and emits the wrapped body verbatim."
+├── paragraph
+│   └── comment (inline, "Additive prefix — contributions accumula…")
+├── nodeDef +#bibliography [shape: single-line]
+│   └── nodeUse @cite [paramsSource: pipes, params: 2]
+│       ├── param name="author" value="Smith"
+│       └── param name="year" value="2024"
+├── nodeDef +#bibliography [shape: value-block]
+│   ├── text "\n  "
+│   └── nodeUse @cite [paramsSource: form-fill, params: 2]
+│       ├── param name="author" value="Came, H."
+│       └── param name="year" value="2024"
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Node uses — every call shape against @ci…")
+├── comment (line, "----------------------------------------…")
+├── paragraph
+│   ├── text "A bare reference inline: "
+│   ├── nodeUse @greeting [paramsSource: none, params: 0]
+│   └── text "."
+├── nodeUse @greeting [paramsSource: none, params: 0]
+│   └── paragraph
+│       └── text "body content for greeting."
+├── paragraph
+│   ├── comment (inline, "Parens, space-separated — standalone sel…")
+│   └── nodeUse @cite [paramsSource: parens, params: 2]
+│       ├── param name="author" value="Smith"
+│       └── param name="year" value="2024"
+├── paragraph
+│   ├── comment (inline, "Parens, colon-separated — standalone sel…")
+│   └── nodeUse @cite [paramsSource: parens, params: 2]
+│       ├── param name="author" value="Smith"
+│       └── param name="year" value="2024"
+├── paragraph
+│   ├── comment (inline, "Pipes form on its own line — self-closin…")
+│   └── nodeUse @cite [paramsSource: pipes, params: 2]
+│       ├── param name="author" value="Smith"
+│       └── param name="year" value="2024"
+├── paragraph
+│   ├── text "Record arg with hyphen "
+│   ├── nodeUse @cite [paramsSource: record, params: 2]
+│   │   ├── param name="author" value="Smith"
+│   │   └── param name="year" value="2024"
+│   └── text " inline."
+├── paragraph
+│   ├── text "Record arg with colon "
+│   ├── nodeUse @cite [paramsSource: record, params: 2]
+│   │   ├── param name="author" value="Smith"
+│   │   └── param name="year" value="2024"
+│   └── text " inline."
+├── nodeUse @cite [paramsSource: form-fill, params: 2]
+│   ├── param name="author" value="Smith"
+│   └── param name="year" value="2024"
+├── nodeUse @cite [paramsSource: pipes, params: 2]
+│   ├── param name="author" value="Smith"
+│   ├── param name="year" value="2024"
+│   └── paragraph
+│       └── text "   "
+├── paragraph
+│   ├── text "Quoted-string record arg "
+│   ├── nodeUse @cite [paramsSource: record, params: 2]
+│   │   ├── param name="author" value="Came, H."
+│   │   └── param name="year" value="2024"
+│   └── text " inline."
+├── nodeUse @cite [paramsSource: pipes, params: 2]
+│   ├── param name="author" value="@strong Smith strong@"
+│   ├── param name="year" value="2024"
+│   └── paragraph
+│       ├── text " "
+│       └── text "  "
+├── paragraph
+│   └── text "The variable name\\:Tauraj is bad — backs…"
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Data access (dotted) — both bare and ins…")
+├── comment (line, "----------------------------------------…")
+├── paragraph
+│   ├── text "The first meta value is "
+│   ├── nodeUse @meta.a [paramsSource: none, params: 0]
+│   ├── text " and the person's name is "
+│   ├── nodeUse @person.name [paramsSource: none, params: 0]
+│   └── text "."
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Conditionals — existence + comparison, t…")
+├── comment (line, "----------------------------------------…")
+├── ifStatement [existence]
+│   ├── existenceCondition @name
+│   └── paragraph
+│       ├── text " The name is set: "
+│       ├── nodeUse @name [paramsSource: none, params: 0]
+│       └── text ". "
+├── ifStatement [comparison, else]
+│   ├── comparisonCondition @person.age is "31"
+│   │   └── numberValue 31
+│   ├── paragraph
+│   │   └── text " Thirty-one. "
+│   └── paragraph
+│       └── text " Not thirty-one. "
+├── ifStatement [comparison]
+│   ├── comparisonCondition @flags.enabled is "true"
+│   │   └── booleanValue true
+│   └── paragraph
+│       └── text " Enabled flag is on. "
+├── ifStatement [comparison]
+│   ├── comparisonCondition @flags.optional is "<?>"
+│   │   └── nullValue
+│   └── paragraph
+│       └── text " Optional value is unset. "
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Iteration.")
+├── comment (line, "----------------------------------------…")
+├── eachStatement @nums as n
+│   └── paragraph
+│       ├── text " item "
+│       ├── nodeUse @n [paramsSource: none, params: 0]
+│       └── text "; "
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Scripting — script block and inline scri…")
+├── comment (line, "----------------------------------------…")
+├── scriptBlock "\nfunction shout(s) {\n  return String(s).…"
+├── paragraph
+│   ├── text "The system says: "
+│   └── scriptCall shout("hello")
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Multi-line param value via form-fill (M1…")
+├── comment (line, "----------------------------------------…")
+├── nodeUse @card [paramsSource: form-fill, params: 2]
+│   ├── param name="title" value="Long card"
+│   └── param name="body" value="  Multi\n  line\n  value"
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Block-aware capture substitution (M17).")
+├── comment (line, "Record values can carry block-level cont…")
+├── comment (line, "Accessed downstream via @x.field, the ca…")
+├── comment (line, "document content and splices block-shape…")
+├── comment (line, "----------------------------------------…")
+├── paragraph
+│   ├── text "The card_b title (inline use, single-par…"
+│   ├── nodeUse @card_b.title [paramsSource: none, params: 0]
+│   └── text "."
+├── paragraph
+│   └── text "The card_b body (block use, multi-paragr…"
+├── paragraph
+│   └── nodeUse @card_b.body [paramsSource: none, params: 0]
+├── comment (line, "----------------------------------------…")
+├── comment (line, "Bibliography pattern — additive contribu…")
+├── comment (line, "----------------------------------------…")
+└── nodeUse @bibliography [paramsSource: none, params: 0]
