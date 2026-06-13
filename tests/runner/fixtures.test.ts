@@ -2,7 +2,7 @@
 //
 // For each `.wit` file the harness:
 //   1. Reads the source.
-//   2. Runs `parse(source, file)` from `@wit/parser`.
+//   2. Runs `parse(source, file)` from `@witlang/parser`.
 //   3. Wraps the outcome in an envelope (`{ ok: true, ast }` or
 //      `{ ok: false, error }`).
 //   4. Serializes that envelope deterministically and either:
@@ -16,7 +16,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 
 import {
   diffSnapshot,

@@ -28,7 +28,7 @@ import type {
   DataDef,
   DataValue,
   NodeDef,
-} from '@wit/parser';
+} from '@witlang/parser';
 import { lookupRecordField } from './canonical-key.js';
 
 export interface DataLookups {

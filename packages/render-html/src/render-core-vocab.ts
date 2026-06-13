@@ -8,8 +8,8 @@
 // Render strategy: dispatch on `type` if recognized as core-vocab,
 // otherwise emit a tag derived from `type` (or a `<div data-wit-type=...>`).
 
-import type { NodeUse, Param } from '@wit/parser';
-import { isCoreVocabName, RESERVED_OPAQUE } from '@wit/runtime';
+import type { NodeUse, Param } from '@witlang/parser';
+import { isCoreVocabName, RESERVED_OPAQUE } from '@witlang/runtime';
 import { escapeHtml } from './escape.js';
 
 export type BodyRenderer = (use: NodeUse) => string;

@@ -4,7 +4,7 @@
 // error codes plus a typed error class. The resolver/expander throw these
 // instead of plain Errors so callers can switch on `code`.
 
-import type { Loc } from '@wit/parser';
+import type { Loc } from '@witlang/parser';
 
 export const RuntimeErrorCode = {
   E_UNRESOLVED_REFERENCE: 'E_UNRESOLVED_REFERENCE',

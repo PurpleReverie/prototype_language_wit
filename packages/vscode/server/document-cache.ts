@@ -2,8 +2,8 @@
 // triple plus error lists. Cross-file dependents tracked separately in
 // cross-file.ts so cache stays focused on individual document state.
 
-import { parse, WitError, type Document } from '@wit/parser';
-import { resolve, ResolverError, type ResolvedDocument } from '@wit/runtime';
+import { parse, WitError, type Document } from '@witlang/parser';
+import { resolve, ResolverError, type ResolvedDocument } from '@witlang/runtime';
 import {
   buildPositionIndex,
   type PositionEntry,

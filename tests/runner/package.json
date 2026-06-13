@@ -1,10 +1,10 @@
 {
-  "name": "@wit/test-runner",
+  "name": "@witlang/test-runner",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@wit/parser": "workspace:*",
-    "@wit/runtime": "workspace:*"
+    "@witlang/parser": "workspace:*",
+    "@witlang/runtime": "workspace:*"
   }
 }

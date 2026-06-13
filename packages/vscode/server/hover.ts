@@ -4,8 +4,8 @@
 // produces a markdown string. The server wraps the string in an LSP
 // `Hover` response.
 
-import type { NodeUse, NodeDef, DataDef, Inline } from '@wit/parser';
-import { isCoreVocabName, RESERVED_OPAQUE } from '@wit/runtime';
+import type { NodeUse, NodeDef, DataDef, Inline } from '@witlang/parser';
+import { isCoreVocabName, RESERVED_OPAQUE } from '@witlang/runtime';
 import type { DocumentState } from './document-cache.js';
 import { lookupAt, type PositionEntry } from './position-index.js';
 

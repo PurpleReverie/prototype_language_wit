@@ -1,7 +1,7 @@
 // Markdown renderer for ExpandedDocument.
 //
 // Walks the expanded AST and emits a CommonMark-compatible Markdown
-// string. Mirrors @wit/render-html but produces plain text with
+// string. Mirrors @witlang/render-html but produces plain text with
 // Markdown syntax. Conventional NodeUse names (h1..h6, chapter, figure,
 // callout, aside, pullquote, bibliography, dl, ul/ol, blockquote, pre,
 // hr, table, a, img) each have a hand-rolled mapping. Sectioning names
@@ -28,8 +28,8 @@ import type {
   Record as RecordNode,
   Collection,
   DataValue,
-} from '@wit/parser';
-import type { ExpandedDocument } from '@wit/runtime';
+} from '@witlang/parser';
+import type { ExpandedDocument } from '@witlang/runtime';
 import {
   renderInlines, renderInline, renderUnresolvedAccess, setBlockDispatcher,
 } from './render-inline.js';

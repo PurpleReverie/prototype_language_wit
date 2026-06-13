@@ -3,8 +3,8 @@
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { parse, WitError } from '@wit/parser';
-import { resolve, RuntimeError } from '@wit/runtime';
+import { parse, WitError } from '@witlang/parser';
+import { resolve, RuntimeError } from '@witlang/runtime';
 import type { CliIo } from './bin.js';
 
 export function runCheck(args: readonly string[], io: CliIo): number {

@@ -6,8 +6,8 @@ import {
   DiagnosticSeverity,
   type Diagnostic,
 } from 'vscode-languageserver/node';
-import { parse, WitError, type Document } from '@wit/parser';
-import { ResolverError } from '@wit/runtime';
+import { parse, WitError, type Document } from '@witlang/parser';
+import { ResolverError } from '@witlang/runtime';
 import type { DocumentState } from './document-cache.js';
 
 export interface ParseOutcome {

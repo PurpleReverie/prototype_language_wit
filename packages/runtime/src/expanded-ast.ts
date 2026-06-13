@@ -20,7 +20,7 @@
 // learning new shapes. The "EXCEPT" list above describes nodes that
 // will no longer appear once expansion is complete, not new node kinds.
 
-import type { Block, Loc } from '@wit/parser';
+import type { Block, Loc } from '@witlang/parser';
 
 export interface ExpandedDocument {
   kind: 'expanded-document';

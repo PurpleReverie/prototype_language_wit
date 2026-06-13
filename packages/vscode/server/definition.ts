@@ -3,7 +3,7 @@
 // Location uses LSP shape: { uri, range }. The handler resolves a NodeUse
 // or access-segment to its NodeDef or DataDef and emits the def's loc.
 
-import type { NodeUse, NodeDef, DataDef, Loc } from '@wit/parser';
+import type { NodeUse, NodeDef, DataDef, Loc } from '@witlang/parser';
 import type { DocumentState } from './document-cache.js';
 import { lookupAt } from './position-index.js';
 import { uriFromFsPath } from './cross-file.js';

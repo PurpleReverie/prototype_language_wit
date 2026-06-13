@@ -17,7 +17,7 @@ import type {
   Paragraph,
   ScriptCall,
   Loc,
-} from '@wit/parser';
+} from '@witlang/parser';
 
 type Walkable = Block | Inline;
 

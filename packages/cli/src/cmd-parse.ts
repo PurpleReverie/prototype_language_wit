@@ -1,7 +1,7 @@
 // `wit parse <file>` — parse the given .wit file and print AST as JSON.
 
 import * as fs from 'node:fs';
-import { parse, WitError } from '@wit/parser';
+import { parse, WitError } from '@witlang/parser';
 import type { CliIo } from './bin.js';
 
 export function runParse(args: readonly string[], io: CliIo): number {

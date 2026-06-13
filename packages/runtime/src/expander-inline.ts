@@ -32,8 +32,8 @@ import type {
   Param,
   Loc,
   Text,
-} from '@wit/parser';
-import { parse } from '@wit/parser';
+} from '@witlang/parser';
+import { parse } from '@witlang/parser';
 import { lookupRecordField } from './canonical-key.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
 

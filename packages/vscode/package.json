@@ -49,8 +49,8 @@
     "install:local": "command -v code >/dev/null || { echo 'VS Code CLI (code) not on PATH. In VS Code: Cmd-Shift-P → Shell Command: Install code command in PATH.'; exit 1; } && pnpm run build && pnpm exec vsce package --no-dependencies --out wit-vscode.vsix && code --install-extension wit-vscode.vsix && rm -f wit-vscode.vsix"
   },
   "devDependencies": {
-    "@wit/parser": "workspace:*",
-    "@wit/runtime": "workspace:*",
+    "@witlang/parser": "workspace:*",
+    "@witlang/runtime": "workspace:*",
     "@types/vscode": "^1.80.0",
     "esbuild": "^0.24.0",
     "typescript": "^5.5.4",

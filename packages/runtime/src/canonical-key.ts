@@ -17,7 +17,7 @@
 //   - If two field keys collapse to the same canonical key, the Record
 //     is ambiguous → E_AMBIGUOUS_RECORD_KEY at index-build time.
 
-import type { DataValue, Record as RecordNode } from '@wit/parser';
+import type { DataValue, Record as RecordNode } from '@witlang/parser';
 import { ResolverError, RuntimeErrorCode } from './errors.js';
 
 export function canonicalizeKey(segment: string): string {

@@ -1,8 +1,8 @@
 // HTML core-vocab + @node + @table tests (M10.core-vocab).
 
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
-import { resolve, expand } from '@wit/runtime';
+import { parse } from '@witlang/parser';
+import { resolve, expand } from '@witlang/runtime';
 import { renderHtml } from './render.js';
 
 function render(src: string): string {

@@ -1,4 +1,4 @@
-// Curated public surface for @wit/parser (v0.1.0).
+// Curated public surface for @witlang/parser (v0.1.0).
 //
 // Anything not re-exported here is package-private. Downstream consumers
 // (runtime, renderers, CLI, language server) import from this module

@@ -18,7 +18,7 @@
 // - `resolvedFiles` caches each file's own ResolvedDocument by absolute
 //   path so a transitively shared file is parsed once.
 
-import type { Block, NodeDef, DataDef, NodeUse, Loc } from '@wit/parser';
+import type { Block, NodeDef, DataDef, NodeUse, Loc } from '@witlang/parser';
 
 // A NodeDef produced by collapsing `+#name` partials (and an optional
 // base `#name`) carries `partialSources` — the locs of every partial

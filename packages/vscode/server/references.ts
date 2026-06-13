@@ -2,7 +2,7 @@
 // that binds to one), walks the current document's resolved bindings and
 // returns the loc of every NodeUse whose binding === target def.
 
-import type { NodeUse, NodeDef, DataDef, Loc } from '@wit/parser';
+import type { NodeUse, NodeDef, DataDef, Loc } from '@witlang/parser';
 import type { DocumentState } from './document-cache.js';
 import { lookupAt } from './position-index.js';
 import type { LocationLike } from './definition.js';

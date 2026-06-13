@@ -7,7 +7,7 @@ import type {
   Text,
   Interpolation,
   NodeUse,
-} from '@wit/parser';
+} from '@witlang/parser';
 
 export function renderInlines(items: readonly Inline[]): string {
   let out = '';

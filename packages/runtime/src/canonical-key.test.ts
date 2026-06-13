@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 import { resolve } from './resolver.js';
 import { expand } from './expander.js';
 import { canonicalizeKey, lookupRecordField } from './canonical-key.js';
 import { ResolverError, RuntimeErrorCode } from './errors.js';
-import type { Record as RecordNode } from '@wit/parser';
+import type { Record as RecordNode } from '@witlang/parser';
 
 function flat(nodes: unknown): string {
   return JSON.stringify(nodes);

@@ -10,7 +10,7 @@
 // Errors:
 // - E_PARTIAL_SHAPE_MISMATCH — partials disagree on shape or captures.
 
-import type { Block, Inline, NodeDef, Paragraph, Record, Collection } from '@wit/parser';
+import type { Block, Inline, NodeDef, Paragraph, Record, Collection } from '@witlang/parser';
 
 import type { MergedNodeDef } from './resolved-ast.js';
 import { ResolverError, RuntimeErrorCode } from './errors.js';

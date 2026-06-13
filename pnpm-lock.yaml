@@ -19,43 +19,43 @@ importers:
         version: 2.1.9(@types/node@20.19.42)
 
   packages/cli:
-    devDependencies:
-      '@wit/parser':
+    dependencies:
+      '@witlang/parser':
         specifier: workspace:*
         version: link:../parser
-      '@wit/render-html':
+      '@witlang/render-html':
         specifier: workspace:*
         version: link:../render-html
-      '@wit/render-markdown':
+      '@witlang/render-markdown':
         specifier: workspace:*
         version: link:../render-markdown
-      '@wit/runtime':
+      '@witlang/runtime':
         specifier: workspace:*
         version: link:../runtime
 
   packages/parser: {}
 
   packages/render-html:
-    devDependencies:
-      '@wit/parser':
+    dependencies:
+      '@witlang/parser':
         specifier: workspace:*
         version: link:../parser
-      '@wit/runtime':
+      '@witlang/runtime':
         specifier: workspace:*
         version: link:../runtime
 
   packages/render-markdown:
-    devDependencies:
-      '@wit/parser':
+    dependencies:
+      '@witlang/parser':
         specifier: workspace:*
         version: link:../parser
-      '@wit/runtime':
+      '@witlang/runtime':
         specifier: workspace:*
         version: link:../runtime
 
   packages/runtime:
-    devDependencies:
-      '@wit/parser':
+    dependencies:
+      '@witlang/parser':
         specifier: workspace:*
         version: link:../parser
 
@@ -64,10 +64,10 @@ importers:
       '@types/vscode':
         specifier: ^1.80.0
         version: 1.120.0
-      '@wit/parser':
+      '@witlang/parser':
         specifier: workspace:*
         version: link:../parser
-      '@wit/runtime':
+      '@witlang/runtime':
         specifier: workspace:*
         version: link:../runtime
       esbuild:
@@ -91,10 +91,10 @@ importers:
 
   tests/runner:
     dependencies:
-      '@wit/parser':
+      '@witlang/parser':
         specifier: workspace:*
         version: link:../../packages/parser
-      '@wit/runtime':
+      '@witlang/runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
 

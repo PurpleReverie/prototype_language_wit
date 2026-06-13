@@ -20,7 +20,7 @@ import type {
   EachStatement,
   Record as RecordNode,
   Collection,
-} from '@wit/parser';
+} from '@witlang/parser';
 import type { ResolvedDocument, Binding } from './resolved-ast.js';
 import { ResolverError, RuntimeErrorCode } from './errors.js';
 import {

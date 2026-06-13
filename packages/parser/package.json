@@ -1,7 +1,17 @@
 {
-  "name": "@wit/parser",
+  "name": "@witlang/parser",
   "version": "0.1.0",
-  "private": true,
+  "description": "Parser for the Wit markup language — lexer, parser, AST",
+  "keywords": ["wit", "markup", "parser", "ast", "language", "typescript"],
+  "license": "MIT",
+  "author": "Tauraj Greig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PurpleReverie/prototype_language_wit.git",
+    "directory": "packages/parser"
+  },
+  "homepage": "https://github.com/PurpleReverie/prototype_language_wit#readme",
+  "bugs": "https://github.com/PurpleReverie/prototype_language_wit/issues",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,6 +23,13 @@
   },
   "files": [
     "dist",
-    "src"
-  ]
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

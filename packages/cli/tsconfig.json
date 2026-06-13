@@ -8,11 +8,24 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*"
+  ],
   "references": [
-    { "path": "../parser" },
-    { "path": "../runtime" },
-    { "path": "../render-html" },
-    { "path": "../render-markdown" }
+    {
+      "path": "../parser"
+    },
+    {
+      "path": "../runtime"
+    },
+    {
+      "path": "../render-html"
+    },
+    {
+      "path": "../render-markdown"
+    }
+  ],
+  "exclude": [
+    "src/**/*.test.ts"
   ]
 }

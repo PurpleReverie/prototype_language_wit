@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
-import { resolve, expand } from '@wit/runtime';
+import { parse } from '@witlang/parser';
+import { resolve, expand } from '@witlang/runtime';
 import type {
   Block,
   Inline,
@@ -13,8 +13,8 @@ import type {
   Interpolation,
   Record as RecordNode,
   Collection,
-} from '@wit/parser';
-import type { ExpandedDocument } from '@wit/runtime';
+} from '@witlang/parser';
+import type { ExpandedDocument } from '@witlang/runtime';
 import { renderMarkdown } from './render.js';
 
 const LOC: Loc = { file: 't', line: 1, col: 1, offset: 0, length: 0 };

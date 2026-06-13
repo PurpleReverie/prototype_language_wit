@@ -14,11 +14,11 @@
 
 import {
   tryParseCollectionFromText,
-} from '@wit/parser';
+} from '@witlang/parser';
 import type {
   Block, Collection as CollectionNode, DataValue, Inline,
   NodeUse, Param, Record as RecordNode,
-} from '@wit/parser';
+} from '@witlang/parser';
 import { escapeHtml } from './escape.js';
 
 type InlineRenderer = (items: readonly Inline[]) => string;

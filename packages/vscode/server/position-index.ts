@@ -21,7 +21,7 @@ import type {
   Bold,
   Record as RecordNode,
   Collection,
-} from '@wit/parser';
+} from '@witlang/parser';
 
 export type PositionKind =
   | 'nodeUse'

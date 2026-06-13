@@ -27,7 +27,7 @@ import type {
   EachStatement,
   Loc,
   Text,
-} from '@wit/parser';
+} from '@witlang/parser';
 import type { ResolvedDocument } from './resolved-ast.js';
 import type { ExpandedDocument } from './expanded-ast.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
@@ -43,7 +43,7 @@ import {
 } from './expander-iteration.js';
 import { createLhBridge } from './lh-bridge.js';
 import { runScripts } from './script-runner.js';
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 import { resolve } from './resolver.js';
 
 const DEPTH_LIMIT = 256;

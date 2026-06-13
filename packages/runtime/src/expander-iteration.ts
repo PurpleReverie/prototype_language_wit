@@ -20,7 +20,7 @@
 //   - Collection access not resolving to a Collection → E_NOT_ITERABLE.
 //   - Empty collection → emit no body (not an error).
 
-import type { Block, DataValue, EachStatement } from '@wit/parser';
+import type { Block, DataValue, EachStatement } from '@witlang/parser';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
 import { resolveAccessPath, type DataLookups } from './expander-conditions.js';
 

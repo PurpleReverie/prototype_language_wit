@@ -1,7 +1,17 @@
 {
-  "name": "@wit/cli",
+  "name": "@witlang/cli",
   "version": "0.1.0",
-  "private": true,
+  "description": "Command-line tool for the Wit markup language — parse, check, build, tour",
+  "keywords": ["wit", "markup", "cli", "language"],
+  "license": "MIT",
+  "author": "Tauraj Greig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PurpleReverie/prototype_language_wit.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/PurpleReverie/prototype_language_wit#readme",
+  "bugs": "https://github.com/PurpleReverie/prototype_language_wit/issues",
   "type": "module",
   "main": "./dist/bin.js",
   "bin": {
@@ -9,12 +19,19 @@
   },
   "files": [
     "dist",
-    "src"
+    "README.md",
+    "LICENSE"
   ],
-  "devDependencies": {
-    "@wit/parser": "workspace:*",
-    "@wit/runtime": "workspace:*",
-    "@wit/render-html": "workspace:*",
-    "@wit/render-markdown": "workspace:*"
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@witlang/parser": "workspace:*",
+    "@witlang/runtime": "workspace:*",
+    "@witlang/render-html": "workspace:*",
+    "@witlang/render-markdown": "workspace:*"
   }
 }

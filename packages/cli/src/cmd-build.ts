@@ -5,10 +5,10 @@
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { parse, WitError } from '@wit/parser';
-import { resolve, expand, RuntimeError } from '@wit/runtime';
-import { renderHtml } from '@wit/render-html';
-import { renderMarkdown } from '@wit/render-markdown';
+import { parse, WitError } from '@witlang/parser';
+import { resolve, expand, RuntimeError } from '@witlang/runtime';
+import { renderHtml } from '@witlang/render-html';
+import { renderMarkdown } from '@witlang/render-markdown';
 import type { CliIo } from './bin.js';
 
 export type OutputFormat = 'html' | 'md';

@@ -2,7 +2,7 @@
 // Tests the pure function — no LSP runtime.
 
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 import {
   collectSemanticTokens,
   encodeTokens,

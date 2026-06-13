@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
-import type { Paragraph, Text } from '@wit/parser';
+import { parse } from '@witlang/parser';
+import type { Paragraph, Text } from '@witlang/parser';
 import { resolve } from './resolver.js';
 import { expand } from './expander.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';

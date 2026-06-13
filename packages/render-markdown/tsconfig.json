@@ -8,9 +8,18 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*"
+  ],
   "references": [
-    { "path": "../parser" },
-    { "path": "../runtime" }
+    {
+      "path": "../parser"
+    },
+    {
+      "path": "../runtime"
+    }
+  ],
+  "exclude": [
+    "src/**/*.test.ts"
   ]
 }

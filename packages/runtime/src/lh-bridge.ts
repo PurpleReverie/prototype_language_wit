@@ -25,7 +25,7 @@ import type {
   Inline,
   NodeUse,
   Record as RecordNode,
-} from '@wit/parser';
+} from '@witlang/parser';
 import { canonicalizeKey } from './canonical-key.js';
 import type { ExpandedDocument } from './expanded-ast.js';
 import type { ResolvedDocument } from './resolved-ast.js';

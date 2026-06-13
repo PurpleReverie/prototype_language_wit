@@ -1,7 +1,7 @@
 // Tests for the position index — build correctness and lookup.
 
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 import { buildPositionIndex, lookupAt } from './position-index.js';
 
 function indexOf(src: string) {

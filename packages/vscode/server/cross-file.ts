@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import type { FileReader } from '@wit/runtime';
+import type { FileReader } from '@witlang/runtime';
 
 export function fsPathFromUri(uri: string): string | null {
   if (!uri.startsWith('file://')) return null;

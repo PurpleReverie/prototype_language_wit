@@ -8,8 +8,8 @@
 // arbitrary blocks (paragraphs, nested uses), but render.ts already
 // owns the master dispatch and imports this module.
 
-import type { Block, Inline, NodeUse, Param } from '@wit/parser';
-import { isCoreVocabName, RESERVED_OPAQUE } from '@wit/runtime';
+import type { Block, Inline, NodeUse, Param } from '@witlang/parser';
+import { isCoreVocabName, RESERVED_OPAQUE } from '@witlang/runtime';
 import { renderInline, renderInlines, renderUnresolvedAccess } from './render-inline.js';
 import { renderTableMarkdown } from './render-table.js';
 

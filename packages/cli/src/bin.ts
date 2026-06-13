@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // CLI entry. Dispatches subcommands by switching on argv[2] — no
-// dependency on a CLI library (DS-18: zero runtime deps in @wit/cli).
+// dependency on a CLI library (DS-18: zero runtime deps in @witlang/cli).
 //
 // Usage:
 //   wit parse <file>            Parse a .wit file, print AST as JSON.
@@ -10,6 +10,8 @@
 //                               explicitly with --format html|md.
 //   wit --version | --help
 
+import { realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { runParse } from './cmd-parse.js';
 import { runCheck } from './cmd-check.js';
 import { runBuild } from './cmd-build.js';
@@ -56,7 +58,17 @@ async function dispatch(cmd: string, rest: readonly string[], io: CliIo): Promis
 }
 
 // Direct invocation guard — only run main when this module is the entry point.
-const isMain = import.meta.url === `file://${process.argv[1]}`;
+// Resolve symlinks on both sides so `node_modules/.bin/wit` (a symlink into
+// the real package) still detects as the entry point.
+const isMain = (() => {
+  const entryArg = process.argv[1];
+  if (!entryArg) return false;
+  try {
+    return fileURLToPath(import.meta.url) === realpathSync(entryArg);
+  } catch {
+    return false;
+  }
+})();
 if (isMain) {
   const io: CliIo = {
     stdout: (s) => process.stdout.write(s),

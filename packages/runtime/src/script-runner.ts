@@ -27,7 +27,7 @@ import type {
   ScriptBlock,
   ScriptCall,
   Text,
-} from '@wit/parser';
+} from '@witlang/parser';
 import type { ExpandedDocument } from './expanded-ast.js';
 import { ExpanderError, RuntimeErrorCode } from './errors.js';
 import type { LhBridge } from './lh-bridge.js';

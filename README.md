@@ -9,6 +9,17 @@ HTML renderer, a CLI, and a VS Code language extension.
 
 ## Quick start
 
+Install from npm:
+
+```
+npm install -g @witlang/cli
+wit tour path/to/file.wit
+wit check path/to/file.wit
+wit build path/to/file.wit -o out.html
+```
+
+Or, from a clone of this repo:
+
 ```
 pnpm install
 pnpm build
@@ -17,8 +28,8 @@ node packages/cli/dist/bin.js check path/to/file.wit
 node packages/cli/dist/bin.js build path/to/file.wit -o out.html
 ```
 
-The `wit` binary takes a single subcommand (`parse`, `check`, `build`)
-plus a path; pass `--help` for the usage string.
+The `wit` binary takes a single subcommand (`parse`, `check`, `build`,
+`tour`) plus a path; pass `--help` for the usage string.
 
 ### VS Code extension
 
@@ -52,7 +63,7 @@ package and a stable typed output:
   | (chars) |    | (tokens   |    | (binding |    | (inline |    |  HTML  |
   |         |    |  -> AST)  |    |  + refs) |    |  + eval)|    |        |
   +---------+    +-----------+    +----------+    +---------+    +--------+
-        @wit/parser                   @wit/runtime                @wit/render-html
+        @witlang/parser               @witlang/runtime            @witlang/render-html
 ```
 
 - **lex / parse** — `packages/parser` turns the source string into an

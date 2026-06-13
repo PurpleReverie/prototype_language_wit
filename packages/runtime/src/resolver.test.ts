@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
-import type { NodeDef, DataDef, NodeUse } from '@wit/parser';
+import { parse } from '@witlang/parser';
+import type { NodeDef, DataDef, NodeUse } from '@witlang/parser';
 import { resolve } from './resolver.js';
 import type { MergedNodeDef } from './resolved-ast.js';
 import { ResolverError } from './errors.js';

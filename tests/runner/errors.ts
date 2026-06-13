@@ -13,7 +13,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, join, relative } from 'node:path';
 
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 
 export interface ExpectedError {
   code: string;

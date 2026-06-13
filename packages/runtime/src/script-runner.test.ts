@@ -6,7 +6,7 @@
 // which gets spliced into the prose as a Text node.
 
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 import { resolve } from './resolver.js';
 import { expand } from './expander.js';
 import { createLhBridge } from './lh-bridge.js';

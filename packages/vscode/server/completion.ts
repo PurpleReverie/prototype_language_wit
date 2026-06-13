@@ -2,8 +2,8 @@
 // the syntactic context (@, #, ::, access path, param body), and returns
 // a CompletionItem-shaped array tailored to that context.
 
-import type { NodeUse } from '@wit/parser';
-import { CORE_VOCAB_NAMES, RESERVED_OPAQUE } from '@wit/runtime';
+import type { NodeUse } from '@witlang/parser';
+import { CORE_VOCAB_NAMES, RESERVED_OPAQUE } from '@witlang/runtime';
 import type { DocumentState } from './document-cache.js';
 import { lookupAt } from './position-index.js';
 

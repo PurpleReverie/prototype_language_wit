@@ -1,4 +1,4 @@
-# @wit/parser
+# @witlang/parser
 
 The Wit language parser. Reads Wit source and produces a typed AST.
 
@@ -33,13 +33,13 @@ Produces a `nodeDef` named `greeting` with one declared capture
 
 ## Public API
 
-`@wit/parser` exposes a small, curated surface. See `src/index.ts` for
+`@witlang/parser` exposes a small, curated surface. See `src/index.ts` for
 the canonical list. The main entry is `parse(source, file?)` which
 returns a `Document` node. Errors are thrown as `WitError` instances
 carrying a stable `code` and a `loc`.
 
 ```ts
-import { parse, WitError } from '@wit/parser';
+import { parse, WitError } from '@witlang/parser';
 
 try {
   const doc = parse(source, '/path/to/file.wit');

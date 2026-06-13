@@ -26,8 +26,8 @@ import type {
   Collection,
   DataValue,
   Param,
-} from '@wit/parser';
-import type { ExpandedDocument } from '@wit/runtime';
+} from '@witlang/parser';
+import type { ExpandedDocument } from '@witlang/runtime';
 import { escapeHtml } from './escape.js';
 import { tryRenderCore } from './render-core-vocab.js';
 import { tryRenderTable } from './render-table.js';

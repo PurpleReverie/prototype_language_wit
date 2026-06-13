@@ -6,7 +6,7 @@
 // parse → resolve → expand and then poke the bridge directly.
 
 import { describe, it, expect } from 'vitest';
-import { parse } from '@wit/parser';
+import { parse } from '@witlang/parser';
 import { resolve } from './resolver.js';
 import { expand } from './expander.js';
 import { createLhBridge } from './lh-bridge.js';

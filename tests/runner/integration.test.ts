@@ -16,8 +16,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import { parse } from '@wit/parser';
-import { resolve as resolveDoc, expand } from '@wit/runtime';
+import { parse } from '@witlang/parser';
+import { resolve as resolveDoc, expand } from '@witlang/runtime';
 
 import {
   diffSnapshot,

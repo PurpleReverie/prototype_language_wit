@@ -2,7 +2,7 @@
 // NodeDef + DataDef entries. LSP `DocumentSymbol` is hierarchical, but
 // flat is fine for a v1 outline and saves on nesting bugs.
 
-import type { Document, NodeDef, DataDef, Block, Loc } from '@wit/parser';
+import type { Document, NodeDef, DataDef, Block, Loc } from '@witlang/parser';
 import type { DocumentState } from './document-cache.js';
 
 export interface SymbolEntry {

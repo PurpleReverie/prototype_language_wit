@@ -19,8 +19,8 @@ import type {
   NodeDef,
   DataDef,
   ReferenceDirective,
-} from '@wit/parser';
-import { parse } from '@wit/parser';
+} from '@witlang/parser';
+import { parse } from '@witlang/parser';
 
 import type { ResolvedDocument } from './resolved-ast.js';
 import { ResolverError, RuntimeErrorCode } from './errors.js';

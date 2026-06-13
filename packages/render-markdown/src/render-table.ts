@@ -5,11 +5,11 @@
 // schema-record). Multi-line cell content is collapsed to spaces — for
 // rich cells the author should reach for `@dl` etc.
 
-import { tryParseCollectionFromText } from '@wit/parser';
+import { tryParseCollectionFromText } from '@witlang/parser';
 import type {
   Collection as CollectionNode, DataValue, Inline, NodeUse, Param,
   Record as RecordNode,
-} from '@wit/parser';
+} from '@witlang/parser';
 
 type InlineRenderer = (item: Inline) => string;
 
