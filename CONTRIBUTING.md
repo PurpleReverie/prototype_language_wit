@@ -50,10 +50,3 @@ The cadence is documented in [`RULES.md`](./RULES.md). The short version:
 - Reference any related issue.
 - Keep the diff small enough that I can review it in a sitting.
 
-## AI-assisted development
-
-Wit was developed collaboratively with Claude (Anthropic's AI assistant).
-The engineering process — milestone gating, file/function size budgets,
-test-first cadence — is documented in [`RULES.md`](./RULES.md) so
-contributors can read it and understand the rhythm. Human review is
-required on every change.

@@ -164,14 +164,6 @@ strings, multi-line values, and block-aware capture substitution.
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md). Issues and PRs welcome —
 I aim to triage within a week.
 
-## How this was built
-
-Wit was developed collaboratively with Claude (Anthropic's AI assistant).
-The engineering process — file-size constraints, test-first cadence,
-milestone gating — is documented in [`RULES.md`](./RULES.md). The
-project's design log lives in [`PLAN.md`](./PLAN.md). Human review on
-every change.
-
 ## License
 
 [MIT](./LICENSE).

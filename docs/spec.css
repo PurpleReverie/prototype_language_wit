@@ -1,0 +1,202 @@
+/* Print-friendly styling for the Wit language specification PDF.
+   Based on scratch/wit-walkthrough.css with light adjustments for
+   long-form spec material (deeper TOC, wider tables). */
+
+@page {
+  size: A4;
+  margin: 0.9in 0.85in;
+}
+
+html {
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  line-height: 1.55;
+}
+
+body {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1.title {
+  font-size: 26pt;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0.2em;
+  page-break-after: avoid;
+}
+
+p.subtitle {
+  font-size: 13pt;
+  color: #444;
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: 2.2em;
+}
+
+p.author, p.date {
+  color: #888;
+  font-size: 10pt;
+  margin: 0;
+}
+
+h1 {
+  font-size: 18pt;
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid #ddd;
+  page-break-after: avoid;
+  page-break-before: auto;
+}
+
+h1:first-of-type, h1.title { border-bottom: none; }
+
+h2 {
+  font-size: 13.5pt;
+  margin-top: 1.4em;
+  margin-bottom: 0.4em;
+  color: #2a2a2a;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 11.5pt;
+  margin-top: 1.1em;
+  margin-bottom: 0.3em;
+  color: #2a2a2a;
+  page-break-after: avoid;
+}
+
+h4 {
+  font-size: 10.5pt;
+  margin-top: 0.9em;
+  margin-bottom: 0.25em;
+  color: #2a2a2a;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0 0 0.6em 0;
+  orphans: 3;
+  widows: 3;
+}
+
+ul, ol {
+  margin: 0.3em 0 0.9em 0;
+  padding-left: 1.4em;
+}
+
+ul li, ol li {
+  margin-bottom: 0.25em;
+}
+
+code {
+  font-family: "Menlo", "Monaco", "Consolas", monospace;
+  font-size: 9.5pt;
+  background-color: #f4f4f4;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #c7254e;
+}
+
+pre {
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+  padding: 0.7em 0.9em;
+  margin: 0.8em 0;
+  overflow-x: auto;
+  font-size: 9pt;
+  line-height: 1.45;
+  page-break-inside: avoid;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  color: #1a1a1a;
+  font-size: inherit;
+}
+
+blockquote {
+  border-left: 3px solid #999;
+  margin: 0.8em 0 0.8em 0;
+  padding-left: 1em;
+  color: #444;
+  font-style: italic;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.8em 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+
+a {
+  color: #1a4e8a;
+  text-decoration: none;
+}
+
+strong {
+  font-weight: 600;
+}
+
+em {
+  font-style: italic;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1.5em 0;
+}
+
+/* Pandoc-generated table of contents */
+nav#TOC {
+  margin: 1em 0 2.5em 0;
+  font-size: 10pt;
+  page-break-after: always;
+}
+
+nav#TOC ul {
+  list-style: none;
+  padding-left: 1em;
+}
+
+nav#TOC > ul {
+  padding-left: 0;
+}
+
+nav#TOC a {
+  color: #1a1a1a;
+}
+
+nav#TOC ul ul {
+  font-size: 9.5pt;
+  color: #555;
+}
+
+/* Page break helpers */
+h1 + p, h1 + ul, h1 + ol, h1 + pre, h1 + table { page-break-before: avoid; }
