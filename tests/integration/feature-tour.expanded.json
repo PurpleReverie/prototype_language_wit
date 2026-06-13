@@ -1,7 +1,7 @@
 {
   "error": {
     "code": "E_MISSING_REFERENCE_FILE",
-    "message": "Referenced file not found: /Users/taurajgreig/Projects/Personal/prototype_language_wit/tests/integration/feature-tour-missing.wit"
+    "message": "Referenced file not found: <repo>/tests/integration/feature-tour-missing.wit"
   },
   "ok": false,
   "stage": "resolve"

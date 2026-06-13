@@ -330,9 +330,14 @@ Verify:
 ### 13. Install the tarballs into a scratch project
 
 ```bash
+REPO=$(pwd)
 mkdir /tmp/wit-smoke && cd /tmp/wit-smoke
 npm init -y
-npm install /Users/taurajgreig/Projects/Personal/prototype_language_wit/packages/cli/witlang-cli-0.1.0.tgz
+npm install "$REPO/packages/cli/witlang-cli-0.1.0.tgz" \
+            "$REPO/packages/parser/witlang-parser-0.1.0.tgz" \
+            "$REPO/packages/runtime/witlang-runtime-0.1.0.tgz" \
+            "$REPO/packages/render-html/witlang-render-html-0.1.0.tgz" \
+            "$REPO/packages/render-markdown/witlang-render-markdown-0.1.0.tgz"
 ```
 
 This pulls cli + parser + runtime + render-html + render-markdown

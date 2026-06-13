@@ -99,13 +99,21 @@ function serializeError(err: unknown): unknown {
   if (err && typeof err === 'object') {
     const e = err as { code?: unknown; message?: unknown; loc?: unknown };
     const out: Record<string, unknown> = {
-      message: typeof e.message === 'string' ? e.message : String(err),
+      message: normalizePaths(
+        typeof e.message === 'string' ? e.message : String(err),
+      ),
     };
     if (typeof e.code === 'string') out.code = e.code;
     if (e.loc !== undefined) out.loc = e.loc;
     return out;
   }
-  return { message: String(err) };
+  return { message: normalizePaths(String(err)) };
+}
+
+// Strip the repo root from error messages so snapshots are stable across
+// machines (the resolver reports absolute paths for clarity at runtime).
+function normalizePaths(s: string): string {
+  return s.split(REPO_ROOT + '/').join('<repo>/');
 }
 
 function assertSnapshotMatches(
