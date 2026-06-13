@@ -4,3 +4,4 @@ dist
 *.tsbuildinfo
 *.vsix
 scratch/
+.agent-state/

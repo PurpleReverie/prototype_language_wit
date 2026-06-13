@@ -2,7 +2,7 @@
 
 All notable changes to Wit will be documented in this file.
 
-## 0.1.0 — 2026-06-13
+## 0.1.0 — 2026-06-14
 
 Initial public release.
 
