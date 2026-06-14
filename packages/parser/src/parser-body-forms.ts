@@ -17,6 +17,7 @@
 
 import { ErrorCode } from './errors.js';
 import { ParseError } from './parser-errors.js';
+import { probeParamValue } from './parser-data.js';
 import type {
   Block,
   Comment,
@@ -304,11 +305,13 @@ export function formFillToParams(
   loc: Loc,
 ): Param[] {
   const fields = parseFormFillFields(rawText, loc);
-  return fields.map((f) => ({
-    name: f.key,
-    value: f.value,
-    loc: structuredClone(loc),
-  }));
+  return fields.map((f) => {
+    const pLoc = structuredClone(loc);
+    const param: Param = { name: f.key, value: f.value, loc: pLoc };
+    const probed = probeParamValue(f.value, pLoc);
+    if (probed !== null) param.typedValue = probed;
+    return param;
+  });
 }
 
 // Silence unused-symbol warnings for types used only in JSDoc.

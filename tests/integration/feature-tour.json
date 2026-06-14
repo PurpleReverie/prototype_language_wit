@@ -481,6 +481,10 @@
               },
               {
                 "name": "year",
+                "typedValue": {
+                  "kind": "numberValue",
+                  "value": 2024
+                },
                 "value": "2024"
               }
             ],
@@ -512,6 +516,10 @@
               },
               {
                 "name": "year",
+                "typedValue": {
+                  "kind": "numberValue",
+                  "value": 2024
+                },
                 "value": "2024"
               }
             ],
@@ -599,6 +607,10 @@
               },
               {
                 "name": "year",
+                "typedValue": {
+                  "kind": "numberValue",
+                  "value": 2024
+                },
                 "value": "2024"
               }
             ],
@@ -627,6 +639,10 @@
               },
               {
                 "name": "year",
+                "typedValue": {
+                  "kind": "numberValue",
+                  "value": 2024
+                },
                 "value": "2024"
               }
             ],
@@ -655,6 +671,10 @@
               },
               {
                 "name": "year",
+                "typedValue": {
+                  "kind": "numberValue",
+                  "value": 2024
+                },
                 "value": "2024"
               }
             ],
@@ -738,6 +758,10 @@
           },
           {
             "name": "year",
+            "typedValue": {
+              "kind": "numberValue",
+              "value": 2024
+            },
             "value": "2024"
           }
         ],

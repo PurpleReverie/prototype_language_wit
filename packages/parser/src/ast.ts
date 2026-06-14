@@ -12,6 +12,11 @@ export interface Param extends HasLoc {
   // A node-use parameter. `name` is null for positional values.
   name: string | null;
   value: string;
+  // M-W16: shape-probed typed value. Populated when the captured text
+  // looks like a collection (`[ ... ]`), record (`{ ... }`), or scalar
+  // literal (number / boolean / null). Pure prose stays as `value` only.
+  // Optional/additive so existing `param.value` consumers keep working.
+  typedValue?: DataValue;
 }
 
 export interface AccessPath extends HasLoc {

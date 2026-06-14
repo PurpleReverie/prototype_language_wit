@@ -12,6 +12,50 @@
             "params": [
               {
                 "name": "rows",
+                "typedValue": {
+                  "items": [
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Article"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "Note"
+                        }
+                      ],
+                      "kind": "collection"
+                    },
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Kāwanatanga"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "The practice of good governance, spanning multiple lines."
+                        }
+                      ],
+                      "kind": "collection"
+                    },
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Tino rangatiratanga"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "Self-determination."
+                        }
+                      ],
+                      "kind": "collection"
+                    }
+                  ],
+                  "kind": "collection"
+                },
                 "value": "[[Article, Note], [Kāwanatanga, ! The practice of good governance, spanning multiple lines. !], [Tino rangatiratanga, Self-determination.]]"
               }
             ],

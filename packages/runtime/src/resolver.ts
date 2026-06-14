@@ -246,10 +246,23 @@ function bindUses(
 
 function bindBlock(block: Block, ctx: BindCtx): void {
   if (block.kind === 'nodeUse') return bindNodeUse(block, ctx);
-  if (block.kind === 'nodeDef') return bindChildren(block.body, ctx);
+  if (block.kind === 'nodeDef') return bindNodeDefBody(block, ctx);
   if (block.kind === 'paragraph') return bindInlines(block.children, ctx);
   if (block.kind === 'ifStatement') return bindIf(block, ctx);
   if (block.kind === 'eachStatement') return bindEach(block, ctx);
+}
+
+// M-W16: a NodeDef body sees its capture list as in-scope names so
+// `@cap` and `@cap.field` inside the body don't fail resolution. They
+// resolve at expand time against the bound param's typedValue (or
+// against the interpolation env for scalar / prose values).
+function bindNodeDefBody(def: NodeDef, ctx: BindCtx): void {
+  for (const cap of def.captures) ctx.iterScope.push(cap);
+  try {
+    bindChildren(def.body, ctx);
+  } finally {
+    for (let i = 0; i < def.captures.length; i++) ctx.iterScope.pop();
+  }
 }
 
 function bindIf(block: IfStatement, ctx: BindCtx): void {

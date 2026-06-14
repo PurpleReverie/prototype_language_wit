@@ -61,6 +61,10 @@
           },
           {
             "name": "year",
+            "typedValue": {
+              "kind": "numberValue",
+              "value": 2021
+            },
             "value": "2021"
           },
           {

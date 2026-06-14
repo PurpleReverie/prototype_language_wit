@@ -89,6 +89,38 @@ export interface CollectionParseResult {
   endPos: number;
 }
 
+// M-W16: shape-probe a captured param value string. Returns the typed
+// DataValue when the string looks like a collection / record / number /
+// boolean / null literal; returns null for plain prose. Used at param
+// capture time to type pipe / form-fill / parens values so `(each @x)`
+// and `@x.field` can target them at expand time.
+export function probeParamValue(raw: string, loc: Loc): DataValue | null {
+  const trimmed = raw.trim();
+  if (trimmed.length === 0) return null;
+  if (trimmed.charAt(0) === '[') {
+    const c = tryParseCollectionFromText(trimmed, loc);
+    if (c !== null && trimmed.slice(c.endPos).trim().length === 0) {
+      return c.collection;
+    }
+    return null;
+  }
+  if (trimmed.charAt(0) === '{') {
+    const r = tryParseRecordFromText(trimmed, loc);
+    if (r !== null && trimmed.slice(r.endPos).trim().length === 0) {
+      return r.record;
+    }
+    return null;
+  }
+  // Scalar literal probe — only fires for bareword numbers / booleans / null.
+  // Quoted strings and plain prose stay untyped (the runtime keeps using
+  // `param.value` for those).
+  if (trimmed === 'true' || trimmed === 'false' || trimmed === 'null' ||
+      NUMBER_RE.test(trimmed)) {
+    return classifyScalar(trimmed, loc);
+  }
+  return null;
+}
+
 export function tryParseRecordFromText(
   src: string,
   base: Loc,

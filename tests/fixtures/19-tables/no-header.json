@@ -12,10 +12,45 @@
             "params": [
               {
                 "name": "rows",
+                "typedValue": {
+                  "items": [
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "a"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "b"
+                        }
+                      ],
+                      "kind": "collection"
+                    },
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "c"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "d"
+                        }
+                      ],
+                      "kind": "collection"
+                    }
+                  ],
+                  "kind": "collection"
+                },
                 "value": "[[a, b], [c, d]]"
               },
               {
                 "name": "header",
+                "typedValue": {
+                  "kind": "booleanValue",
+                  "value": false
+                },
                 "value": "false"
               }
             ],

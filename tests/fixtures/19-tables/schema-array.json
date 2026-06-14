@@ -59,6 +59,19 @@
             "params": [
               {
                 "name": "schema",
+                "typedValue": {
+                  "items": [
+                    {
+                      "kind": "stringValue",
+                      "value": "name"
+                    },
+                    {
+                      "kind": "stringValue",
+                      "value": "status"
+                    }
+                  ],
+                  "kind": "collection"
+                },
                 "value": "[name, status]"
               },
               {

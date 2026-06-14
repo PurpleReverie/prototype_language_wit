@@ -302,12 +302,47 @@ function emptyTextAt(loc: Loc): Text {
 function expandWithDef(use: NodeUse, def: NodeDef, ctx: ExpandCtx): Splice {
   guardDepth(ctx, use);
   ctx.depth++;
+  // M-W16: when captured params carry typed values (collection / record /
+  // scalar), push them as an iteration-env frame so `(each @name)` and
+  // `@name.field` inside the def body can resolve against the param.
+  const frame = buildTypedParamFrame(use, def);
+  if (frame !== null) ctx.iterEnv.push(frame);
   try {
     const spliced = expandNodeDef({ use, def });
     return expandSplice(spliced, ctx);
   } finally {
     ctx.depth--;
+    if (frame !== null) ctx.iterEnv.pop();
   }
+}
+
+function buildTypedParamFrame(
+  use: NodeUse,
+  def: NodeDef,
+): IterFrame | null {
+  if (use.params.length === 0) return null;
+  const frame: IterFrame = new Map();
+  // Field-keyed: match each param name against the def's captures.
+  // Positional: zip in capture order.
+  const fieldByName = new Map<string, DataValue>();
+  let posIdx = 0;
+  for (const p of use.params) {
+    if (p.typedValue === undefined) {
+      if (p.name === null) posIdx++;
+      continue;
+    }
+    if (p.name !== null) {
+      fieldByName.set(p.name, p.typedValue);
+      continue;
+    }
+    const target = def.captures[posIdx++];
+    if (target !== undefined) frame.set(target, p.typedValue);
+  }
+  for (const cap of def.captures) {
+    const v = fieldByName.get(cap);
+    if (v !== undefined) frame.set(cap, v);
+  }
+  return frame.size > 0 ? frame : null;
 }
 
 function guardDepth(ctx: ExpandCtx, use: NodeUse): void {

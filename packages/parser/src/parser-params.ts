@@ -15,8 +15,18 @@
 
 import type { Param } from './ast.js';
 import type { Loc } from './loc.js';
+import { probeParamValue } from './parser-data.js';
 import type { TokenCursor } from './parser-cursor.js';
 import type { Token } from './tokens.js';
+
+// M-W16: attach a typed value to a Param when the captured string
+// looks like a collection / record / scalar literal. Mutates and
+// returns the param.
+function withTypedValue(p: Param): Param {
+  const probed = probeParamValue(p.value, p.loc);
+  if (probed !== null) p.typedValue = probed;
+  return p;
+}
 
 // ---------------------------------------------------------------------------
 // Public entries.
@@ -158,9 +168,9 @@ function slotToParam(slot: SlotTokens): Param | null {
   const left = slot.text.trim();
   const right = maybeUnquote(slot.rest.trim());
   if (left.length === 0 && right.length === 0 && !slot.flag) return null;
-  if (slot.hyphen) return namedFromHyphen(left, right, slot.loc);
+  if (slot.hyphen) return withTypedValue(namedFromHyphen(left, right, slot.loc));
   if (slot.flag) return flagParam(left, slot.loc);
-  return splitFirstWord(left, slot.loc);
+  return withTypedValue(splitFirstWord(left, slot.loc));
 }
 
 // M15.form-fill: a `rest` value that's exactly a `"..."` quoted string
