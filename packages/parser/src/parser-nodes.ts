@@ -163,7 +163,17 @@ function detectShape(
 
 function atParagraphEnd(cursor: TokenCursor): boolean {
   const tok = cursor.current();
-  return tok.kind === 'paragraphBreak' || tok.kind === 'eof';
+  // W-15: a bare `@name` at end of a def body should self-close. The
+  // surrounding closer (`name#` hash-close, `!!`, next def opener) is
+  // an implicit paragraph boundary for shape-detection purposes — it
+  // ends the containing context so the bare ref can't possibly have
+  // a body within the def.
+  return tok.kind === 'paragraphBreak' ||
+         tok.kind === 'eof' ||
+         tok.kind === 'hashClose' ||
+         tok.kind === 'bangBang' ||
+         tok.kind === 'hashOpen' ||
+         tok.kind === 'additivePrefix';
 }
 
 function hasMatchingClose(

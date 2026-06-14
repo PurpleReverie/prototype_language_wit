@@ -56,9 +56,41 @@ export function expandNodeDef(args: ExpandDefArgs): Splice {
   const env = isFieldKeyed(args.use.paramsSource)
     ? buildRecordCaptureEnv(args.use, args.def)
     : buildCaptureEnv(args.def.captures, args.use.params);
-  const body = args.use.body ?? [];
+  // W-9: bodySlot is a def-side marker. Any `...` in the USE's body is
+  // literal content and must not be re-substituted when the def-side
+  // bodySlot splices the use body in. Convert use-body bodySlots to
+  // literal text `...` before substitution.
+  const body = literalizeBodySlots(args.use.body ?? []);
   const cloned = structuredClone(args.def.body) as (Block | Inline)[];
   return substituteAll(cloned, env, body);
+}
+
+// W-9: recursively replace bodySlot inline nodes inside a use's body
+// with a Text("...") node. Preserves locs so error messages stay
+// anchored. Doesn't touch bodySlots inside NodeDefs nested in the
+// body (they own their own def-side semantics).
+function literalizeBodySlots(
+  items: readonly (Block | Inline)[],
+): (Block | Inline)[] {
+  return items.map((it) => literalizeOne(it));
+}
+
+function literalizeOne(item: Block | Inline): Block | Inline {
+  if (item.kind === 'bodySlot') {
+    return { kind: 'text', value: '...', loc: structuredClone(item.loc) };
+  }
+  if (item.kind === 'paragraph') {
+    return { ...item, children: item.children.map((c) =>
+      literalizeOne(c) as Inline) };
+  }
+  if (item.kind === 'italic' || item.kind === 'bold') {
+    return { ...item, children: item.children.map((c) =>
+      literalizeOne(c) as Inline) };
+  }
+  if (item.kind === 'nodeUse' && item.body !== null) {
+    return { ...item, body: literalizeBodySlots(item.body) };
+  }
+  return item;
 }
 
 function buildCaptureEnv(
