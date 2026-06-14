@@ -37,6 +37,9 @@ export interface FileCtx {
     fileCtx: FileCtx,
     rootPath: string,
   ) => ResolvedDocument;
+  // W-10: when set, swallow E_MISSING_REFERENCE_FILE and skip the
+  // referenced merge instead of throwing.
+  onMissingReference?: (path: string) => null | void;
 }
 
 export function defaultFileReader(absPath: string): string {
@@ -68,7 +71,21 @@ export function mergeReferences(
 ): void {
   for (const directive of collectReferences(doc.children)) {
     const absPath = computeAbsPath(rootPath, directive.path);
-    const refDoc = loadReferenced(absPath, directive, ctx);
+    let refDoc: ResolvedDocument;
+    try {
+      refDoc = loadReferenced(absPath, directive, ctx);
+    } catch (err) {
+      // W-10: optional-reference callback can swallow the missing-file
+      // error and skip this directive. Any other resolver error
+      // (circular, duplicate, etc.) still propagates.
+      if (err instanceof ResolverError &&
+          err.code === RuntimeErrorCode.E_MISSING_REFERENCE_FILE &&
+          ctx.onMissingReference !== undefined) {
+        ctx.onMissingReference(absPath);
+        continue;
+      }
+      throw err;
+    }
     mergeInto(refDoc, targets, directive);
     targets.resolvedFiles.set(absPath, refDoc);
     for (const [p, r] of refDoc.resolvedFiles) {

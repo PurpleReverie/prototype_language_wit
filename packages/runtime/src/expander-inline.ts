@@ -164,6 +164,19 @@ function substituteOne(
   bodyContent: readonly (Block | Inline)[],
 ): (Block | Inline)[] {
   if (item.kind === 'interpolation') {
+    // W-8: an unset capture used to silently substitute empty. Now: throw
+    // E_UNRESOLVED_REFERENCE so the caller at the use site knows it
+    // missed a required param. Pre-existing tests rely on substituting
+    // empty when env carries an explicitly-empty string (flag params,
+    // empty quoted strings), so the missing-key check is "name not in
+    // env at all", not "value is empty".
+    if (!env.has(item.name)) {
+      throw new ExpanderError(
+        RuntimeErrorCode.E_UNRESOLVED_REFERENCE,
+        `Missing required capture "${item.name}" at @${item.name}`,
+        item.loc,
+      );
+    }
     return expandInterpolationValue(env.get(item.name) ?? '', item.loc);
   }
   if (item.kind === 'bodySlot') {

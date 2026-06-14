@@ -37,6 +37,12 @@ import { isReservedNodeName } from './core-vocab.js';
 export interface ResolveOptions {
   rootPath?: string;
   fileReader?: FileReader;
+  // W-10: when set, a missing referenced file dispatches to this
+  // callback instead of throwing E_MISSING_REFERENCE_FILE. The callback
+  // may return `null` to silently skip the reference, or throw to
+  // restore the strict behaviour. Useful for in-progress documents
+  // where some references are intentionally unresolved.
+  onMissingReference?: (path: string) => null | void;
 }
 
 export function resolve(
@@ -48,6 +54,7 @@ export function resolve(
     resolving: new Set<string>(),
     resolved: new Map<string, ResolvedDocument>(),
     resolveDocument: resolveDocument,
+    onMissingReference: options.onMissingReference,
   };
   const rootPath = options.rootPath;
   guardReferences(doc, rootPath);
