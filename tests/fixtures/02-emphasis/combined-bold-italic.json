@@ -18,20 +18,17 @@
             "value": "He read the inscription "
           },
           {
-            "kind": "text",
-            "value": "_"
-          },
-          {
-            "kind": "text",
-            "value": "*aloud"
-          },
-          {
-            "kind": "text",
-            "value": "*"
-          },
-          {
-            "kind": "text",
-            "value": "_"
+            "children": [
+              {
+                "kind": "text",
+                "value": "*aloud"
+              },
+              {
+                "kind": "text",
+                "value": "*"
+              }
+            ],
+            "kind": "italic"
           },
           {
             "kind": "text",

@@ -38,16 +38,13 @@
             "value": "). "
           },
           {
-            "kind": "text",
-            "value": "_"
-          },
-          {
-            "kind": "interpolation",
-            "name": "title"
-          },
-          {
-            "kind": "text",
-            "value": "_"
+            "children": [
+              {
+                "kind": "interpolation",
+                "name": "title"
+              }
+            ],
+            "kind": "italic"
           },
           {
             "kind": "text",

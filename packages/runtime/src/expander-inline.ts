@@ -135,7 +135,11 @@ function substituteOne(
     return expandInterpolationValue(env.get(item.name) ?? '', item.loc);
   }
   if (item.kind === 'bodySlot') {
-    return structuredClone(bodyContent) as (Block | Inline)[];
+    // W-3a: trim leading/trailing whitespace from the body content's
+    // first/last Text nodes before splicing. The use-site syntax
+    // `@x Yell x@` carries spaces around `Yell` from the prose lex,
+    // which would survive into the def's `*...*` wrap as `* Yell *`.
+    return trimBodyEdges(structuredClone(bodyContent) as (Block | Inline)[]);
   }
   if (item.kind === 'paragraph') {
     return substituteParagraph(item, env, bodyContent);
@@ -321,5 +325,50 @@ function renderTerminal(value: DataValue, loc: Loc): Text | null {
 
 function textNode(value: string, loc: Loc): Text {
   return { kind: 'text', value, loc: structuredClone(loc) };
+}
+
+// W-3a: trim leading/trailing whitespace on the first/last Text nodes
+// of a body-slot splice. Recurses into a leading/trailing Paragraph so
+// `@x Yell x@` → `[Paragraph([Text("Yell")])]` not `[Paragraph([Text(" Yell ")])]`.
+// Drops empty Text nodes at the edges.
+function trimBodyEdges(items: (Block | Inline)[]): (Block | Inline)[] {
+  if (items.length === 0) return items;
+  trimLeading(items);
+  trimTrailing(items);
+  return items;
+}
+
+function trimLeading(items: (Block | Inline)[]): void {
+  while (items.length > 0) {
+    const first = items[0]!;
+    if (first.kind === 'text') {
+      const trimmed = (first as Text).value.replace(/^[ \t\n]+/, '');
+      if (trimmed.length === 0) { items.shift(); continue; }
+      (first as Text).value = trimmed;
+      return;
+    }
+    if (first.kind === 'paragraph') {
+      trimLeading((first as Paragraph).children as (Block | Inline)[]);
+      return;
+    }
+    return;
+  }
+}
+
+function trimTrailing(items: (Block | Inline)[]): void {
+  while (items.length > 0) {
+    const last = items[items.length - 1]!;
+    if (last.kind === 'text') {
+      const trimmed = (last as Text).value.replace(/[ \t\n]+$/, '');
+      if (trimmed.length === 0) { items.pop(); continue; }
+      (last as Text).value = trimmed;
+      return;
+    }
+    if (last.kind === 'paragraph') {
+      trimTrailing((last as Paragraph).children as (Block | Inline)[]);
+      return;
+    }
+    return;
+  }
 }
 

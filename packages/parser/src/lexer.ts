@@ -176,8 +176,44 @@ function tryEmphasis(state: LexState, buf: RunBuf): boolean {
   const c = state.src.charAt(state.cur.offset);
   if (c !== '_' && c !== '*') return false;
   const marker = c as '_' | '*';
+  // W-2 / W-12c: when there's a prior unclosed emphasisOpen of the same
+  // marker still pending in the current paragraph AND this position
+  // could plausibly close (preceded by non-whitespace not same marker,
+  // followed by boundary), prefer CLOSE over OPEN. This unblocks
+  // `_::title::_` where the second `_` is followed by punctuation.
+  // Without this, the second `_` opens (because punctuation-as-follow
+  // passes the W-12c loosened open rule) and the first `_` falls back
+  // to literal text.
+  if (hasUnclosedEmphasisInParagraph(state, marker) &&
+      isPrecedingNonWsNotMarker(state, marker) &&
+      isFollowingBoundary(state) &&
+      tryRecognizeEmphasisClose(state, buf, marker)) {
+    return true;
+  }
   if (tryRecognizeEmphasisOpen(state, buf, marker)) return true;
   if (tryRecognizeEmphasisClose(state, buf, marker)) return true;
+  return false;
+}
+
+// Scan the tokens emitted since the last paragraph break for an
+// unmatched emphasisOpen of `marker`. Walks back to the paragraph
+// boundary; an emphasisClose seen first (counted as pending) must be
+// matched by an emphasisOpen further back. If we encounter an open
+// while no close is pending, that open is unmatched and we return true.
+function hasUnclosedEmphasisInParagraph(
+  state: LexState, marker: '_' | '*',
+): boolean {
+  let pendingCloses = 0;
+  for (let i = state.tokens.length - 1; i >= 0; i--) {
+    const t = state.tokens[i]!;
+    if (t.kind === 'paragraphBreak') return false;
+    if (t.kind === 'emphasisClose' && t.marker === marker) {
+      pendingCloses += 1;
+    } else if (t.kind === 'emphasisOpen' && t.marker === marker) {
+      if (pendingCloses === 0) return true;
+      pendingCloses -= 1;
+    }
+  }
   return false;
 }
 
