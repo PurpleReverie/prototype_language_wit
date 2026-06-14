@@ -156,6 +156,14 @@ function detectShape(
   if (paramsSource === 'pipes' && inline) {
     return hasMatchingClose(cursor, name, true) ? 'bodied' : 'self';
   }
+  // W-5: block-position pipe-form `@x |a v|` followed by a paragraph
+  // break and ANOTHER `@x ...` use of the same name — the later close
+  // (`x@`) belongs to the next invocation, not this one. The pipe-form
+  // should self-close here.
+  if (paramsSource === 'pipes' && atParagraphEnd(cursor) &&
+      nextParagraphStartsWithSameNodeOpen(cursor, name)) {
+    return 'bare';
+  }
   if (hasMatchingClose(cursor, name, inline)) return 'bodied';
   if (inline) return 'bare';
   return atParagraphEnd(cursor) ? 'bare' : 'bodied';
@@ -174,6 +182,18 @@ function atParagraphEnd(cursor: TokenCursor): boolean {
          tok.kind === 'bangBang' ||
          tok.kind === 'hashOpen' ||
          tok.kind === 'additivePrefix';
+}
+
+// W-5: peek past the upcoming paragraphBreak and check whether the
+// first content token is another nodeOpen of the same name.
+function nextParagraphStartsWithSameNodeOpen(
+  cursor: TokenCursor, name: string,
+): boolean {
+  let i = 0;
+  // Skip the current paragraphBreak run.
+  while (cursor.peek(i).kind === 'paragraphBreak') i += 1;
+  const tok = cursor.peek(i);
+  return tok.kind === 'nodeOpen' && tok.name === name;
 }
 
 function hasMatchingClose(
