@@ -271,7 +271,7 @@
               "key": "body",
               "value": {
                 "kind": "stringValue",
-                "value": "  Line one of the body.\n\n  Line two after a paragraph break."
+                "value": "Line one of the body.\n\nLine two after a paragraph break."
               }
             }
           ],
@@ -294,7 +294,7 @@
               "key": "body",
               "value": {
                 "kind": "stringValue",
-                "value": "  Line one of the body.\n\n  Line two after a paragraph break.\n  @h1 heading test h1@"
+                "value": "Line one of the body.\n\nLine two after a paragraph break.\n@h1 heading test h1@"
               }
             }
           ],
@@ -1179,7 +1179,7 @@
           },
           {
             "name": "body",
-            "value": "  Multi\n  line\n  value"
+            "value": "Multi\nline\nvalue"
           }
         ],
         "paramsSource": "form-fill"

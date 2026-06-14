@@ -17,7 +17,7 @@
               "key": "body",
               "value": {
                 "kind": "stringValue",
-                "value": "  Body intro paragraph.\n\n  @h1 inline heading h1@"
+                "value": "Body intro paragraph.\n\n@h1 inline heading h1@"
               }
             }
           ],

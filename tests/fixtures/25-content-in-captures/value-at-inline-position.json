@@ -17,7 +17,7 @@
               "key": "body",
               "value": {
                 "kind": "stringValue",
-                "value": "  Lead paragraph with _italic_ phrasing.\n\n  Trailing paragraph after a break."
+                "value": "Lead paragraph with _italic_ phrasing.\n\nTrailing paragraph after a break."
               }
             }
           ],

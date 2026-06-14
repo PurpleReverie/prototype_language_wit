@@ -336,11 +336,31 @@ function tryConsumeIndentedBlock(s: Scanner): StringValue | null {
     collected.pop();
   }
   s.pos = lastConsumedEnd;
+  // W-22: strip common leading indent so a record-style multi-line
+  // value renders flush rather than carrying 2-4 leading spaces.
+  const dedented = dedentCommon(collected);
   return {
     kind: 'stringValue',
-    value: collected.join('\n'),
+    value: dedented.join('\n'),
     loc: locOfRange(s, start, lastConsumedEnd),
   };
+}
+
+function dedentCommon(lines: readonly string[]): string[] {
+  let common: string | null = null;
+  for (const ln of lines) {
+    if (ln.length === 0) continue;
+    const m = /^[ \t]*/.exec(ln);
+    const lead = m === null ? '' : m[0];
+    if (common === null) { common = lead; continue; }
+    let i = 0;
+    const n = Math.min(common.length, lead.length);
+    while (i < n && common.charAt(i) === lead.charAt(i)) i += 1;
+    common = common.slice(0, i);
+    if (common.length === 0) break;
+  }
+  if (common === null || common.length === 0) return [...lines];
+  return lines.map((ln) => ln.length === 0 ? ln : ln.slice(common!.length));
 }
 
 // Scan a line (after outer-indent stripped) for the first top-level `,`

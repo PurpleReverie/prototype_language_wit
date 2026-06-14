@@ -62,13 +62,13 @@ document
 │       ├── field "title"
 │       │   └── stringValue "My card"
 │       └── field "body"
-│           └── stringValue "  Line one of the body.\n\n  Line two afte…"
+│           └── stringValue "Line one of the body.\n\nLine two after a …"
 ├── dataDef #card_b [type: record]
 │   └── record [keys: title,body]
 │       ├── field "title"
 │       │   └── stringValue "My card"
 │       └── field "body"
-│           └── stringValue "  Line one of the body.\n\n  Line two afte…"
+│           └── stringValue "Line one of the body.\n\nLine two after a …"
 ├── comment (line, "----------------------------------------…")
 ├── comment (line, "Node definitions — block, single-line, v…")
 ├── comment (line, "Captures: explicit list and implicit der…")
@@ -223,7 +223,7 @@ document
 ├── comment (line, "----------------------------------------…")
 ├── nodeUse @card [paramsSource: form-fill, params: 2]
 │   ├── param name="title" value="Long card"
-│   └── param name="body" value="  Multi\n  line\n  value"
+│   └── param name="body" value="Multi\nline\nvalue"
 ├── comment (line, "----------------------------------------…")
 ├── comment (line, "Block-aware capture substitution (M17).")
 ├── comment (line, "Record values can carry block-level cont…")

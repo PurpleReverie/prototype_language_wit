@@ -10,7 +10,7 @@
               "key": "a",
               "value": {
                 "kind": "stringValue",
-                "value": "  multi\n  line"
+                "value": "multi\nline"
               }
             },
             {

@@ -38,7 +38,7 @@
         "params": [
           {
             "name": "description",
-            "value": "  year: 1942 (the lamp went dim).\n  keeper: A. Vane."
+            "value": "year: 1942 (the lamp went dim).\nkeeper: A. Vane."
           }
         ],
         "paramsSource": "form-fill"

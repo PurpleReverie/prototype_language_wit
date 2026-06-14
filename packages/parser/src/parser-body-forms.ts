@@ -176,7 +176,33 @@ export function takeIndentedBlock(
   while (collected.length > 0 && collected[collected.length - 1] === '') {
     collected.pop();
   }
-  return { value: collected.join('\n'), nextIndex: i };
+  // W-22: strip the common leading indentation of the collected lines so
+  // a multi-line `body:` value renders as flush text instead of carrying
+  // 4 leading spaces from the source layout into every Text node.
+  return { value: dedentCommonLeading(collected).join('\n'), nextIndex: i };
+}
+
+// Strip the common leading whitespace from non-empty lines. Blank lines
+// stay blank. If lines contain no common prefix nothing is stripped.
+function dedentCommonLeading(lines: readonly string[]): string[] {
+  let common: string | null = null;
+  for (const ln of lines) {
+    if (ln.length === 0) continue;
+    const m = /^[ \t]*/.exec(ln);
+    const lead = m === null ? '' : m[0];
+    if (common === null) { common = lead; continue; }
+    common = longestCommonPrefix(common, lead);
+    if (common.length === 0) break;
+  }
+  if (common === null || common.length === 0) return [...lines];
+  return lines.map((ln) => ln.length === 0 ? ln : ln.slice(common.length));
+}
+
+function longestCommonPrefix(a: string, b: string): string {
+  const n = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < n && a.charAt(i) === b.charAt(i)) i += 1;
+  return a.slice(0, i);
 }
 
 function isStrictlyDeeperIndent(line: string, keyIndent: string): boolean {
