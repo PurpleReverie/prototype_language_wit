@@ -34,8 +34,14 @@ export function parseNodeDef(
 ): NodeDef | DataDef {
   const additive = consumeAdditive(cursor);
   const open = cursor.advance() as HashOpen;
-  const captures = consumeCaptures(cursor);
+  let captures = consumeCaptures(cursor);
   const shape = detectDefShape(cursor, open.name);
+  // W-1: single-line / value-block defs can write `#name: ||a, b|| body !!`
+  // — the capture list comes AFTER the leading colon. consumeCaptures
+  // already ran with the colon in the way, so try again past it.
+  if (captures === null && shape !== 'block') {
+    captures = consumeCapturesAfterColon(cursor);
+  }
   if (shape === 'single-line') {
     return parseSingleLineDef(cursor, open, captures, additive, opts);
   }
@@ -43,6 +49,32 @@ export function parseNodeDef(
     return parseValueBlockDef(cursor, open, captures, additive, opts);
   }
   return parseBlockDef(cursor, open, captures, additive, opts);
+}
+
+// W-1: a single-line / value-block def can place its capture list after
+// the leading colon: `#name: ||a, b|| body !!`. Peek past the colon
+// text-run and try consumeCaptures there. On match, rewrite the leading
+// colon token so the body parser sees only the post-colon, post-captures
+// remainder.
+function consumeCapturesAfterColon(cursor: TokenCursor): CaptureList {
+  const saved = cursor.position();
+  const tok = cursor.current();
+  if (tok.kind !== 'textRun') return null;
+  const m = /^[ \t]*:[ \t]*/.exec(tok.value);
+  if (m === null) return null;
+  const afterColon = tok.value.slice(m[0].length);
+  // Need the post-colon residue to be empty (the captures are the next
+  // token) before we advance past the colon.
+  if (afterColon.length > 0) return null;
+  cursor.advance(); // consume the colon text-run
+  if (cursor.current().kind !== 'captureOpen') {
+    cursor.reset(saved);
+    return null;
+  }
+  cursor.advance();
+  const text = readCaptureText(cursor);
+  expectCaptureClose(cursor);
+  return splitCaptureNames(text);
 }
 
 

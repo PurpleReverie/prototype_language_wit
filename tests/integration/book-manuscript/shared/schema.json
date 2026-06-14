@@ -11,18 +11,6 @@
         "body": [
           {
             "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": "author, title, year, publisher"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
             "value": " "
           },
           {
@@ -68,8 +56,8 @@
         ],
         "captures": [
           "author",
-          "year",
           "title",
+          "year",
           "publisher"
         ],
         "kind": "nodeDef",

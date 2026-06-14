@@ -11,18 +11,6 @@
         "body": [
           {
             "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": "author, title, year, page"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
             "value": " "
           },
           {
@@ -68,9 +56,9 @@
         ],
         "captures": [
           "author",
+          "title",
           "year",
-          "page",
-          "title"
+          "page"
         ],
         "kind": "nodeDef",
         "name": "cite",
