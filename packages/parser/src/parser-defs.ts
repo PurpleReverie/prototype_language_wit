@@ -15,6 +15,11 @@ import {
   tryParseRecordFromText,
 } from './parser-data.js';
 import { ParseError } from './parser-errors.js';
+import {
+  isEndHere,
+  isStatementStart,
+  parseStatementAfterParen,
+} from './parser-statements.js';
 import type {
   Block, Collection as CollectionNode, DataDef, Inline, NodeDef,
   Record as RecordNode,
@@ -385,12 +390,55 @@ function collectDefValue(
     if (!stopAtParaBreak && cursor.current().kind === 'paragraphBreak') {
       cursor.advance(); continue;
     }
+    // W-17: paren-statements (`(each ...)`, `(if ...)`) are block-level
+    // constructs that parseInline treats as inline-stops. In a def
+    // value-block body, parse them directly so additive partials can
+    // carry iteration / conditionals. `(end)` / `(else)` are not
+    // top-level statements; let parseInline emit them as inline tokens.
+    if (isStatementStart(cursor)) {
+      const block = parseStatementAfterParen(cursor, {
+        parseBlocks: (c, stop) => collectStatementBlocks(c, stop, opts),
+      });
+      out.push(block); continue;
+    }
     const before = cursor.position();
     for (const child of opts.parseInline(cursor)) out.push(child);
     if (cursor.position() === before) break; // forward-progress safety.
   }
   return out;
 }
+
+// W-17: collect blocks inside a paren-statement body until the supplied
+// stop predicate (typically isEndHere / isElseHere) fires. Inside the
+// body, plain inlines are gathered into Paragraphs via opts.parseInline;
+// nested (if)/(each) recurse here; def-value terminators (`!!`, `name#`,
+// next def-open) terminate as a safety net.
+function collectStatementBlocks(
+  cursor: TokenCursor,
+  stop: (c: TokenCursor) => boolean,
+  opts: NodeDefOptions,
+): Block[] {
+  const out: Block[] = [];
+  while (!cursor.isAtEnd() && !stop(cursor) && !isDefValueTerminator(cursor, false)) {
+    if (cursor.current().kind === 'paragraphBreak') { cursor.advance(); continue; }
+    if (isStatementStart(cursor)) {
+      const block = parseStatementAfterParen(cursor, {
+        parseBlocks: (c, s) => collectStatementBlocks(c, s, opts),
+      });
+      out.push(block);
+      continue;
+    }
+    const before = cursor.position();
+    const inlines = opts.parseInline(cursor);
+    if (inlines.length > 0) {
+      const first = inlines[0]!;
+      out.push({ kind: 'paragraph', children: inlines as never, loc: first.loc });
+    }
+    if (cursor.position() === before) break;
+  }
+  return out;
+}
+
 
 function isDefValueTerminator(
   cursor: TokenCursor, stopAtParaBreak: boolean,
