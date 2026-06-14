@@ -200,16 +200,21 @@ function parseFieldValueText(raw: string): string {
   return stripFormFillEscapes(v);
 }
 
-// Form-fill values only recognize `\"`, `\\`, `\:` escapes; other
+// Form-fill values recognize `\"`, `\\`, `\:`, and `\,` escapes; other
 // backslash sequences pass through literally (so `\_`, `\*` survive as
 // `\_`, `\*` because inline parsing doesn't run on the value).
+//
+// W-20: `\,` is the documented author-side opt-out so a literal comma
+// inside a `[ a, b, c ]` collection-shaped value can be safely captured
+// without splitting items. The backslash is dropped here so the comma
+// reaches the rendered output as a plain `,`.
 function stripFormFillEscapes(s: string): string {
   let out = '';
   for (let i = 0; i < s.length; i++) {
     const c = s.charAt(i);
     if (c === '\\' && i + 1 < s.length) {
       const next = s.charAt(i + 1);
-      if (next === ':' || next === '"' || next === '\\') {
+      if (next === ':' || next === '"' || next === '\\' || next === ',') {
         out += next; i += 1; continue;
       }
     }
@@ -246,8 +251,11 @@ export function stripEscapes(s: string): string {
     const c = s.charAt(i);
     if (c === '\\' && i + 1 < s.length) {
       const next = s.charAt(i + 1);
+      // W-20: include `,` so `\,` inside prose-shape captured values
+      // (e.g. a quoted bareword in `key value\, more`) reaches the
+      // renderer as a plain comma rather than a literal backslash.
       if (next === ':' || next === '"' || next === '\\' ||
-          next === '{' || next === '}') {
+          next === '{' || next === '}' || next === ',') {
         out += next; i += 1; continue;
       }
     }
