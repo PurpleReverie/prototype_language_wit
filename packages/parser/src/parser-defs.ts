@@ -9,7 +9,11 @@ import {
   isFormFillRawText,
 } from './parser-body-forms.js';
 import { resolveCaptures, type CaptureList } from './parser-captures.js';
-import { maybeAsDataValue } from './parser-data.js';
+import {
+  maybeAsDataValue,
+  tryParseCollectionFromText,
+  tryParseRecordFromText,
+} from './parser-data.js';
 import { ParseError } from './parser-errors.js';
 import type {
   Block, Collection as CollectionNode, DataDef, Inline, NodeDef,
@@ -212,6 +216,17 @@ function parseBangBangDef(
   const fastFillRec = rawValBlock !== null && !additive && captures === null &&
     isFormFillRawText(rawValBlock)
     ? formFillToRecord(rawValBlock, open.loc) : null;
+  // W-19: raw-text probe for `#name: [ ... ] !!` / `#name: { ... } !!`
+  // BEFORE the inline parser runs. Applies to both single-line and
+  // value-block shapes — a multi-line collection literal `[\n  { ... }\n]`
+  // classifies as value-block due to the newline. Without this probe,
+  // a `_x_` inside a collection / record value gets parsed as italic
+  // and splits the body's single Text node — silently downgrading
+  // what should be a dataDef(value=collection) into a nodeDef.
+  const rawForData = rawValBlock ?? (shape === 'single-line'
+    ? peekRawBangBangBody(cursor, open) : null);
+  const rawDataValue = rawForData !== null && !additive && captures === null
+    ? probeRawDataValue(rawForData, open.loc) : null;
   const raw = shape === 'single-line'
     ? collectSingleLineValue(cursor, opts) : collectValueBlock(cursor, opts);
   const trimmed = shape === 'single-line' ? trimTrailingTextWs(raw) : raw;
@@ -219,6 +234,9 @@ function parseBangBangDef(
     shape === 'single-line' ? maybeAsDataValue(trimmed) : trimmed;
   const closeLoc = expectBangBang(cursor, open);
   const loc = spanLoc(open.loc, closeLoc);
+  if (rawDataValue !== null) {
+    return { kind: 'dataDef', name: open.name, value: rawDataValue, loc };
+  }
   if (shape === 'single-line' && !additive) {
     const dataValue = extractPureDataValue(body);
     if (dataValue !== null) {
@@ -233,6 +251,33 @@ function parseBangBangDef(
     captures: resolveCaptures(captures, body),
     shape, body, additive, loc,
   };
+}
+
+// W-19: probe the raw single-line body text for `[ … ]` / `{ … }`. If the
+// whole body (after trimming whitespace and the trailing `!!`) is a
+// well-formed collection or record literal, return it. Underscores or
+// asterisks inside the values stay as content; no inline emphasis runs.
+// Parse errors from the data parser are absorbed (return null) so the
+// regular inline-parsing path kicks in for genuine non-literal bodies.
+function probeRawDataValue(
+  rawBody: string,
+  loc: Loc,
+): RecordNode | CollectionNode | null {
+  const text = rawBody.replace(/[ \t\n]+$/, '');
+  if (text.length === 0) return null;
+  if (text.charAt(0) !== '[' && text.charAt(0) !== '{') return null;
+  try {
+    if (text.charAt(0) === '[') {
+      const c = tryParseCollectionFromText(text, loc);
+      if (c === null || text.slice(c.endPos).trim().length !== 0) return null;
+      return c.collection;
+    }
+    const r = tryParseRecordFromText(text, loc);
+    if (r === null || text.slice(r.endPos).trim().length !== 0) return null;
+    return r.record;
+  } catch {
+    return null;
+  }
 }
 
 // Peek raw source between the value-block opener and its closing `!!`
