@@ -47,7 +47,11 @@
           },
           {
             "kind": "text",
-            "value": "). _"
+            "value": "). "
+          },
+          {
+            "kind": "text",
+            "value": "_"
           },
           {
             "kind": "interpolation",
@@ -55,7 +59,11 @@
           },
           {
             "kind": "text",
-            "value": "_."
+            "value": "_"
+          },
+          {
+            "kind": "text",
+            "value": "."
           }
         ],
         "captures": [

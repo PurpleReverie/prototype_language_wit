@@ -15,7 +15,15 @@
           },
           {
             "kind": "text",
-            "value": "He read the inscription _*aloud"
+            "value": "He read the inscription "
+          },
+          {
+            "kind": "text",
+            "value": "_"
+          },
+          {
+            "kind": "text",
+            "value": "*aloud"
           },
           {
             "kind": "text",
@@ -23,20 +31,29 @@
           },
           {
             "kind": "text",
-            "value": "_, then read it again *"
+            "value": "_"
+          },
+          {
+            "kind": "text",
+            "value": ", then read it again "
           },
           {
             "children": [
               {
-                "kind": "text",
-                "value": "silently"
+                "children": [
+                  {
+                    "kind": "text",
+                    "value": "silently"
+                  }
+                ],
+                "kind": "italic"
               }
             ],
-            "kind": "italic"
+            "kind": "bold"
           },
           {
             "kind": "text",
-            "value": "*."
+            "value": "."
           }
         ],
         "kind": "paragraph"
