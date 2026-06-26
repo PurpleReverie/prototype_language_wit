@@ -25,3 +25,31 @@ at one thing alone.
 ~ when a reference needs no parameters at all, the bare name is enough
 
 The lamp burned, as @weil knew it would.
+
+
+~ ── bibliography entries — pick the invocation form that reads best ─────────────
+~
+~ for a bibliography (one citation per block, not woven into prose), any of
+~ the param-invocation forms work against the same template. block-form defs
+~ with `||captures||` are the form that binds named arguments at the call.
+
+#ref ||author, title, year, page||
+_::title::_, ::author:: (::year::), p. ::page::
+ref#
+
+~ form-fill body — most readable when fields are many or values are long
+
+@ref
+  author: Trinity House
+  title: Lighthouse Engineering — a Practical Guide
+  year: 1981
+  page: 203
+ref@
+
+~ record-arg — names + brace literal, comma-separated
+
+@ref { author - Berger, title - Ways of Seeing, year - 1972, page - 9 }
+
+~ pipes — terse, fits on one line per call
+
+@ref |author Fresnel| |title Mémoire sur un nouveau système| |year 1822| |page 14|

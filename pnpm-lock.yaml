@@ -59,6 +59,8 @@ importers:
         specifier: workspace:*
         version: link:../parser
 
+  packages/skill: {}
+
   packages/vscode:
     devDependencies:
       '@types/vscode':

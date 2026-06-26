@@ -1,0 +1,61 @@
+~ Preferred shapes — a realistic mini-document using only the five
+~ preferred Wit shapes from SKILL.md's cheat sheet. Copy-paste-friendly.
+
+~ ─── value-block defs: named content blocks (preferred for citations
+~     and fixed sections).
+
+#epigraph:
+The sea does not forgive forgetting.
+— coastal proverb
+!!
+
+#weil_attention:
+Weil, _Gravity and Grace_ (1952), p. 117.
+!!
+
+~ ─── block-form def: a wrapper for a manuscript section (preferred
+~     for breaking long content into per-file pieces).
+
+#section
+@h2 ::title:: h2@
+...
+section#
+
+~ Wait — that def uses captures. Block-form with captures looks like:
+
+#section_titled ||title||
+@h2 ::title:: h2@
+...
+section_titled#
+
+~ ─── record-arg with colon delimiter (preferred for structured calls).
+
+#card ||title, status||
+::title:: [::status::]
+card#
+
+@card { title: Beta, status: draft }
+
+~ Multi-line variant for complex calls:
+
+@card {
+  title: Delta
+  status: draft
+}
+
+~ ─── colon scatter (preferred for terse inline calls with a body).
+
+@card title:Kappa status:draft card@
+
+~ ─── bare reference in prose (preferred for in-text citations).
+
+@epigraph
+
+A lighthouse keeper trims a wick before the dusk turns absolute.
+
+Attention, as @weil_attention argued, is a moral act — not a service
+the world is owed.
+
+@section_titled |title Findings|
+The watch logs show three patterns worth naming.
+section_titled@

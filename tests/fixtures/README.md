@@ -24,6 +24,17 @@ were added during M10.core-vocab:
 - `21-optional-captures/` — explicit `||a, b||` vs body-inferred
   capture lists.
 
+Categories `22`–`26` were added during M13–M17:
+
+- `22-record-args/` — record-arg call form `@x { k - v, ... }`.
+- `23-form-fill/` — form-fill body shape (`key: value` lines).
+- `24-colon-scatter/` — colon scatter on single-line bodies.
+- `25-content-in-captures/` — block-aware capture substitution (M17).
+- `26-all-param-forms/` — cross-form equivalence showcase: every
+  param-invocation form bound against the same template, proving they
+  resolve to the same captures by name. Narrow per-form probes live in
+  the categories above; this one is the equivalence proof.
+
 ## Filename rules
 
 (a) **Kebab-case, scenario-descriptive.** Name what the file *tests*, not

@@ -30,7 +30,7 @@ wit build examples/01-prose.wit -o /tmp/out.html
 | [`02-emphasis.wit`](./02-emphasis.wit) | `_italic_`, `*bold*`, and combinations. |
 | [`03-comments.wit`](./03-comments.wit) | Line comments (`~ ...`) and block comments (`~~ ... ~~/`). |
 | [`04-using-nodes.wit`](./04-using-nodes.wit) | Invoking nodes: bare references, block form, inline use. |
-| [`05-parameters.wit`](./05-parameters.wit) | Parameter forms: pipes, parens, colon syntax. |
+| [`05-parameters.wit`](./05-parameters.wit) | The five param-invocation forms: pipes, parens (space + colon style), record-arg, form-fill body, colon scatter. |
 | [`06-indentation.wit`](./06-indentation.wit) | How Wit treats whitespace — what's preserved, what's not. |
 | [`07-defining-nodes.wit`](./07-defining-nodes.wit) | `#name … name#` definitions with captures and interpolation. |
 | [`08-single-line-defs.wit`](./08-single-line-defs.wit) | `#name: value !!` single-line definition shape. |

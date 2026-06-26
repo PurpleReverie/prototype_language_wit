@@ -1,0 +1,7 @@
+~ Citation schema — the rendering contract for every source cited
+~ from a chapter. Define here once; rendering style changes by
+~ editing this single def.
+
+#cite ||author, title, year, page||
+::author:: (::year::, p. ::page::). _::title::_.
+cite#

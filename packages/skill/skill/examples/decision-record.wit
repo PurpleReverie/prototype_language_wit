@@ -1,0 +1,90 @@
+~ An architecture decision record (ADR) — Wit version.
+~ Demonstrates: metadata records, schema-array tables, callouts, ADR
+~ structure (context / options / decision / consequences).
+
+#adr: {
+  number - 0014
+  title - Adopt Wit for project documentation
+  status - accepted
+  date - 2026-03-14
+  authors - Mara Finch and Aldous Vane
+}
+
+#options: [
+  { name - Markdown,
+    pros - Familiar and ubiquitous tooling,
+    cons - Weak structure — breaks on tables and citations }
+  { name - AsciiDoc,
+    pros - Powerful and well-structured,
+    cons - Heavyweight syntax — smaller ecosystem }
+  { name - reStructuredText,
+    pros - Strong directives in the Python ecosystem,
+    cons - Awkward syntax — sparse tooling outside Sphinx }
+  { name - Wit,
+    pros - Prose-first and data-driven with a custom-renderer hook,
+    cons - New language with a smaller community }
+]
+
+~ Wrapper defs.
+
+#info
+@node(type callout, tone info)
+...
+node@
+info#
+
+#warn
+@node(type callout, tone warn)
+...
+node@
+warn#
+
+~ The ADR proper.
+
+@h1 ADR @adr.number — @adr.title h1@
+
+*Status*: @adr.status · *Date*: @adr.date · *Authors*: @adr.authors
+
+@h2 Context h2@
+
+Our documentation has outgrown Markdown. Citations are increasingly
+informal, cross-references rot when sections move, and we now
+maintain three duplicate tables of contents across the handbook,
+the website, and the chapter PDFs.
+
+We need a markup language that lets us treat structure as data —
+so the same chapter list drives the TOC, the navigation, and the
+chapter bodies — and that supports an argument-map citation pattern
+without forcing every reference into a footnote.
+
+@h2 Options considered h2@
+
+@table |schema name, pros, cons| |from @options|
+table@
+
+@h2 Decision h2@
+
+We adopt Wit. The argument-map citation pattern alone justifies the
+switch; the self-organising document layer (data drives content) is
+a substantial bonus for our multi-author manual.
+
+We commit to the v0.1.0 release and accept the smaller-community
+risk in exchange for the ergonomic gains.
+
+@h2 Consequences h2@
+
+@info
+Authors will need a brief onboarding. The witlang/skill package
+ships a Claude Code skill that downstream agents and contributors
+can use to write idiomatic Wit.
+info@
+
+@warn
+Editor support is currently limited to VS Code. Contributors using
+other editors will lack syntax highlighting and live errors until
+we ship plugins for them. Planned: 2026-Q3.
+warn@
+
+The legacy Markdown handbook stays where it is for now. New
+chapters will be authored in Wit; we'll migrate existing chapters
+opportunistically.

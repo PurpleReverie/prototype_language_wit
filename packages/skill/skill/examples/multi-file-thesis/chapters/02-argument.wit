@@ -1,0 +1,26 @@
+~ Chapter 2 — The labour reading. Owns the #chapter_two def.
+
+reference ../shared/sources.wit
+reference ../shared/types.wit
+
+#arendt_labour: @arendt ch. 3. !!
+
+#chapter_two
+@h2 Chapter 2 — Labour h2@
+
+@info
+Building on @arendt_labour, this chapter distinguishes labour from
+work and locates attention firmly within the labour register.
+info@
+
+The labour reading hinges on three points. First, attention is
+expended — it takes time and energy. Second, that expenditure is
+not recoverable; one cannot put attention back into the pot the way
+one can with capital. Third, the asymmetry of who attends, and for
+whom, is political.
+
+@aside
+Arendt does not extend her labour analysis to attention explicitly.
+The connection is mine.
+aside@
+chapter_two#

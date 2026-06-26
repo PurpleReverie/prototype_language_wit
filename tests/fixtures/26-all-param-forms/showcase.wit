@@ -1,0 +1,57 @@
+#card ||title, status||
+::title:: [::status::]
+card#
+
+@card |title Alpha| |status draft| card@
+
+@card
+|title Alpha|
+prose between scatters keeps the body alive
+|status draft|
+card@
+
+@card(title Beta, status draft)
+
+@card(title Gamma, status: draft)
+
+@card { title - Delta, status - draft }
+
+@card { title: Epsilon, status: draft }
+
+@card {
+  title - Zeta
+  status - draft
+}
+
+@card
+  title: Eta
+  status: draft
+card@
+
+~ PENDING — proposed @name: ... !! shape; parser support not yet implemented.
+~ See memory/wit-form-fill-unification-plan.md to resume.
+~
+~ @card: title: Eta status: draft !!
+~
+~ @card: title: Eta status: draft Happy Birthday !!
+~
+~ @card:
+~ title: Eta
+~ status: draft
+~ Happy Birthday !
+~ !!
+
+@card
+  title: Theta
+  status:
+    a long
+    multi-line draft
+card@
+
+@card title:Iota status:draft card@
+
+@card title:"Kappa Two" status:draft card@
+
+@card |title Lambda| |featured!| card@
+
+@card |title Mu| |status draft|

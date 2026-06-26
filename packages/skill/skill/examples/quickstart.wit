@@ -1,0 +1,11 @@
+~ Quickstart — the smallest correct Wit document.
+~ Read this when you want the shape of a working file in 10 lines.
+
+#epigraph:
+The sea does not forgive forgetting.
+— coastal proverb
+!!
+
+@epigraph
+
+A lighthouse keeper trims a wick before the dusk turns absolute.

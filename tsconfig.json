@@ -21,6 +21,7 @@
     { "path": "./packages/render-html" },
     { "path": "./packages/render-markdown" },
     { "path": "./packages/cli" },
+    { "path": "./packages/skill" },
     { "path": "./packages/vscode" },
     { "path": "./tests/runner" }
   ]

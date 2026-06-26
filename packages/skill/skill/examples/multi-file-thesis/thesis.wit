@@ -1,0 +1,19 @@
+~ Root file — pulls in every chapter via `reference` and renders the
+~ assembled thesis. Order of `reference` lines determines chapter order.
+~
+~ Each chapter is invoked with an explicit close (`@chapter_one
+~ chapter_one@`) — block-form defs require it. Value-block defs
+~ (#name: … !!) can be invoked bare from inside a paragraph but not
+~ at top level cross-file, so block form is the right shape for
+~ chapter exports.
+
+reference ./chapters/01-introduction.wit
+reference ./chapters/02-argument.wit
+
+@h1 On Attention h1@
+
+By Mara Finch · 2026
+
+@chapter_one chapter_one@
+
+@chapter_two chapter_two@

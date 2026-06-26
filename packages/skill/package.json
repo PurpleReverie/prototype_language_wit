@@ -1,0 +1,39 @@
+{
+  "name": "@witlang/skill",
+  "version": "0.1.0",
+  "description": "Authoring skill for the Wit markup language, distributed as a Claude Code SKILL.md. Run `wit-skill init` in a downstream project to install.",
+  "keywords": ["wit", "markup", "skill", "claude", "claude-code", "agent"],
+  "license": "MIT",
+  "author": "Tauraj Greig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PurpleReverie/prototype_language_wit.git",
+    "directory": "packages/skill"
+  },
+  "homepage": "https://github.com/PurpleReverie/prototype_language_wit#readme",
+  "bugs": "https://github.com/PurpleReverie/prototype_language_wit/issues",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "wit-skill": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "skill",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

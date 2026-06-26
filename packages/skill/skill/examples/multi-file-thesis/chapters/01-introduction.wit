@@ -1,0 +1,27 @@
+~ Chapter 1 — Introduction. Owns the #chapter_one def and declares
+~ its own argument-map citation entries.
+
+reference ../shared/sources.wit
+reference ../shared/types.wit
+
+#weil_attention: @weil p. 117. !!
+#berger_looking: @berger p. 9. !!
+
+~ Block-form def — invoked from the root with an explicit
+~ `@chapter_one chapter_one@` so the parser knows it's a block use.
+
+#chapter_one
+@h2 Chapter 1 — Introduction h2@
+
+Attention, as @weil_attention argued, is the rarest form of
+generosity — and the easiest to mistake for something else.
+
+Berger complicates this @berger_looking by insisting that we never
+look at one thing alone: the act of looking is laden with the
+histories of prior looking, with what the institution funding the
+looker is willing to pay for.
+
+What this thesis adds is the claim that attention, so understood,
+is _labour_ — and that the failure to recognize it as such has
+moral consequence.
+chapter_one#

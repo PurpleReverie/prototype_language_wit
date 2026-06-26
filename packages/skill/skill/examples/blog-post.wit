@@ -1,0 +1,70 @@
+~ A short blog post / essay — realistic Wit demonstrating preferred shapes.
+~ Demonstrates: data-def metadata, value-block citations, wrapped custom
+~ nodes for callouts and pull quotes, italic + bold prose, the argument-
+~ map citation pattern.
+
+#meta: {
+  title - Why I Like Lighthouses
+  author - Mara Finch
+  date - 2026-03-14
+  reading_time - 5 min
+}
+
+~ Wrapper defs — in a real project these live in shared/types.wit.
+
+#info
+@node(type callout, tone info)
+...
+node@
+info#
+
+#pull_quote
+@node(type pull_quote)
+...
+node@
+pull_quote#
+
+~ Citation argument map — ideas named, pages locked in one place.
+
+#weil_attention:
+Weil, _Gravity and Grace_ (1952), p. 117.
+!!
+
+#berger_looking:
+Berger, _Ways of Seeing_ (1972), p. 9.
+!!
+
+~ The essay.
+
+@h1 @meta.title h1@
+
+By @meta.author · @meta.date · @meta.reading_time
+
+Lighthouses signal *safety* across the _darkest_ nights. The keepers
+who tended them performed a kind of attention I find moving:
+a slow, vigilant practice over conditions no one else could see.
+
+@info
+First-order Fresnel lenses were the most powerful; second-order —
+typical of harbour lights — were small enough for one keeper to
+maintain through a quiet watch.
+info@
+
+The principle is simple. A single oil lamp at the centre of a Fresnel
+lens, focused through concentric prisms, throws a beam visible
+twenty miles to sea. As @weil_attention argued, attention is the
+rarest form of generosity, and the keeper's work was precisely that:
+a generous expenditure of attention over hours nobody would notice
+unless the lamp went out.
+
+@pull_quote
+Attention is the rarest form of generosity.
+pull_quote@
+
+Berger complicates the picture @berger_looking by insisting that
+we never look at one thing alone — the act of looking is laden with
+the histories of prior looking, with what the looker expects to find.
+The keeper's attention is no exception: it carries the weight of
+every night before, and a duty to every night after.
+
+The lamps are mostly automated now. Something is lost.

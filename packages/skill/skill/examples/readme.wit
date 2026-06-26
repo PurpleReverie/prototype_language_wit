@@ -1,0 +1,83 @@
+~ A software README — realistic Wit demonstrating data-def metadata,
+~ wrapped code-block custom nodes, callouts, and core vocab lists.
+
+#project: {
+  name - WidgetKit
+  tagline - A tiny library for building widgets.
+  version - 1.2.0
+  homepage - https://example.org/widgetkit
+  license - MIT
+  node_version - 20+
+}
+
+#author: { name - Mara Finch, github - mfinch }
+
+~ Wrapper defs — `shared/types.wit` material.
+
+#info
+@node(type callout, tone info)
+...
+node@
+info#
+
+#code ||lang||
+@node(type code, lang ::lang::)
+...
+node@
+code#
+
+~ The README.
+
+@h1 @project.name h1@
+
+@project.tagline
+
+@info
+Version @project.version · Requires Node @project.node_version ·
+@project.license-licensed.
+info@
+
+@h2 Install h2@
+
+Pick a package manager:
+
+@code |lang shell|
+npm install widgetkit
+code@
+
+@code |lang shell|
+pnpm add widgetkit
+code@
+
+@code |lang shell|
+yarn add widgetkit
+code@
+
+@h2 Usage h2@
+
+A minimal widget:
+
+@code |lang typescript|
+import { createWidget } from 'widgetkit';
+
+const button = createWidget({
+  kind: 'button',
+  label: 'Click me',
+  onClick: () => console.log('clicked'),
+});
+
+document.body.append(button.element);
+code@
+
+@h2 Documentation h2@
+
+Full docs live at @a |href @project.homepage| @project.homepage a@.
+
+@h2 Status h2@
+
+WidgetKit is in active development. Authored by @author.name
+(@author.github on GitHub). Contributions welcome.
+
+@h2 License h2@
+
+@project.license. See `LICENSE` for full text.

@@ -1,8 +1,20 @@
-~ parameters: two syntaxes — pipes and parens.
-~ flags use a trailing ! on the final word before the closing delimiter.
+~ parameters: five syntaxes that all bind named values into a node use.
+~ pick the one that reads best where you stand. mixing inside one call
+~ is an error — the form you open with is the form that closes.
 
 
-~ ── three forms ─────────────────────────────────────────────────────────────────
+~ ── the five invocation forms (all equivalent) ──────────────────────────────────
+~
+~   pipes                  @scene |mood calm|
+~   parens, space-style    @scene(mood calm)
+~   parens, colon-style    @scene(mood: calm)
+~   record-arg             @scene { mood - calm }
+~   form-fill body         @scene
+~                            mood: calm
+~                          scene@
+~   colon scatter          @scene mood:calm scene@      (single-line body only)
+~
+~ inside pipes / parens / record-args, value shapes are the same:
 ~
 ~   |value|               positional — single word, no !
 ~   |key value|           named — first word is key, rest is value
@@ -80,3 +92,63 @@ The harbour was still.
 |mood tense|
 Then the bell began to ring.
 scene@
+
+
+~ ── parens, colon-style ─────────────────────────────────────────────────────────
+~
+~ inside parens, `:` is interchangeable with space as the key/value separator.
+~ pick whichever reads better — colons help when a value also contains spaces.
+
+@figure(src: lamp.png, caption: The second-order Fresnel lens)
+@badge(tone: good, verified!)
+
+
+~ ── record-arg — named params in brace form ─────────────────────────────────────
+~
+~ a record literal directly after the handle becomes the call's named arguments.
+~ self-closing: the matching `}` ends the call. no `name@` close, no body after.
+~ field name → capture name. great for citation-style calls in prose.
+
+@figure { src - lamp.png, caption - The second-order Fresnel lens }
+
+~ across lines when the list is long
+
+@figure {
+  src - lamp.png
+  caption - The second-order Fresnel lens
+  alt - A polished Fresnel lens reflecting an evening sky
+}
+
+~ colons work as the field separator inside record-args too
+
+@figure { src: lamp.png, caption: The second-order Fresnel lens }
+
+
+~ ── form-fill body — one param per line ─────────────────────────────────────────
+~
+~ when the body's first line looks like `key: value`, the whole body is read as
+~ named params. the most prose-readable form for many params with long values.
+
+@figure
+  src: lamp.png
+  caption: The second-order Fresnel lens
+  alt: A polished Fresnel lens reflecting an evening sky
+figure@
+
+~ values can run across multiple lines if continuation lines indent deeper
+
+@figure
+  src: lamp.png
+  caption:
+    The second-order Fresnel lens, installed at Dunmore Head
+    in 1857 and never replaced.
+figure@
+
+
+~ ── colon scatter (single-line body) ────────────────────────────────────────────
+~
+~ on a one-line body, `key:value` pairs sit beside prose words. values run
+~ up to the next whitespace; quote multi-word values with "...". handy for
+~ inline calls where a full form-fill body would feel heavy.
+
+The lamp, @figure src:lamp caption:"Second-order Fresnel" figure@, still works.

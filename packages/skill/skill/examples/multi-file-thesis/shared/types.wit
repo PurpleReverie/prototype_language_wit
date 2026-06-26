@@ -1,0 +1,20 @@
+~ Project-wide wrapper defs for custom node types. Authors call these
+~ instead of bare @node(type X) so the `type` param lives in one place.
+
+#info
+@node(type callout, tone info)
+...
+node@
+info#
+
+#warn
+@node(type callout, tone warn)
+...
+node@
+warn#
+
+#aside
+@node(type aside)
+...
+node@
+aside#

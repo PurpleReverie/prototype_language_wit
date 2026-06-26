@@ -99,6 +99,7 @@ a child VS Code window with the extension live-loaded.
 | [`@witlang/render-html`](./packages/render-html/) | HTML renderer. |
 | [`@witlang/render-markdown`](./packages/render-markdown/) | Markdown renderer. |
 | [`@witlang/cli`](./packages/cli/) | `wit` command-line tool. |
+| [`@witlang/skill`](./packages/skill/) | Claude Code authoring skill — `npx @witlang/skill init` drops a `SKILL.md` into a downstream project so agents write Wit idiomatically. |
 
 The VS Code extension lives in `packages/vscode/` and is not on npm
 (install via `pnpm vscode:install` from a clone).
@@ -150,6 +151,8 @@ strings, multi-line values, and block-aware capture substitution.
 - `packages/render-html` — reference HTML renderer.
 - `packages/render-markdown` — reference Markdown renderer.
 - `packages/cli` — `wit` command-line driver.
+- `packages/skill` — Claude Code authoring skill + `wit-skill init`
+  installer.
 - `packages/vscode` — VS Code extension (LSP client + server,
   TextMate grammar).
 - `examples/` — one short `.wit` file per language feature

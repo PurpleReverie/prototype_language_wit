@@ -1,0 +1,1063 @@
+~ ════════════════════════════════════════════════════════════════════
+~  all-permutations.wit
+~ ────────────────────────────────────────────────────────────────────
+~  Every authoring shape Wit supports today, ordered so the preferred
+~  forms appear first — both at the section level and within each
+~  section. Avoided forms are still documented so you can recognise
+~  them in legacy files.
+~
+~  Markers:
+~    [PREFERRED]   — reach for this first
+~    [AVOID]       — uglier or fragile; documented for recognition only
+~    (no marker)   — fine in context; the section explains when
+~
+~  Design principles (in priority order):
+~    1. Content goes in node bodies. Parameters are metadata.
+~       Never pass the content of a node in via a parameter.
+~    2. Name content as a value-block def: `#name: … !!`.
+~    3. Reference named content from prose with a bare `@name`.
+~    4. Pass structured params with record-arg + colon: `{ k: v }`.
+~    5. For one-line calls with a body, use colon scatter: `@x k:v x@`.
+~    6. Decompose long manuscripts with block-form defs:
+~       `#chapter\n...\nchapter#` per file.
+~    7. Reserve pipes (`|k v|`) for the one case they're best at —
+~       switching a parameter mid-body (see section 14.4).
+~
+~  Section index:
+~     1. CHEAT SHEET — preferred shapes at a glance
+~     2. Comments
+~     3. Prose & emphasis
+~     4. Node uses — body shapes
+~     5. Node defs — value-block (#name: … !!)           [PREFERRED]
+~     6. Node defs — block form (#name … name#)          [PREFERRED for manuscripts]
+~     7. Node defs — single-line (#name: value)
+~     8. Captures (||a, b||) & interpolation (::name::)
+~     9. Body splice (...)
+~    10. Invocation form — record-arg                    [PREFERRED]
+~    11. Invocation form — colon scatter                 [PREFERRED for short calls]
+~    12. Invocation form — form-fill body
+~    13. Invocation form — parens (space + colon)
+~    14. Invocation form — pipes                         [AVOID — see 14.0]
+~    15. Param value shapes
+~    16. Quoted values & escapes
+~    17. Records
+~    18. Collections
+~    19. Data access (dotted paths)
+~    20. Conditionals
+~    21. Iteration
+~    22. Script bridge — <% %> and `lh`
+~    23. References (cross-file)
+~    24. Additive partials (+#name)
+~    25. Core vocabulary
+~    26. Tables (schema-array preferred over inline CSV)
+~    27. Opaque node — @node(type X)
+~    28. Cross-form equivalence (ordered preferred-first)
+~ ════════════════════════════════════════════════════════════════════
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 1. CHEAT SHEET — PREFERRED SHAPES (LIVE, PARSEABLE)
+~ ════════════════════════════════════════════════════════════════════
+~
+~ The five shapes below are real Wit, not pseudocode — every block
+~ parses and renders. Reach for them in this order; if none fit, the
+~ catalog from section 2 onward documents every permutation. The defs
+~ here use `_cs` suffixes (`_cs` = cheat sheet) so they don't collide
+~ with the demo defs in later sections.
+
+
+~ ─── A. CONTENT DEF — name a chunk of writing, render it elsewhere.
+~       [PREFERRED] for citations, epigraphs, fixed sections.
+
+#opening_quote_cs:
+The sea does not forgive forgetting.
+— coastal proverb
+!!
+
+~ Use the named content anywhere by name:
+
+@opening_quote_cs
+
+
+~ ─── B. BARE REFERENCE in prose.
+~       [PREFERRED] for in-text citations. Two-word references read
+~       as ideas, not page numbers.
+
+#weil_attention_cs:
+Weil, _Gravity and Grace_ (1952), p. 117.
+!!
+
+Attention, as @weil_attention_cs argued, is a moral act.
+
+
+~ ─── C. RECORD-ARG with colon delimiter — structured params, no body.
+~       [PREFERRED] for typed structured calls.
+
+#sample_card_cs ||title, status||
+::title:: [::status::]
+sample_card_cs#
+
+@sample_card_cs { title: Beta, status: draft }
+
+~ Multi-line variant — [PREFERRED] for complex calls:
+
+@sample_card_cs {
+  title: Delta
+  status: draft
+}
+
+
+~ ─── D. COLON SCATTER — short one-line call with a body.
+~       [PREFERRED] for terse inline calls.
+
+@sample_card_cs title:Kappa status:draft sample_card_cs@
+
+
+~ ─── E. BLOCK-FORM DEF for long manuscript sections.
+~       [PREFERRED] when decomposing a thesis or novel across files;
+~       the lack of indentation is intentional — easier to skim.
+
+#sample_chapter_cs
+...
+sample_chapter_cs#
+
+@sample_chapter_cs
+A section of prose that fills the splice point at `...`.
+sample_chapter_cs@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 2. COMMENTS
+~ ════════════════════════════════════════════════════════════════════
+
+~ 2.1  Comment at column 0.
+~ 2.2  Comments may be indented; the leading whitespace is part of the
+~      line, not the marker.
+
+  ~ 2.3  An indented comment line.
+
+~ 2.4  A run of comment lines reads as a single visual block; the parser
+~      drops each one independently.
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 3. PROSE & EMPHASIS
+~ ════════════════════════════════════════════════════════════════════
+
+~ 3.1  Plain prose — one paragraph.
+
+A lighthouse keeper trims a wick before the dusk turns absolute.
+
+~ 3.2  Multiple paragraphs — separated by one blank line.
+
+The first paragraph stands alone.
+
+The second paragraph follows; the blank line between is the boundary.
+
+~ 3.3  Italic: _word_.
+~ 3.4  Bold: *word*.
+
+She turned _slowly_, then said *no*.
+
+~ 3.5  Italic with bold nested: _italic *bold-in-italic* italic_.
+~ 3.6  Bold with italic nested: *bold _italic-in-bold_ bold*.
+
+The phrase _was *intentional* and considered_, the witness *said _later_*.
+
+~ 3.7  Escapes — `\_` and `\*` keep the literal character.
+
+The path was C:\_drive — escape the underscore so it stays literal.
+
+The asterisk \* survived as punctuation.
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 4. NODE USES — BODY SHAPES
+~ ════════════════════════════════════════════════════════════════════
+
+~ Definitions used by this section — each is a no-capture wrapper so
+~ we can demonstrate every body shape without parameter noise.
+
+#aside
+Lighthouse logs survive in margins.
+aside#
+
+#highlight
+...
+highlight#
+
+#chapter
+...
+chapter#
+
+#scene
+...
+scene#
+
+~ 4.1  [PREFERRED for in-text citations] Bare reference — no body at
+~      all, just `@name`. The most prose-readable shape.
+
+He turned to @aside without a word.
+
+~ 4.2  Block body — opens on its own line, body indented or flush,
+~      closes on its own line. The default for any multi-line content.
+
+@aside
+Keepers do not flinch.
+aside@
+
+~ 4.3  Inline body — opens and closes on one line, sits inside prose.
+
+She crossed the @highlight last threshold highlight@ alone.
+
+~ 4.4  Nested uses — node bodies may contain other node uses.
+
+@chapter
+@scene
+The bell began to ring.
+scene@
+@aside Keepers do not flinch. aside@
+@scene
+He turned the lamp by hand.
+scene@
+chapter@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 5. NODE DEFS — VALUE-BLOCK  #name: … !!     [PREFERRED]
+~ ════════════════════════════════════════════════════════════════════
+~
+~ The greatly preferred shape for content blocks. Name a chunk of
+~ writing once, refer to it with a bare `@name` wherever it belongs.
+
+~ 5.1  [PREFERRED] Multi-line content wrapped in `: … !!`.
+
+#epigraph:
+The sea does not forgive forgetting.
+— coastal proverb
+!!
+
+@epigraph
+
+~ 5.2  Composed value containing emphasis.
+
+#weil_short: Simone Weil, _Gravity and Grace_, 1952 !!
+
+The reference reads: @weil_short
+
+~ 5.3  Value-block holding composed node calls.
+
+#colophon_line: Set in Inter — © @year, @keeper. !!
+
+@colophon_line
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 6. NODE DEFS — BLOCK FORM  #name … name#    [PREFERRED for manuscripts]
+~ ════════════════════════════════════════════════════════════════════
+~
+~ The preferred shape for long manuscripts (thesis, novel) where each
+~ section is its own file and the document is assembled by reference.
+~ The lack of indentation is intentional — it keeps each file scannable.
+
+~ 6.1  Bare wrapper — no captures, no body splice. Fixed content
+~      that renders wherever the node is invoked.
+
+#header
+Welcome to the manual.
+header#
+
+@header
+
+~ 6.2  With body splice (`...`) — the invocation body renders wherever
+~      `...` appears in the def.
+
+#bordered
+@aside
+~ — top border —
+...
+~ — bottom border —
+aside@
+bordered#
+
+@bordered
+Body that gets framed by the def's borders.
+bordered@
+
+~ 6.3  With captures, no body splice — the body uses interpolation
+~      only, drops any body passed at the call site.
+
+#stamp ||status||
+[::status::]
+stamp#
+
+@stamp |status draft|
+
+~ 6.4  Captures + splice — body sits between interpolated header
+~      and footer.
+
+#sectioned ||title||
+@h2 ::title:: h2@
+...
+sectioned#
+
+@sectioned |title Findings|
+Three findings emerged from the survey.
+sectioned@
+
+~ 6.5  Multi-capture, multi-interpolation, with body splice.
+
+#book_section ||number, title, subtitle||
+@h2 ::number:: — ::title:: h2@
+::subtitle::
+...
+book_section#
+
+@book_section |number I| |title The Lamp| |subtitle - On the nature of attention|
+For eleven days the lamp had burned untended.
+book_section@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 7. NODE DEFS — SINGLE-LINE  #name: value
+~ ════════════════════════════════════════════════════════════════════
+
+~ 7.1  Plain string value.
+
+#year: 1923
+
+~ 7.2  Multi-word string value (no quoting needed).
+
+#place: Dunmore Head
+
+~ 7.3  Named identity (a common citation pattern).
+
+#keeper: Aldous Vane
+
+~ 7.4  A definition whose value is a composed inline node call.
+
+#dateline: Logged on @keeper at @place, @year.
+
+The dateline reads: @dateline
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 8. CAPTURES & INTERPOLATION
+~ ════════════════════════════════════════════════════════════════════
+
+~ 8.1  Single capture.
+
+#greet ||name||
+Hello, ::name::.
+greet#
+
+@greet |name Mara|
+
+~ 8.2  Multiple captures, comma-separated.
+
+#chapter_meta ||number, title, year, keeper||
+::number:: — ::title:: (::year::, kept by ::keeper::)
+chapter_meta#
+
+@chapter_meta
+  number: II
+  title: The Voice
+  year: 1857
+  keeper: A. Vane
+chapter_meta@
+
+~ 8.3  Captures repeated in the same body.
+
+#triplet ||a||
+::a:: ::a:: ::a::
+triplet#
+
+@triplet |a echo|
+
+~ 8.4  Capture passed into a nested node use. For conditionals driven
+~      by captures inside a def, prefer data-driven conditionals — see
+~      section 20.
+
+#wrapped_use ||tone, label||
+@aside
+Tone is ::tone::, label is ::label::.
+aside@
+wrapped_use#
+
+@wrapped_use |tone good| |label Approved|
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 9. BODY SPLICE  (...)
+~ ════════════════════════════════════════════════════════════════════
+
+~ 9.1  `...` on its own line marks where the invocation body is
+~      rendered inside the def. See section 6.2 and 6.4 for examples.
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 10. INVOCATION FORM — RECORD-ARG  { k: v }    [PREFERRED]
+~ ════════════════════════════════════════════════════════════════════
+
+#card ||title, status, owner||
+::title:: [::status::]
+card#
+
+~ 10.1  [PREFERRED] Single-line, colon delimiter — structured params,
+~       self-closing, no body.
+
+@card { title: Beta, status: draft }
+
+~ 10.2  [PREFERRED for complex calls] Multi-line, colon delimiter.
+
+@card {
+  title: Delta
+  status: draft
+  owner: Mara Finch
+}
+
+~ 10.3  Record-arg sitting inline inside a sentence — self-closing,
+~       no `card@` close.
+
+As @card { title - Epsilon, status - draft } shipped on Friday.
+
+~ 10.4  Single-line, hyphen delimiter (interchangeable with colon).
+
+@card { title - Alpha, status - draft }
+
+~ 10.5  Multi-line, hyphen delimiter.
+
+@card {
+  title - Gamma
+  status - draft
+  owner - Mara Finch
+}
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 11. INVOCATION FORM — COLON SCATTER    [PREFERRED for short calls]
+~ ════════════════════════════════════════════════════════════════════
+
+~ 11.1  [PREFERRED] Single-line body with `key:value` pairs (no
+~       whitespace around `:`) beside prose words. Value runs up to
+~       the next whitespace.
+
+@card title:Kappa status:draft card@
+
+~ 11.2  Quoted multi-word value.
+
+@card title:"Lambda Lens" status:draft card@
+
+~ 11.3  Scattered between prose words.
+
+The lamp, @card title:Mu status:draft card@, was relit.
+
+~ 11.4  Backslash escape for a literal colon in a value.
+
+@card title:name\:Nu status:draft card@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 12. INVOCATION FORM — FORM-FILL BODY
+~ ════════════════════════════════════════════════════════════════════
+
+~ 12.1  Minimal form-fill — every non-blank line is `<key>: <value>`,
+~       at least two content lines, first matches `<id>:` shape.
+
+@card
+  title: Zeta
+  status: draft
+card@
+
+~ 12.2  Field values may contain whitespace; everything to end-of-line
+~       is the value.
+
+@card
+  title: A field value with spaces and punctuation, no quoting needed.
+  status: draft
+card@
+
+~ 12.3  Multi-line value — a `key:` with empty same-line value consumes
+~       the indented block beneath it. Continuation lines must be
+~       strictly deeper-indented than the key line.
+
+@card
+  title: Eta
+  status:
+    a longer status running
+    across two lines
+card@
+
+~ 12.4  Quoted value — surviving the colon contract and trimmed quotes.
+
+@card
+  title: "Theta with: a colon inside"
+  status: draft
+card@
+
+~ 12.5  Backslash escape — opt out of the colon contract.
+
+@card
+  title: name\:Tauraj — colon kept literally
+  status: draft
+card@
+
+~ 12.6  Comments inside a form-fill body are dropped, not parsed as fields.
+
+@card
+  ~ comment line — ignored entirely
+  title: Iota
+  status: draft
+card@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 13. INVOCATION FORM — PARENS  (k v)  /  (k: v)
+~ ════════════════════════════════════════════════════════════════════
+
+#badge ||tone, label, verified||
+::label::
+badge#
+
+~ 13.1  Single param, space-style.
+
+@badge(tone good)
+
+~ 13.2  Single param, colon-style.
+
+@badge(tone: good)
+
+~ 13.3  Multiple, comma-separated.
+
+@badge(tone good, label Approved)
+@badge(tone: good, label: Approved)
+
+~ 13.4  Boolean flag inside parens.
+
+@badge(verified!)
+
+~ 13.5  Mixed flag + named.
+
+@badge(tone good, verified!)
+@badge(tone: good, verified!)
+
+~ 13.6  Mixed colon + space-style in the same parens (each pair is
+~       parsed independently).
+
+@badge(tone: good, label Approved)
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 14. INVOCATION FORM — PIPES  |k v|    [AVOID — see 14.0]
+~ ════════════════════════════════════════════════════════════════════
+~
+~ 14.0  [AVOID] Pipes are the least preferred invocation form — the
+~       `|` is visually noisy. The ONE case they're best at is
+~       switching a parameter mid-body (see 14.4); for everything else
+~       reach for record-arg (section 10), colon scatter (section 11),
+~       or form-fill (section 12).
+
+#figure ||src, caption, alt, fullwidth||
+::caption::
+figure#
+
+#panel ||background_colour, label||
+::label::
+panel#
+
+#scene_a ||mood, location||
+...
+scene_a#
+
+~ 14.1  One positional value.
+
+@figure |lamp.png| figure@
+
+~ 14.2  One named pair.
+
+@scene_a |mood calm| scene_a@
+
+~ 14.3  Multiple named pairs, all on one line.
+
+@scene_a |mood calm| |location harbour| scene_a@
+
+~ 14.4  [USEFUL] Block body with pipes opening, body between, `name@`
+~       close. The legitimate use of pipes: parameters that may be
+~       switched mid-body via scatter (see 14.6).
+
+@scene_a |mood calm|
+The harbour was still.
+scene_a@
+
+~ 14.5  Hyphen escape for multi-word keys.
+
+@panel |background_colour dark slate| |label Lantern| panel@
+
+~ 14.6  [AVOID — ugly] Pipes scatter — pipes interleaved with prose,
+~       last-wins per key. Visually noisy; reserved for the rare case
+~       a parameter genuinely needs to switch partway through a body.
+
+@scene_a
+|mood calm|
+The harbour was still.
+|mood tense|
+Then the bell began to ring.
+scene_a@
+
+~ 14.7  Boolean flag (trailing !).
+
+@figure |fullwidth!| figure@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 15. PARAM VALUE SHAPES
+~ ════════════════════════════════════════════════════════════════════
+
+#widget ||a, b, c, special_flag||
+...
+widget#
+
+~ 15.1  Positional — single token, no `!`, no spaces.
+
+@widget |lamp.png| widget@
+
+~ 15.2  [AVOID] Named — first word is key, rest of pipe is the value.
+~       This shape implies passing CONTENT in via a parameter; design
+~       Wit files so content lives in node bodies, not in params.
+
+@widget |a A long value with many words| widget@
+
+~ 15.3  Hyphen-escape — `key - value` for multi-word keys.
+
+@widget |special_flag - this is a complete value| widget@
+
+~ 15.4  Boolean flag — trailing `!` before the `|`.
+
+@widget |special_flag!| widget@
+
+~ 15.5  Multi-word boolean flag.
+
+@widget |multi word special flag!| widget@
+
+~ 15.6  Mid-value `!` is just punctuation, never a flag marker.
+
+@widget |a Wow! What a lens| widget@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 16. QUOTED VALUES & BACKSLASH ESCAPES
+~ ════════════════════════════════════════════════════════════════════
+
+#quoted ||a, b||
+...
+quoted#
+
+~ 16.1  Quoted value in parens.
+
+@quoted(a: "value with spaces and: a colon")
+
+~ 16.2  Quoted value in record-arg.
+
+@quoted { a - "value with spaces and: a colon" }
+
+~ 16.3  Quoted value in colon-scatter.
+
+@quoted a:"value with spaces" b:plain quoted@
+
+~ 16.4  Quoted value INSIDE quotes — `\"`.
+
+@quoted(a: "She said \"yes\" and meant it")
+
+~ 16.5  Backslash itself — `\\`.
+
+@quoted(a: A literal backslash: \\)
+
+~ 16.6  Inside record-arg, escape the braces — `\{` and `\}`.
+
+@quoted { a - literal \{ and \} survive }
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 17. RECORDS — EVERY SHAPE
+~ ════════════════════════════════════════════════════════════════════
+~
+~ Data-def record field delimiter is `-` (hyphen). `:` is the field
+~ delimiter inside *record-arg call values* (section 10), not inside
+~ data-def records.
+
+~ 17.1  Single-line, comma-separated.
+
+#world: { location - Bag End, time - night, storm - true }
+
+~ 17.2  Multi-line — items one per line, no commas.
+
+#keeper_record: {
+  name - Aldous Vane
+  years at post - 31
+  lamp lit - true
+}
+
+~ 17.3  Nested records — a record value may itself be a record.
+
+#keeper_detailed: {
+  name - Aldous Vane
+  posted - Dunmore Head
+  history { years - 31, incidents - 2 }
+}
+
+~ 17.4  Mixed value types — strings, numbers, booleans, ints.
+
+#report: {
+  title - Q3 Operations Review
+  author - Mara Finch
+  quarter - Q3 2024
+  status - final
+  pages - 42
+  draft - false
+}
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 18. COLLECTIONS — EVERY SHAPE
+~ ════════════════════════════════════════════════════════════════════
+
+~ 18.1  Inline list of bare values.
+
+#themes: [ attention, perception, moral failure ]
+
+~ 18.2  Multi-line list of records — items one per line, no commas.
+
+#findings: [
+  { claim - Attention precedes perception, supported - true,  strength - strong   }
+  { claim - Looking is never neutral,       supported - true,  strength - strong   }
+  { claim - Attention is a form of labour,  supported - true,  strength - moderate }
+  { claim - Perception is neutral,          supported - false, strength - contested }
+]
+
+~ 18.3  Single-line list of single records.
+
+#small_findings: [ { a - 1 }, { b - 2 } ]
+
+~ 18.4  Same shape as 18.2 — every record in the list uses the hyphen
+~       field delimiter; `:` is reserved for record-arg call sites
+~       (section 10), not data-def records.
+
+#chapters_table: [
+  { number - I,   title - The Lamp,     file - one.wit   }
+  { number - II,  title - The Voice,    file - two.wit   }
+  { number - III, title - The Stranger, file - three.wit }
+]
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 19. DATA ACCESS (DOTTED PATHS)
+~ ════════════════════════════════════════════════════════════════════
+
+#paper_meta: {
+  title - On Attention
+  author - { name - Mara Finch, role - lead }
+  words - 4200
+}
+
+~ 19.1  Bare reference — renders the whole value.
+
+The paper title is @paper_meta.title.
+
+~ 19.2  Field access.
+
+Author: @paper_meta.author.name.
+
+~ 19.3  Nested field access.
+
+Role: @paper_meta.author.role — word count @paper_meta.words.
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 20. CONDITIONALS
+~ ════════════════════════════════════════════════════════════════════
+
+#book_status: { status - draft, audience - external }
+#corresponding_author: { corresponding - true, role - lead, name - Aldous Vane }
+
+~ 20.1  `is` operator.
+
+(if @book_status.status is draft)
+@aside Draft — do not distribute. aside@
+(end)
+
+~ 20.2  `equals` operator (synonym).
+
+(if @book_status.audience equals external)
+@aside Reviewed and approved for external circulation. aside@
+(end)
+
+~ 20.3  Boolean tests — `is true` / `is false`.
+
+(if @corresponding_author.corresponding is true)
+Corresponding: @corresponding_author.name
+(else)
+@corresponding_author.name
+(end)
+
+~ 20.4  Nested conditionals.
+
+(if @book_status.status is final)
+(if @book_status.audience equals external)
+@aside Final, external. aside@
+(else)
+@aside Final, internal only. aside@
+(end)
+(else)
+@aside Not yet final. aside@
+(end)
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 21. ITERATION
+~ ════════════════════════════════════════════════════════════════════
+
+#chapters_list: [
+  { number - I,   title - The Lamp,     file - one.wit   }
+  { number - II,  title - The Voice,    file - two.wit   }
+  { number - III, title - The Stranger, file - three.wit }
+]
+
+#finding_card ||claim, strength||
+::claim:: [::strength::]
+finding_card#
+
+~ 21.1  Simple iteration — `(each @list as item) … (end)`. Use pipes
+~       with an explicit `name@` close on the same line so the call
+~       lives entirely on one line inside the loop body.
+
+(each @chapters_list as ch)
+@finding_card |claim @ch.title| |strength @ch.number| finding_card@
+(end)
+
+~ 21.2  Iteration emitting form-fill use sites.
+
+(each @chapters_list as ch)
+@finding_card
+  claim: @ch.title
+  strength: @ch.number
+finding_card@
+(end)
+
+~ 21.3  Iteration with a conditional inside.
+
+(each @chapters_list as ch)
+(if @ch.number is II)
+@aside chapter two — featured. aside@
+(end)
+(end)
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 22. SCRIPT BRIDGE — <% %> AND `lh`
+~ ════════════════════════════════════════════════════════════════════
+
+#paper_summary: { title - On Attention, word_count - 0 }
+
+@aside
+~ A document-level script block. Runs once after the initial render.
+~ The `lh` bridge exposes: data, prose(), set(), sort(), inject(),
+~ query(), node().
+aside@
+
+<%
+const findings = lh.data.findings;
+const supported = findings.filter(f => f.supported === 'true').length;
+const words = lh.prose().wordCount();
+lh.set('paper_summary.word_count', words);
+
+const order = { strong: 0, moderate: 1, contested: 2 };
+lh.sort('finding_card', (a, b) =>
+  order[a.params.strength] - order[b.params.strength]);
+
+lh.inject('paper-stats', `
+  @badge tone:good ${supported} of ${findings.length} supported badge@
+`);
+
+const everyFinding = lh.query('finding_card');
+const introNode = lh.node('intro');
+%>
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 23. REFERENCES (cross-file)
+~ ════════════════════════════════════════════════════════════════════
+
+~ 23.1  A `reference` line at the TOP of a file pulls in another file's
+~       definitions. Multiple references are allowed; paths are relative
+~       to the current file. Commented out here so this single file
+~       remains self-contained.
+~
+~        reference ./shared/schema.wit
+~        reference ../shared/sources.wit
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 24. ADDITIVE PARTIALS  (+#name)
+~ ════════════════════════════════════════════════════════════════════
+
+~ 24.1  Leading `+` on a single-line def contributes to a partial that
+~       merges across files. Useful for assembling a bibliography from
+~       multiple chapter files. Each file adds entries; the final
+~       `#bibliography` is the merged set.
+
++#bibliography: @aside Berger, Ways of Seeing (1972). aside@ !!
++#bibliography: @aside Weil, Gravity and Grace (1952). aside@ !!
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 25. CORE VOCABULARY
+~ ════════════════════════════════════════════════════════════════════
+
+~ The 47 reserved HTML-derived node names work with no `#def` required.
+~ A sampler — full set lives in @witlang/runtime's CORE_VOCAB_NAMES.
+
+~ 25.1  Headings.
+
+@h1 Title h1@
+@h2 Section h2@
+@h3 Subsection h3@
+@h4 Smaller h4@
+@h5 Smaller still h5@
+@h6 Smallest h6@
+
+~ 25.2  Emphasis.
+
+The text was @em emphasised em@ and @strong strongly stated strong@.
+
+~ 25.3  Lists.
+
+@ul
+@li First item li@
+@li Second item li@
+@li Third item li@
+ul@
+
+@ol
+@li First step li@
+@li Second step li@
+ol@
+
+~ 25.4  Anchor with href param.
+
+See the @a |href https://example.org| spec a@ for details.
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 26. TABLES
+~ ════════════════════════════════════════════════════════════════════
+
+~ 26.1  [PREFERRED] Schema-array — `schema` param names columns, body
+~       is a record list. The structured form that aligns with the rest
+~       of Wit's data model.
+
+@table |schema name, role|
+{ name - Aldous Vane, role - head keeper }
+{ name - Mara Finch,  role - inspector   }
+table@
+
+~ 26.2  Schema-record — `from` param references a defined collection.
+
+#staff: [
+  { name - Aldous Vane, role - head keeper }
+  { name - Mara Finch,  role - inspector   }
+]
+
+@table |schema name, role| |from @staff|
+table@
+
+~ 26.3  [AVOID] Inline CSV table — body is rows of `|cell | cell |`.
+~       Prefer 26.1 / 26.2 — they keep the table data structured and
+~       compatible with iteration, scripts, and other renderers.
+
+@table
+| name        | role          |
+| ----------- | ------------- |
+| Aldous Vane | head keeper   |
+| Mara Finch  | inspector     |
+table@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 27. OPAQUE NODE  @node(type X)
+~ ════════════════════════════════════════════════════════════════════
+
+~ 27.1  `@node(type custom)` is the renderer extension point — the
+~       body is passed through and the consumer renderer decides how
+~       to handle the named type.
+
+@node(type custom)
+Body content the consumer renderer handles by name.
+node@
+
+~ 27.2  Opaque node with additional params (alongside `type`).
+
+@node(type chart, layout horizontal)
+Series A: 1, 2, 3
+Series B: 4, 5, 6
+node@
+
+
+~ ════════════════════════════════════════════════════════════════════
+~ 28. CROSS-FORM EQUIVALENCE — the same call, every way
+~ ════════════════════════════════════════════════════════════════════
+~
+~ Every form below resolves to the same captured params against
+~ `#card_v2 ||title, status, owner||`. Ordered preferred-first.
+
+#card_v2 ||title, status, owner||
+::title:: [::status::] — owner ::owner::
+card_v2#
+
+~ 28.1  [PREFERRED] Record-arg, single-line, colon.
+
+@card_v2 { title: Echo, status: draft, owner: Mara Finch }
+
+~ 28.2  [PREFERRED for complex] Record-arg, multi-line, colon.
+
+@card_v2 {
+  title: Echo
+  status: draft
+  owner: Mara Finch
+}
+
+~ 28.3  [PREFERRED for short calls] Colon scatter, single-line body.
+
+@card_v2 title:Echo status:draft owner:"Mara Finch" card_v2@
+
+~ 28.4  Form-fill body.
+
+@card_v2
+  title: Echo
+  status: draft
+  owner: Mara Finch
+card_v2@
+
+~ 28.5  Record-arg, single-line, hyphen.
+
+@card_v2 { title - Echo, status - draft, owner - Mara Finch }
+
+~ 28.6  Record-arg, multi-line, hyphen.
+
+@card_v2 {
+  title - Echo
+  status - draft
+  owner - Mara Finch
+}
+
+~ 28.7  Parens — both colon-style and space-style are valid (see
+~       section 13 for the full parens permutations). Note: multi-word
+~       values across commas in colon-style confuse parens parsing, so
+~       use space-style or quote the value when values are multi-word.
+
+@card_v2(title: Echo, status: draft, owner: Mara)
+
+~ 28.8  [AVOID] Pipes — placed last to avoid binding to a later
+~       `card_v2@`. Reserve for cases where you need to switch a
+~       parameter mid-body (see 14.4).
+
+@card_v2 |title Echo| |status draft| |owner - Mara Finch| card_v2@
