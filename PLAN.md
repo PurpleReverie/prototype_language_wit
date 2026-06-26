@@ -137,6 +137,53 @@ Source: M10.core-vocab.
 | M6 | Reference renderer | HTML output from any expanded AST | One worked example renders to readable HTML |
 | M7 | 1.0 | Docs site, published packages, versioned spec | npm + VSIX published; spec v1.0 frozen |
 
+### D.1 — VS Code extension roadmap (post-M5 core)
+
+The M5 core has shipped in `packages/vscode`: TextMate grammar + semantic
+tokens, push diagnostics, hover, go-to-definition, references, document
+symbols (outline/breadcrumbs), completion (trigger chars `@ # : .`), a
+cross-file reference index, and a `language-configuration.json`
+(brackets, comments, auto-close). The items below are committed future
+work, grouped by effort. Most reuse infrastructure that already exists —
+the parser, runtime, `render-html`/`render-markdown`, and the cross-file
+reference index — so they are about exposing existing capability to the
+editor rather than new engine work.
+
+**Quick wins (config / manifest only)**
+
+| Item | Notes |
+|---|---|
+| Word-wrap default for `.wit` | `contributes.configurationDefaults` → `"[wit]": { "editor.wordWrap": "on" }`. Ships wrap-on to every install; users can still override. |
+| Live HTML preview panel | Webview, side-by-side like Markdown preview, auto-refresh on save/change, backed by `@witlang/render-html`. Highest value-per-effort. |
+| Snippets | `.code-snippets` for the five preferred forms: value-block def `#name: … !!`, record-arg `@x { k: v }`, colon scatter, block-form def `#name … name#`, bare reference. Scaffolds correct idiom. |
+| Code folding | Fold `#name … name#`, `#name: … !!`, and `@x … x@` regions — `folding.markers` in `language-configuration.json` or a `foldingRangeProvider`. |
+| File icon | Wire up the existing `icons/wit-file-icon.svg` via an `iconThemes` contribution so `.wit` files get the custom explorer icon. |
+| Palette commands | Wrap the CLI: "Wit: Render to HTML / Markdown", "Wit: Check", "Wit: Tour". |
+
+**Medium (LSP additions that reuse the existing index)**
+
+| Item | Notes |
+|---|---|
+| Document links | Make `reference ./shared/schema.wit` paths Ctrl-clickable — `documentLinkProvider`. |
+| Rename symbol | Rename a def and update every `@ref`; mostly wiring over the existing references index — `renameProvider`. |
+| Workspace symbol search | Cmd-T across all defs in the workspace; the cross-file index already exists — `workspaceSymbolProvider`. |
+| Signature help | Show expected params as a node call is filled, leveraging v0.2.0 typed params — `signatureHelpProvider`. |
+| Code actions / quick fixes | "convert pipes → record-arg", "extract selection → value-block def", "close unclosed node", fix for the W-6 partial-mismatch diagnostic. Actively steers toward preferred forms. |
+| Style / lint diagnostics | Flag the documented anti-patterns: pipes outside mid-body switching, content carried in params. |
+
+**Bigger bets**
+
+| Item | Notes |
+|---|---|
+| Formatter / format-on-save | `documentFormattingProvider` (or a `wit fmt` CLI) that normalizes invocation forms and form-fill indentation. |
+| Embedded script highlighting | Inject the JS/TS grammar inside `<% %>` blocks so the script bridge gets real highlighting. |
+| Custom editor / notebook view | A true split source + rendered editor for `.wit`. Most ambitious. |
+| Task provider | `wit check` as a build task with a problem matcher. |
+| Marketplace publish | Currently dev-install only (`pnpm vscode:install`); package the VSIX and publish. Ties into M7. |
+
+**Priority (value-per-effort):** live preview → snippets → folding +
+file icon → document links → rename.
+
 ---
 
 ## E. User stories
