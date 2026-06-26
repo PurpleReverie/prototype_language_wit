@@ -45,9 +45,15 @@ export function tryLineComment(state: LexState, buf: RunBuf): boolean {
 function matchLineCommentLead(state: LexState): boolean {
   const { src, cur } = state;
   if (src.charAt(cur.offset) !== '~') return false;
-  if (src.charAt(cur.offset + 1) !== ' ') return false;
-  // Disambiguate against `~~` opener — handled by tryBlockComment first.
-  return src.charAt(cur.offset + 1) !== '~';
+  const next = src.charAt(cur.offset + 1);
+  // Standard `~ ` opener (tilde + space).
+  if (next === ' ') return true;
+  // W-12b: a bare `~` on its own line (tilde immediately followed by
+  // newline or end of file) is a degenerate empty comment, matching
+  // the common case of using bare `~` as a visual separator inside a
+  // comment block.
+  if (next === '\n' || next === '') return true;
+  return false;
 }
 
 function isAtLineStart(state: LexState): boolean {
@@ -65,7 +71,10 @@ function isAtLineStart(state: LexState): boolean {
 function emitLineComment(state: LexState): void {
   const start = snapshot(state.cur);
   advance(state); // consume `~`
-  advance(state); // consume ` `
+  // W-12b: only consume the following space if it's actually present.
+  // For the degenerate empty-comment case `~\n`, the next char is the
+  // newline itself and must not be consumed.
+  if (state.src.charAt(state.cur.offset) === ' ') advance(state);
   const textStart = state.cur.offset;
   while (
     state.cur.offset < state.src.length &&

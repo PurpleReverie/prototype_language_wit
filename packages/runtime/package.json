@@ -1,8 +1,14 @@
 {
   "name": "@witlang/runtime",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Resolver + expander runtime for the Wit markup language",
-  "keywords": ["wit", "markup", "runtime", "expander", "resolver"],
+  "keywords": [
+    "wit",
+    "markup",
+    "runtime",
+    "expander",
+    "resolver"
+  ],
   "license": "MIT",
   "author": "Tauraj Greig",
   "repository": {

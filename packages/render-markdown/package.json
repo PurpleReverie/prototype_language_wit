@@ -1,8 +1,13 @@
 {
   "name": "@witlang/render-markdown",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Markdown renderer for the Wit markup language",
-  "keywords": ["wit", "markup", "markdown", "renderer"],
+  "keywords": [
+    "wit",
+    "markup",
+    "markdown",
+    "renderer"
+  ],
   "license": "MIT",
   "author": "Tauraj Greig",
   "repository": {

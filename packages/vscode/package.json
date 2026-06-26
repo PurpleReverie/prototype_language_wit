@@ -2,7 +2,7 @@
   "name": "wit-vscode",
   "displayName": "Wit Language",
   "description": "Language support for Wit (.wit) files: syntax highlighting and language server.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "publisher": "wit",
   "type": "module",

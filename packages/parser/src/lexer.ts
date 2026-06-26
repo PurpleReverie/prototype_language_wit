@@ -176,8 +176,44 @@ function tryEmphasis(state: LexState, buf: RunBuf): boolean {
   const c = state.src.charAt(state.cur.offset);
   if (c !== '_' && c !== '*') return false;
   const marker = c as '_' | '*';
+  // W-2 / W-12c: when there's a prior unclosed emphasisOpen of the same
+  // marker still pending in the current paragraph AND this position
+  // could plausibly close (preceded by non-whitespace not same marker,
+  // followed by boundary), prefer CLOSE over OPEN. This unblocks
+  // `_::title::_` where the second `_` is followed by punctuation.
+  // Without this, the second `_` opens (because punctuation-as-follow
+  // passes the W-12c loosened open rule) and the first `_` falls back
+  // to literal text.
+  if (hasUnclosedEmphasisInParagraph(state, marker) &&
+      isPrecedingNonWsNotMarker(state, marker) &&
+      isFollowingBoundary(state) &&
+      tryRecognizeEmphasisClose(state, buf, marker)) {
+    return true;
+  }
   if (tryRecognizeEmphasisOpen(state, buf, marker)) return true;
   if (tryRecognizeEmphasisClose(state, buf, marker)) return true;
+  return false;
+}
+
+// Scan the tokens emitted since the last paragraph break for an
+// unmatched emphasisOpen of `marker`. Walks back to the paragraph
+// boundary; an emphasisClose seen first (counted as pending) must be
+// matched by an emphasisOpen further back. If we encounter an open
+// while no close is pending, that open is unmatched and we return true.
+function hasUnclosedEmphasisInParagraph(
+  state: LexState, marker: '_' | '*',
+): boolean {
+  let pendingCloses = 0;
+  for (let i = state.tokens.length - 1; i >= 0; i--) {
+    const t = state.tokens[i]!;
+    if (t.kind === 'paragraphBreak') return false;
+    if (t.kind === 'emphasisClose' && t.marker === marker) {
+      pendingCloses += 1;
+    } else if (t.kind === 'emphasisOpen' && t.marker === marker) {
+      if (pendingCloses === 0) return true;
+      pendingCloses -= 1;
+    }
+  }
   return false;
 }
 
@@ -187,7 +223,10 @@ function tryRecognizeEmphasisOpen(
   marker: '_' | '*',
 ): boolean {
   if (!isPrecedingBoundary(state)) return false;
-  if (!isFollowingAlnum(state)) return false;
+  // W-12c / W-21: open allows following non-whitespace (not just alnum)
+  // so `*"foo"*`, `*-flag*` etc. open. The "not same marker" guard
+  // keeps `__` / `**` literal (no zero-width emphasis).
+  if (!isFollowingNonWsNotMarker(state, marker)) return false;
   if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
   else flushTextRun(state, buf);
   emitEmphasisOpen(state, marker);
@@ -199,7 +238,12 @@ function tryRecognizeEmphasisClose(
   buf: RunBuf,
   marker: '_' | '*',
 ): boolean {
-  if (!isPrecedingAlnum(state)) return false;
+  // W-12c / W-21: close allows preceding non-whitespace (not just alnum)
+  // so `*Bold.*`, `*Bold!*`, `_Title_)`, and multi-line emphasis (close
+  // after a `)` that follows a soft line break) all parse. The "not
+  // same marker" guard prevents bare `__` / `**` from spuriously
+  // closing in the middle.
+  if (!isPrecedingNonWsNotMarker(state, marker)) return false;
   if (!isFollowingBoundary(state)) return false;
   if (bufHasAnyContent(buf)) flushTextRunBeforeInline(state, buf);
   else flushTextRun(state, buf);
@@ -265,6 +309,26 @@ function isPrecedingAlnum(state: LexState): boolean {
 
 function isFollowingAlnum(state: LexState): boolean {
   return isAlnum(peek(state, 1));
+}
+
+// W-12c / W-21: loosened flank rules. "Preceding non-whitespace, not
+// the same marker char" — so `.`, `!`, `?`, `,`, `:`, `;`, `)`, `"`
+// all count as valid pre-close flanks (fixes the "every emphasised
+// lead-in in English prose breaks" report) while `__` / `**` stay
+// literal. Symmetric rule for the opening side.
+function isPrecedingNonWsNotMarker(state: LexState, marker: '_' | '*'): boolean {
+  if (state.cur.offset <= state.paragraphStart) return false;
+  const prev = state.src.charAt(state.cur.offset - 1);
+  if (prev === '' || prev === ' ' || prev === '\t' || prev === '\n') return false;
+  if (prev === marker) return false;
+  return true;
+}
+
+function isFollowingNonWsNotMarker(state: LexState, marker: '_' | '*'): boolean {
+  const next = peek(state, 1);
+  if (next === '' || next === ' ' || next === '\t' || next === '\n') return false;
+  if (next === marker) return false;
+  return true;
 }
 
 function peek(state: LexState, ahead: number): string {

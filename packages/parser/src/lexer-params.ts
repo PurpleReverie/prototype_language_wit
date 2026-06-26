@@ -33,20 +33,60 @@ type Closer = '|' | ')';
 
 export function lexParamState(state: LexState, closer: Closer): void {
   let buf: RunBuf = freshBuf(state);
+  // M-W16: track `[`/`{` nesting so `,` inside a collection/record
+  // literal stays content instead of splitting the param slot.
+  const bracketDepth = { v: 0 };
   while (state.cur.offset < state.src.length) {
     const c = state.src.charAt(state.cur.offset);
     if (c === '\n') break; // unclosed — parser diagnoses
-    if (c === closer) { flushTextRun(state, buf); emitCloser(state, closer); return; }
+    if (c === closer && bracketDepth.v === 0) {
+      flushTextRun(state, buf); emitCloser(state, closer); return;
+    }
     if (handleEscape(state, buf)) continue;
     if (handleQuotedString(state, buf)) continue;
-    if (handleComma(state, buf, closer)) { buf = freshBuf(state); continue; }
-    if (handleHyphen(state, buf, closer)) { buf = freshBuf(state); continue; }
-    if (handleColon(state, buf, closer)) { buf = freshBuf(state); continue; }
-    if (handleBang(state, buf, closer)) { buf = freshBuf(state); continue; }
+    if (handleBracketDepth(state, buf, bracketDepth)) continue;
+    if (bracketDepth.v === 0 && handleComma(state, buf, closer)) {
+      buf = freshBuf(state); continue;
+    }
+    if (bracketDepth.v === 0 && handleHyphen(state, buf, closer)) {
+      buf = freshBuf(state); continue;
+    }
+    if (bracketDepth.v === 0 && handleColon(state, buf, closer)) {
+      buf = freshBuf(state); continue;
+    }
+    if (bracketDepth.v === 0 && handleBang(state, buf, closer)) {
+      buf = freshBuf(state); continue;
+    }
     buf.value += c;
     advance(state);
   }
   flushTextRun(state, buf);
+}
+
+// M-W16: track open/close of `[`/`]` and `{`/`}` so structural separators
+// (`,`, ` - `, `:`, `!`) inside a nested literal stay content. The
+// recognizer matches one byte at a time, increments/decrements depth, and
+// always appends the char to the buf — at depth>0 the buf holds the raw
+// nested literal so parser-data can re-parse it.
+function handleBracketDepth(
+  state: LexState,
+  buf: RunBuf,
+  depth: { v: number },
+): boolean {
+  const c = state.src.charAt(state.cur.offset);
+  if (c === '[' || c === '{') {
+    depth.v += 1;
+    buf.value += c;
+    advance(state);
+    return true;
+  }
+  if ((c === ']' || c === '}') && depth.v > 0) {
+    depth.v -= 1;
+    buf.value += c;
+    advance(state);
+    return true;
+  }
+  return false;
 }
 
 function freshBuf(state: LexState): RunBuf {

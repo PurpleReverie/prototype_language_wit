@@ -17,7 +17,7 @@
               "key": "body",
               "value": {
                 "kind": "stringValue",
-                "value": "  First paragraph in the body.\n\n  Second paragraph after a blank line."
+                "value": "First paragraph in the body.\n\nSecond paragraph after a blank line."
               }
             }
           ],

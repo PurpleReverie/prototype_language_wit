@@ -17,6 +17,7 @@
 
 import { ErrorCode } from './errors.js';
 import { ParseError } from './parser-errors.js';
+import { probeParamValue } from './parser-data.js';
 import type {
   Block,
   Comment,
@@ -175,7 +176,33 @@ export function takeIndentedBlock(
   while (collected.length > 0 && collected[collected.length - 1] === '') {
     collected.pop();
   }
-  return { value: collected.join('\n'), nextIndex: i };
+  // W-22: strip the common leading indentation of the collected lines so
+  // a multi-line `body:` value renders as flush text instead of carrying
+  // 4 leading spaces from the source layout into every Text node.
+  return { value: dedentCommonLeading(collected).join('\n'), nextIndex: i };
+}
+
+// Strip the common leading whitespace from non-empty lines. Blank lines
+// stay blank. If lines contain no common prefix nothing is stripped.
+function dedentCommonLeading(lines: readonly string[]): string[] {
+  let common: string | null = null;
+  for (const ln of lines) {
+    if (ln.length === 0) continue;
+    const m = /^[ \t]*/.exec(ln);
+    const lead = m === null ? '' : m[0];
+    if (common === null) { common = lead; continue; }
+    common = longestCommonPrefix(common, lead);
+    if (common.length === 0) break;
+  }
+  if (common === null || common.length === 0) return [...lines];
+  return lines.map((ln) => ln.length === 0 ? ln : ln.slice(common.length));
+}
+
+function longestCommonPrefix(a: string, b: string): string {
+  const n = Math.min(a.length, b.length);
+  let i = 0;
+  while (i < n && a.charAt(i) === b.charAt(i)) i += 1;
+  return a.slice(0, i);
 }
 
 function isStrictlyDeeperIndent(line: string, keyIndent: string): boolean {
@@ -199,16 +226,21 @@ function parseFieldValueText(raw: string): string {
   return stripFormFillEscapes(v);
 }
 
-// Form-fill values only recognize `\"`, `\\`, `\:` escapes; other
+// Form-fill values recognize `\"`, `\\`, `\:`, and `\,` escapes; other
 // backslash sequences pass through literally (so `\_`, `\*` survive as
 // `\_`, `\*` because inline parsing doesn't run on the value).
+//
+// W-20: `\,` is the documented author-side opt-out so a literal comma
+// inside a `[ a, b, c ]` collection-shaped value can be safely captured
+// without splitting items. The backslash is dropped here so the comma
+// reaches the rendered output as a plain `,`.
 function stripFormFillEscapes(s: string): string {
   let out = '';
   for (let i = 0; i < s.length; i++) {
     const c = s.charAt(i);
     if (c === '\\' && i + 1 < s.length) {
       const next = s.charAt(i + 1);
-      if (next === ':' || next === '"' || next === '\\') {
+      if (next === ':' || next === '"' || next === '\\' || next === ',') {
         out += next; i += 1; continue;
       }
     }
@@ -245,8 +277,11 @@ export function stripEscapes(s: string): string {
     const c = s.charAt(i);
     if (c === '\\' && i + 1 < s.length) {
       const next = s.charAt(i + 1);
+      // W-20: include `,` so `\,` inside prose-shape captured values
+      // (e.g. a quoted bareword in `key value\, more`) reaches the
+      // renderer as a plain comma rather than a literal backslash.
       if (next === ':' || next === '"' || next === '\\' ||
-          next === '{' || next === '}') {
+          next === '{' || next === '}' || next === ',') {
         out += next; i += 1; continue;
       }
     }
@@ -304,11 +339,13 @@ export function formFillToParams(
   loc: Loc,
 ): Param[] {
   const fields = parseFormFillFields(rawText, loc);
-  return fields.map((f) => ({
-    name: f.key,
-    value: f.value,
-    loc: structuredClone(loc),
-  }));
+  return fields.map((f) => {
+    const pLoc = structuredClone(loc);
+    const param: Param = { name: f.key, value: f.value, loc: pLoc };
+    const probed = probeParamValue(f.value, pLoc);
+    if (probed !== null) param.typedValue = probed;
+    return param;
+  });
 }
 
 // Silence unused-symbol warnings for types used only in JSDoc.

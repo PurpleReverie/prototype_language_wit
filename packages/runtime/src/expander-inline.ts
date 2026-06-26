@@ -56,9 +56,41 @@ export function expandNodeDef(args: ExpandDefArgs): Splice {
   const env = isFieldKeyed(args.use.paramsSource)
     ? buildRecordCaptureEnv(args.use, args.def)
     : buildCaptureEnv(args.def.captures, args.use.params);
-  const body = args.use.body ?? [];
+  // W-9: bodySlot is a def-side marker. Any `...` in the USE's body is
+  // literal content and must not be re-substituted when the def-side
+  // bodySlot splices the use body in. Convert use-body bodySlots to
+  // literal text `...` before substitution.
+  const body = literalizeBodySlots(args.use.body ?? []);
   const cloned = structuredClone(args.def.body) as (Block | Inline)[];
   return substituteAll(cloned, env, body);
+}
+
+// W-9: recursively replace bodySlot inline nodes inside a use's body
+// with a Text("...") node. Preserves locs so error messages stay
+// anchored. Doesn't touch bodySlots inside NodeDefs nested in the
+// body (they own their own def-side semantics).
+function literalizeBodySlots(
+  items: readonly (Block | Inline)[],
+): (Block | Inline)[] {
+  return items.map((it) => literalizeOne(it));
+}
+
+function literalizeOne(item: Block | Inline): Block | Inline {
+  if (item.kind === 'bodySlot') {
+    return { kind: 'text', value: '...', loc: structuredClone(item.loc) };
+  }
+  if (item.kind === 'paragraph') {
+    return { ...item, children: item.children.map((c) =>
+      literalizeOne(c) as Inline) };
+  }
+  if (item.kind === 'italic' || item.kind === 'bold') {
+    return { ...item, children: item.children.map((c) =>
+      literalizeOne(c) as Inline) };
+  }
+  if (item.kind === 'nodeUse' && item.body !== null) {
+    return { ...item, body: literalizeBodySlots(item.body) };
+  }
+  return item;
 }
 
 function buildCaptureEnv(
@@ -132,10 +164,27 @@ function substituteOne(
   bodyContent: readonly (Block | Inline)[],
 ): (Block | Inline)[] {
   if (item.kind === 'interpolation') {
+    // W-8: an unset capture used to silently substitute empty. Now: throw
+    // E_UNRESOLVED_REFERENCE so the caller at the use site knows it
+    // missed a required param. Pre-existing tests rely on substituting
+    // empty when env carries an explicitly-empty string (flag params,
+    // empty quoted strings), so the missing-key check is "name not in
+    // env at all", not "value is empty".
+    if (!env.has(item.name)) {
+      throw new ExpanderError(
+        RuntimeErrorCode.E_UNRESOLVED_REFERENCE,
+        `Missing required capture "${item.name}" at @${item.name}`,
+        item.loc,
+      );
+    }
     return expandInterpolationValue(env.get(item.name) ?? '', item.loc);
   }
   if (item.kind === 'bodySlot') {
-    return structuredClone(bodyContent) as (Block | Inline)[];
+    // W-3a: trim leading/trailing whitespace from the body content's
+    // first/last Text nodes before splicing. The use-site syntax
+    // `@x Yell x@` carries spaces around `Yell` from the prose lex,
+    // which would survive into the def's `*...*` wrap as `* Yell *`.
+    return trimBodyEdges(structuredClone(bodyContent) as (Block | Inline)[]);
   }
   if (item.kind === 'paragraph') {
     return substituteParagraph(item, env, bodyContent);
@@ -321,5 +370,50 @@ function renderTerminal(value: DataValue, loc: Loc): Text | null {
 
 function textNode(value: string, loc: Loc): Text {
   return { kind: 'text', value, loc: structuredClone(loc) };
+}
+
+// W-3a: trim leading/trailing whitespace on the first/last Text nodes
+// of a body-slot splice. Recurses into a leading/trailing Paragraph so
+// `@x Yell x@` → `[Paragraph([Text("Yell")])]` not `[Paragraph([Text(" Yell ")])]`.
+// Drops empty Text nodes at the edges.
+function trimBodyEdges(items: (Block | Inline)[]): (Block | Inline)[] {
+  if (items.length === 0) return items;
+  trimLeading(items);
+  trimTrailing(items);
+  return items;
+}
+
+function trimLeading(items: (Block | Inline)[]): void {
+  while (items.length > 0) {
+    const first = items[0]!;
+    if (first.kind === 'text') {
+      const trimmed = (first as Text).value.replace(/^[ \t\n]+/, '');
+      if (trimmed.length === 0) { items.shift(); continue; }
+      (first as Text).value = trimmed;
+      return;
+    }
+    if (first.kind === 'paragraph') {
+      trimLeading((first as Paragraph).children as (Block | Inline)[]);
+      return;
+    }
+    return;
+  }
+}
+
+function trimTrailing(items: (Block | Inline)[]): void {
+  while (items.length > 0) {
+    const last = items[items.length - 1]!;
+    if (last.kind === 'text') {
+      const trimmed = (last as Text).value.replace(/[ \t\n]+$/, '');
+      if (trimmed.length === 0) { items.pop(); continue; }
+      (last as Text).value = trimmed;
+      return;
+    }
+    if (last.kind === 'paragraph') {
+      trimTrailing((last as Paragraph).children as (Block | Inline)[]);
+      return;
+    }
+    return;
+  }
 }
 

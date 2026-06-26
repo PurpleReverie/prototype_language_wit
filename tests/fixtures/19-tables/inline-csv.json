@@ -12,6 +12,74 @@
             "params": [
               {
                 "name": "rows",
+                "typedValue": {
+                  "items": [
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Client Hours"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "COUN603"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "COUN704"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "TOTAL"
+                        }
+                      ],
+                      "kind": "collection"
+                    },
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "One to One"
+                        },
+                        {
+                          "kind": "numberValue",
+                          "value": 62.75
+                        },
+                        {
+                          "kind": "numberValue",
+                          "value": 41.25
+                        },
+                        {
+                          "kind": "numberValue",
+                          "value": 104
+                        }
+                      ],
+                      "kind": "collection"
+                    },
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Couple"
+                        },
+                        {
+                          "kind": "numberValue",
+                          "value": 0.75
+                        },
+                        {
+                          "kind": "numberValue",
+                          "value": 0
+                        },
+                        {
+                          "kind": "numberValue",
+                          "value": 0.75
+                        }
+                      ],
+                      "kind": "collection"
+                    }
+                  ],
+                  "kind": "collection"
+                },
                 "value": "[[Client Hours, COUN603, COUN704, TOTAL], [One to One, 62.75, 41.25, 104], [Couple, 0.75, 0, 0.75]]"
               },
               {

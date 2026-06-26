@@ -17,7 +17,7 @@
               "key": "body",
               "value": {
                 "kind": "stringValue",
-                "value": "  Items follow.\n\n  @ul\n    @li First item li@\n    @li Second item li@\n  ul@"
+                "value": "Items follow.\n\n@ul\n  @li First item li@\n  @li Second item li@\nul@"
               }
             }
           ],

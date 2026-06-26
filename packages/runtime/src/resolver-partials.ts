@@ -39,8 +39,11 @@ function mergeOne(
 ): MergedNodeDef {
   const shape = base?.shape ?? partials[0]!.shape;
   const captures = base?.captures ?? partials[0]!.captures;
-  if (base !== undefined) checkOne(name, base, shape, captures);
-  for (const p of partials) checkOne(name, p, shape, captures);
+  // W-6: track the FIRST declaration so the mismatch diagnostic can
+  // point at both the conflicting partial AND the reference declaration.
+  const reference: NodeDef = base ?? partials[0]!;
+  if (base !== undefined) checkOne(name, base, shape, captures, reference);
+  for (const p of partials) checkOne(name, p, shape, captures, reference);
   return {
     kind: 'nodeDef',
     name,
@@ -58,12 +61,18 @@ function checkOne(
   def: NodeDef,
   shape: NodeDef['shape'],
   captures: readonly string[],
+  reference: NodeDef,
 ): void {
+  if (def === reference) return;
   if (def.shape !== shape) {
-    throw shapeMismatch(name, `shape ${def.shape} does not match ${shape}`, def);
+    throw shapeMismatch(
+      name,
+      `shape ${def.shape} does not match ${shape}`,
+      def, reference,
+    );
   }
   if (!capturesEqual(def.captures, captures)) {
-    throw shapeMismatch(name, 'captures disagree', def);
+    throw shapeMismatch(name, 'captures disagree', def, reference);
   }
 }
 
@@ -71,10 +80,14 @@ function shapeMismatch(
   name: string,
   detail: string,
   def: NodeDef,
+  reference: NodeDef,
 ): ResolverError {
+  // W-6: include the file:line of the prior declaration so the author
+  // can compare against the source that set the shape/captures.
+  const refLoc = `${reference.loc.file}:${reference.loc.line}`;
   return new ResolverError(
     RuntimeErrorCode.E_PARTIAL_SHAPE_MISMATCH,
-    `Partial #${name} ${detail}`,
+    `Partial #${name} ${detail} (prior declaration at ${refLoc})`,
     def.loc,
   );
 }

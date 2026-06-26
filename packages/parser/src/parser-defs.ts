@@ -9,8 +9,17 @@ import {
   isFormFillRawText,
 } from './parser-body-forms.js';
 import { resolveCaptures, type CaptureList } from './parser-captures.js';
-import { maybeAsDataValue } from './parser-data.js';
+import {
+  maybeAsDataValue,
+  tryParseCollectionFromText,
+  tryParseRecordFromText,
+} from './parser-data.js';
 import { ParseError } from './parser-errors.js';
+import {
+  isEndHere,
+  isStatementStart,
+  parseStatementAfterParen,
+} from './parser-statements.js';
 import type {
   Block, Collection as CollectionNode, DataDef, Inline, NodeDef,
   Record as RecordNode,
@@ -34,8 +43,14 @@ export function parseNodeDef(
 ): NodeDef | DataDef {
   const additive = consumeAdditive(cursor);
   const open = cursor.advance() as HashOpen;
-  const captures = consumeCaptures(cursor);
+  let captures = consumeCaptures(cursor);
   const shape = detectDefShape(cursor, open.name);
+  // W-1: single-line / value-block defs can write `#name: ||a, b|| body !!`
+  // — the capture list comes AFTER the leading colon. consumeCaptures
+  // already ran with the colon in the way, so try again past it.
+  if (captures === null && shape !== 'block') {
+    captures = consumeCapturesAfterColon(cursor);
+  }
   if (shape === 'single-line') {
     return parseSingleLineDef(cursor, open, captures, additive, opts);
   }
@@ -43,6 +58,32 @@ export function parseNodeDef(
     return parseValueBlockDef(cursor, open, captures, additive, opts);
   }
   return parseBlockDef(cursor, open, captures, additive, opts);
+}
+
+// W-1: a single-line / value-block def can place its capture list after
+// the leading colon: `#name: ||a, b|| body !!`. Peek past the colon
+// text-run and try consumeCaptures there. On match, rewrite the leading
+// colon token so the body parser sees only the post-colon, post-captures
+// remainder.
+function consumeCapturesAfterColon(cursor: TokenCursor): CaptureList {
+  const saved = cursor.position();
+  const tok = cursor.current();
+  if (tok.kind !== 'textRun') return null;
+  const m = /^[ \t]*:[ \t]*/.exec(tok.value);
+  if (m === null) return null;
+  const afterColon = tok.value.slice(m[0].length);
+  // Need the post-colon residue to be empty (the captures are the next
+  // token) before we advance past the colon.
+  if (afterColon.length > 0) return null;
+  cursor.advance(); // consume the colon text-run
+  if (cursor.current().kind !== 'captureOpen') {
+    cursor.reset(saved);
+    return null;
+  }
+  cursor.advance();
+  const text = readCaptureText(cursor);
+  expectCaptureClose(cursor);
+  return splitCaptureNames(text);
 }
 
 
@@ -180,6 +221,17 @@ function parseBangBangDef(
   const fastFillRec = rawValBlock !== null && !additive && captures === null &&
     isFormFillRawText(rawValBlock)
     ? formFillToRecord(rawValBlock, open.loc) : null;
+  // W-19: raw-text probe for `#name: [ ... ] !!` / `#name: { ... } !!`
+  // BEFORE the inline parser runs. Applies to both single-line and
+  // value-block shapes — a multi-line collection literal `[\n  { ... }\n]`
+  // classifies as value-block due to the newline. Without this probe,
+  // a `_x_` inside a collection / record value gets parsed as italic
+  // and splits the body's single Text node — silently downgrading
+  // what should be a dataDef(value=collection) into a nodeDef.
+  const rawForData = rawValBlock ?? (shape === 'single-line'
+    ? peekRawBangBangBody(cursor, open) : null);
+  const rawDataValue = rawForData !== null && !additive && captures === null
+    ? probeRawDataValue(rawForData, open.loc) : null;
   const raw = shape === 'single-line'
     ? collectSingleLineValue(cursor, opts) : collectValueBlock(cursor, opts);
   const trimmed = shape === 'single-line' ? trimTrailingTextWs(raw) : raw;
@@ -187,6 +239,9 @@ function parseBangBangDef(
     shape === 'single-line' ? maybeAsDataValue(trimmed) : trimmed;
   const closeLoc = expectBangBang(cursor, open);
   const loc = spanLoc(open.loc, closeLoc);
+  if (rawDataValue !== null) {
+    return { kind: 'dataDef', name: open.name, value: rawDataValue, loc };
+  }
   if (shape === 'single-line' && !additive) {
     const dataValue = extractPureDataValue(body);
     if (dataValue !== null) {
@@ -201,6 +256,33 @@ function parseBangBangDef(
     captures: resolveCaptures(captures, body),
     shape, body, additive, loc,
   };
+}
+
+// W-19: probe the raw single-line body text for `[ … ]` / `{ … }`. If the
+// whole body (after trimming whitespace and the trailing `!!`) is a
+// well-formed collection or record literal, return it. Underscores or
+// asterisks inside the values stay as content; no inline emphasis runs.
+// Parse errors from the data parser are absorbed (return null) so the
+// regular inline-parsing path kicks in for genuine non-literal bodies.
+function probeRawDataValue(
+  rawBody: string,
+  loc: Loc,
+): RecordNode | CollectionNode | null {
+  const text = rawBody.replace(/[ \t\n]+$/, '');
+  if (text.length === 0) return null;
+  if (text.charAt(0) !== '[' && text.charAt(0) !== '{') return null;
+  try {
+    if (text.charAt(0) === '[') {
+      const c = tryParseCollectionFromText(text, loc);
+      if (c === null || text.slice(c.endPos).trim().length !== 0) return null;
+      return c.collection;
+    }
+    const r = tryParseRecordFromText(text, loc);
+    if (r === null || text.slice(r.endPos).trim().length !== 0) return null;
+    return r.record;
+  } catch {
+    return null;
+  }
 }
 
 // Peek raw source between the value-block opener and its closing `!!`
@@ -308,12 +390,55 @@ function collectDefValue(
     if (!stopAtParaBreak && cursor.current().kind === 'paragraphBreak') {
       cursor.advance(); continue;
     }
+    // W-17: paren-statements (`(each ...)`, `(if ...)`) are block-level
+    // constructs that parseInline treats as inline-stops. In a def
+    // value-block body, parse them directly so additive partials can
+    // carry iteration / conditionals. `(end)` / `(else)` are not
+    // top-level statements; let parseInline emit them as inline tokens.
+    if (isStatementStart(cursor)) {
+      const block = parseStatementAfterParen(cursor, {
+        parseBlocks: (c, stop) => collectStatementBlocks(c, stop, opts),
+      });
+      out.push(block); continue;
+    }
     const before = cursor.position();
     for (const child of opts.parseInline(cursor)) out.push(child);
     if (cursor.position() === before) break; // forward-progress safety.
   }
   return out;
 }
+
+// W-17: collect blocks inside a paren-statement body until the supplied
+// stop predicate (typically isEndHere / isElseHere) fires. Inside the
+// body, plain inlines are gathered into Paragraphs via opts.parseInline;
+// nested (if)/(each) recurse here; def-value terminators (`!!`, `name#`,
+// next def-open) terminate as a safety net.
+function collectStatementBlocks(
+  cursor: TokenCursor,
+  stop: (c: TokenCursor) => boolean,
+  opts: NodeDefOptions,
+): Block[] {
+  const out: Block[] = [];
+  while (!cursor.isAtEnd() && !stop(cursor) && !isDefValueTerminator(cursor, false)) {
+    if (cursor.current().kind === 'paragraphBreak') { cursor.advance(); continue; }
+    if (isStatementStart(cursor)) {
+      const block = parseStatementAfterParen(cursor, {
+        parseBlocks: (c, s) => collectStatementBlocks(c, s, opts),
+      });
+      out.push(block);
+      continue;
+    }
+    const before = cursor.position();
+    const inlines = opts.parseInline(cursor);
+    if (inlines.length > 0) {
+      const first = inlines[0]!;
+      out.push({ kind: 'paragraph', children: inlines as never, loc: first.loc });
+    }
+    if (cursor.position() === before) break;
+  }
+  return out;
+}
+
 
 function isDefValueTerminator(
   cursor: TokenCursor, stopAtParaBreak: boolean,

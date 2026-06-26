@@ -11,11 +11,61 @@
             "name": "table",
             "params": [
               {
-                "name": "schema { name",
-                "value": "Site, status Status }"
+                "name": "schema",
+                "typedValue": {
+                  "fields": [
+                    {
+                      "key": "name",
+                      "value": {
+                        "kind": "stringValue",
+                        "value": "Site"
+                      }
+                    },
+                    {
+                      "key": "status",
+                      "value": {
+                        "kind": "stringValue",
+                        "value": "Status"
+                      }
+                    }
+                  ],
+                  "kind": "record"
+                },
+                "value": "{ name - Site, status - Status }"
               },
               {
                 "name": "rows",
+                "typedValue": {
+                  "items": [
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Dunmore Head"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "operational"
+                        }
+                      ],
+                      "kind": "collection"
+                    },
+                    {
+                      "items": [
+                        {
+                          "kind": "stringValue",
+                          "value": "Carrick Point"
+                        },
+                        {
+                          "kind": "stringValue",
+                          "value": "maintenance"
+                        }
+                      ],
+                      "kind": "collection"
+                    }
+                  ],
+                  "kind": "collection"
+                },
                 "value": "[[Dunmore Head, operational], [Carrick Point, maintenance]]"
               }
             ],

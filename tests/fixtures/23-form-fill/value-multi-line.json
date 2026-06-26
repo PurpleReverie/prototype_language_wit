@@ -38,7 +38,7 @@
         "params": [
           {
             "name": "body",
-            "value": "  First line.\n  Second line."
+            "value": "First line.\nSecond line."
           }
         ],
         "paramsSource": "form-fill"

@@ -38,7 +38,7 @@
         "params": [
           {
             "name": "body",
-            "value": "  First paragraph.\n\n  Second paragraph."
+            "value": "First paragraph.\n\nSecond paragraph."
           }
         ],
         "paramsSource": "form-fill"

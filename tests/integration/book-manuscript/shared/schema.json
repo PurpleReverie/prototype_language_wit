@@ -11,18 +11,6 @@
         "body": [
           {
             "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
-            "value": "author, title, year, publisher"
-          },
-          {
-            "kind": "text",
-            "value": ""
-          },
-          {
-            "kind": "text",
             "value": " "
           },
           {
@@ -39,15 +27,20 @@
           },
           {
             "kind": "text",
-            "value": "). _"
+            "value": "). "
           },
           {
-            "kind": "interpolation",
-            "name": "title"
+            "children": [
+              {
+                "kind": "interpolation",
+                "name": "title"
+              }
+            ],
+            "kind": "italic"
           },
           {
             "kind": "text",
-            "value": "_. "
+            "value": ". "
           },
           {
             "kind": "interpolation",
@@ -60,8 +53,8 @@
         ],
         "captures": [
           "author",
-          "year",
           "title",
+          "year",
           "publisher"
         ],
         "kind": "nodeDef",

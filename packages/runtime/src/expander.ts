@@ -260,7 +260,16 @@ function expandUse(use: NodeUse, ctx: ExpandCtx): Splice {
   const iterValue = lookupIterEnv(ctx.iterEnv, use.name);
   if (iterValue !== undefined) return expandIterRef(use, iterValue);
   const def = ctx.defs.get(use.name);
-  if (def !== undefined) return expandWithDef(use, def, ctx);
+  if (def !== undefined) {
+    const splice = expandWithDef(use, def, ctx);
+    // W-13: an inline-position use of a block-form def should splice
+    // its content as inlines into the surrounding paragraph rather
+    // than splitting it. Flatten any Paragraph children to their
+    // inline runs; emit text(' ') between paragraphs so adjacent
+    // ones stay separated visually.
+    if (use.inline) return flattenSpliceForInline(splice, use.loc);
+    return splice;
+  }
   const data = ctx.dataDefs.get(use.name);
   if (data !== undefined) {
     const splice = expandDataValue(use, data.value);
@@ -299,15 +308,79 @@ function emptyTextAt(loc: Loc): Text {
   return { kind: 'text', value: '', loc: structuredClone(loc) };
 }
 
+// W-13: inline-position use of a block-form def must not split the
+// surrounding paragraph. Walk the splice; any Paragraph items are
+// inlined as their children (with a `' '` text separator between
+// adjacent paragraphs so prose doesn't glue). Non-paragraph blocks
+// inside an inline use are a context mismatch — drop them with an
+// empty-text sentinel so the AST stays well-formed.
+function flattenSpliceForInline(splice: Splice, loc: Loc): Splice {
+  const out: Splice = [];
+  let pendingSep = false;
+  for (const node of splice) {
+    if (node.kind === 'paragraph') {
+      if (pendingSep) out.push({ kind: 'text', value: ' ', loc: structuredClone(loc) });
+      for (const c of (node as Paragraph).children) out.push(c);
+      pendingSep = true;
+      continue;
+    }
+    if (isBlockKind(node.kind) && node.kind !== 'nodeUse') {
+      // Drop non-paragraph blocks at inline position (lists, headings, …).
+      // The author shouldn't have a block-form def at inline position
+      // emitting block content; emit nothing rather than corrupting
+      // the surrounding paragraph.
+      continue;
+    }
+    out.push(node);
+    pendingSep = false;
+  }
+  return out;
+}
+
 function expandWithDef(use: NodeUse, def: NodeDef, ctx: ExpandCtx): Splice {
   guardDepth(ctx, use);
   ctx.depth++;
+  // M-W16: when captured params carry typed values (collection / record /
+  // scalar), push them as an iteration-env frame so `(each @name)` and
+  // `@name.field` inside the def body can resolve against the param.
+  const frame = buildTypedParamFrame(use, def);
+  if (frame !== null) ctx.iterEnv.push(frame);
   try {
     const spliced = expandNodeDef({ use, def });
     return expandSplice(spliced, ctx);
   } finally {
     ctx.depth--;
+    if (frame !== null) ctx.iterEnv.pop();
   }
+}
+
+function buildTypedParamFrame(
+  use: NodeUse,
+  def: NodeDef,
+): IterFrame | null {
+  if (use.params.length === 0) return null;
+  const frame: IterFrame = new Map();
+  // Field-keyed: match each param name against the def's captures.
+  // Positional: zip in capture order.
+  const fieldByName = new Map<string, DataValue>();
+  let posIdx = 0;
+  for (const p of use.params) {
+    if (p.typedValue === undefined) {
+      if (p.name === null) posIdx++;
+      continue;
+    }
+    if (p.name !== null) {
+      fieldByName.set(p.name, p.typedValue);
+      continue;
+    }
+    const target = def.captures[posIdx++];
+    if (target !== undefined) frame.set(target, p.typedValue);
+  }
+  for (const cap of def.captures) {
+    const v = fieldByName.get(cap);
+    if (v !== undefined) frame.set(cap, v);
+  }
+  return frame.size > 0 ? frame : null;
 }
 
 function guardDepth(ctx: ExpandCtx, use: NodeUse): void {
